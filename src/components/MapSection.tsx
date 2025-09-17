@@ -48,16 +48,16 @@ const MapSection: React.FC = () => {
                 className="w-full h-auto drop-shadow-2xl"
               />
               
-              {/* Heritage spot markers overlaid on the map */}
-              <div className="absolute inset-0 pointer-events-none z-10">
+              {/* Heritage spots positioned absolutely on top of the map */}
+              <div className="absolute inset-0 pointer-events-none">
                 {heritageSpots.map((spot, index) => (
                   <motion.div
                     key={spot.id}
                     initial={{ scale: 0, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.5 + index * 0.2 }}
-                    className="absolute w-6 h-6 bg-yellow-400 rounded-full border-2 border-white shadow-lg animate-pulse"
+                    transition={{ duration: 0.5, delay: index * 0.2 }}
+                    className="absolute w-6 h-6 bg-yellow-400 rounded-full border-2 border-white shadow-lg animate-pulse z-10"
                     style={{
                       left: `${spot.coordinates.x}%`,
                       top: `${spot.coordinates.y}%`,
