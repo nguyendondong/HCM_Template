@@ -5,9 +5,10 @@ import { HeritageSpot as HeritageSpotType } from '../types/heritage';
 interface HeritageSpotProps {
   spot: HeritageSpotType;
   mapRef: React.RefObject<HTMLDivElement>;
+  hideDot?: boolean;
 }
 
-const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef }) => {
+const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef, hideDot }) => {
   const ref = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
@@ -21,7 +22,7 @@ const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef }) => {
         x: 0,
         transition: { duration: 0.8, ease: "easeOut" }
       });
-      
+
       // Animate line drawing
       lineControls.start({
         scaleX: 1,
@@ -32,21 +33,21 @@ const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef }) => {
 
   const getLinePosition = () => {
     if (!mapRef.current || !ref.current) return {};
-    
+
     const mapRect = mapRef.current.getBoundingClientRect();
     const spotRect = ref.current.getBoundingClientRect();
-    
+
     const mapCenterX = mapRect.left + (mapRect.width * spot.coordinates.x / 100);
     const mapCenterY = mapRect.top + (mapRect.height * spot.coordinates.y / 100);
-    
+
     const spotCenterX = spotRect.left + spotRect.width / 2;
     const spotCenterY = spotRect.top + spotRect.height / 2;
-    
+
     const angle = Math.atan2(spotCenterY - mapCenterY, spotCenterX - mapCenterX);
     const distance = Math.sqrt(
       Math.pow(spotCenterX - mapCenterX, 2) + Math.pow(spotCenterY - mapCenterY, 2)
     );
-    
+
     return {
       left: `${spot.coordinates.x}%`,
       top: `${spot.coordinates.y}%`,
@@ -63,33 +64,35 @@ const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef }) => {
         ref={lineRef}
         initial={{ scaleX: 0 }}
         animate={lineControls}
-        className="absolute h-0.5 bg-yellow-400 origin-left pointer-events-none"
+        // className="absolute h-0.5 bg-yellow-400 origin-left pointer-events-none"
         style={getLinePosition()}
       />
-      
+
       {/* Map dot indicator */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={isInView ? { scale: 1, opacity: 1 } : {}}
-        transition={{ duration: 0.5, delay: 0.8 }}
-        className="absolute w-4 h-4 bg-yellow-400 rounded-full border-2 border-white shadow-lg pointer-events-none"
-        style={{
-          left: `${spot.coordinates.x}%`,
-          top: `${spot.coordinates.y}%`,
-          transform: 'translate(-50%, -50%)'
-        }}
-      />
+      {!hideDot && (
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={isInView ? { scale: 1, opacity: 1 } : {}}
+          transition={{ duration: 0.5, delay: 0.8 }}
+          className="absolute w-4 h-4 bg-yellow-400 rounded-full border-2 border-white shadow-lg pointer-events-none"
+          style={{
+            left: `${spot.coordinates.x}%`,
+            top: `${spot.coordinates.y}%`,
+            transform: 'translate(-50%, -50%)'
+          }}
+        />
+      )}
 
       {/* Heritage spot content */}
       <motion.div
-        initial={{ 
-          opacity: 0, 
-          x: spot.side === 'left' ? -100 : 100 
+        initial={{
+          opacity: 0,
+          x: spot.side === 'left' ? -100 : 100
         }}
         animate={controls}
         className={`max-w-md bg-white rounded-2xl shadow-2xl p-6 border-l-4 border-yellow-400 ${
-          spot.side === 'left' 
-            ? 'ml-0 lg:ml-12' 
+          spot.side === 'left'
+            ? 'ml-0 lg:ml-12'
             : 'ml-auto lg:mr-12'
         }`}
       >

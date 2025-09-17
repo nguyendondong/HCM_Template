@@ -2,18 +2,18 @@ import { HeritageSpot } from '../types/heritage';
 
 export const heritageSpots: HeritageSpot[] = [
   {
+    id: 'hanoi',
+    name: 'Hanoi',
+    description: 'Ho Chi Minh Mausoleum - The sacred resting place where millions come to pay respects to the beloved leader.',
+    coordinates: { x: 32, y: 13 },
+    side: 'left'
+  },
+  {
     id: 'nghe-an',
     name: 'Nghe An',
     description: "Uncle Ho's hometown - Where the great leader was born and spent his early years, shaping his revolutionary spirit.",
     coordinates: { x: 45, y: 55 },
     side: 'right'
-  },
-  {
-    id: 'hanoi',
-    name: 'Hanoi',
-    description: 'Ho Chi Minh Mausoleum - The sacred resting place where millions come to pay respects to the beloved leader.',
-    coordinates: { x: 48, y: 25 },
-    side: 'left'
   },
   {
     id: 'cao-bang',
