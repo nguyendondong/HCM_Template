@@ -7,4 +7,5 @@ export interface HeritageSpot {
     y: number; // Percentage from top
   };
   side: 'left' | 'right';
+  url?: string; // Optional URL for the spot
 }
