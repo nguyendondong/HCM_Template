@@ -1,0 +1,133 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Heritage Spots - Public read, authenticated write
+    match /heritageSpots/{spotId} {
+      allow read: if true; // Cho phép tất cả đọc heritage spots
+      allow write: if request.auth != null; // Chỉ user đã login mới write được
+
+      // Validate dữ liệu khi tạo/cập nhật
+      allow create: if request.auth != null
+        && validateHeritageSpot();
+      allow update: if request.auth != null
+        && validateHeritageSpot();
+    }
+
+    // Users - Private, chỉ user đó mới được đọc/ghi
+    match /users/{userId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == userId;
+
+      // Validate user data
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && validateUser();
+      allow update: if request.auth != null
+        && request.auth.uid == userId
+        && validateUserUpdate();
+    }
+
+    // Comments - Public read, authenticated write với validation
+    match /comments/{commentId} {
+      allow read: if true; // Cho phép tất cả đọc comments
+
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.userId
+        && validateComment();
+
+      allow update: if request.auth != null
+        && request.auth.uid == resource.data.userId
+        && validateCommentUpdate();
+
+      allow delete: if request.auth != null
+        && (request.auth.uid == resource.data.userId
+            || request.auth.token.admin == true);
+    }
+
+    // Admin collection - chỉ admin
+    match /admin/{document} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    // ===== VALIDATION FUNCTIONS =====
+
+    // Validate Heritage Spot data
+    function validateHeritageSpot() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['name', 'description', 'coordinates', 'side'])
+        && data.name is string
+        && data.name.size() > 0
+        && data.name.size() <= 100
+        && data.description is string
+        && data.description.size() > 0
+        && data.description.size() <= 1000
+        && data.coordinates is map
+        && data.coordinates.keys().hasAll(['x', 'y'])
+        && data.coordinates.x is number
+        && data.coordinates.y is number
+        && data.coordinates.x >= 0
+        && data.coordinates.x <= 100
+        && data.coordinates.y >= 0
+        && data.coordinates.y <= 100
+        && data.side is string
+        && data.side in ['left', 'right'];
+    }
+
+    // Validate User data
+    function validateUser() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['uid', 'email', 'createdAt', 'visitedSpots'])
+        && data.uid is string
+        && data.uid == request.auth.uid
+        && data.email is string
+        && data.email.matches('.*@.*')
+        && data.visitedSpots is list;
+    }
+
+    // Validate User update (không cho phép thay đổi uid, email, createdAt)
+    function validateUserUpdate() {
+      let data = request.resource.data;
+      return data.uid == resource.data.uid
+        && data.email == resource.data.email
+        && data.createdAt == resource.data.createdAt;
+    }
+
+    // Validate Comment data
+    function validateComment() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['spotId', 'userId', 'userName', 'content', 'rating', 'createdAt'])
+        && data.spotId is string
+        && data.spotId.size() > 0
+        && data.userId is string
+        && data.userId == request.auth.uid
+        && data.userName is string
+        && data.userName.size() > 0
+        && data.userName.size() <= 50
+        && data.content is string
+        && data.content.size() > 0
+        && data.content.size() <= 500
+        && data.rating is number
+        && data.rating >= 1
+        && data.rating <= 5
+        && data.createdAt is timestamp;
+    }
+
+    // Validate Comment update (chỉ cho phép sửa content và rating)
+    function validateCommentUpdate() {
+      let data = request.resource.data;
+      return data.spotId == resource.data.spotId
+        && data.userId == resource.data.userId
+        && data.userName == resource.data.userName
+        && data.createdAt == resource.data.createdAt
+        && data.content is string
+        && data.content.size() > 0
+        && data.content.size() <= 500
+        && data.rating is number
+        && data.rating >= 1
+        && data.rating <= 5;
+    }
+  }
+}
