@@ -13,7 +13,10 @@ const IntroductionSection: React.FC = () => {
   // Lấy URL video từ Firebase Storage
   useEffect(() => {
     getFileDownloadURL('Video/testvideo.mp4')
-      .then(url => setVideoUrl(url))
+      .then(url => {
+        console.log('Video URL loaded:', url);
+        setVideoUrl(url);
+      })
       .catch(err => {
         console.error('Không lấy được video URL:', err);
         setVideoUrl('');

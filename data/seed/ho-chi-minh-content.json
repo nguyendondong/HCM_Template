@@ -1,0 +1,528 @@
+{
+  "heroContent": {
+    "id": "ho-chi-minh-journey-hero",
+    "title": "Hành Trình Theo Dấu Chân Bác",
+    "subtitle": "Khám phá cuộc đời và sự nghiệp vĩ đại của Chủ tịch Hồ Chí Minh",
+    "description": "Đi qua từng dấu chân, từng địa danh gắn bó với Người - từ quê hương Kim Liên đến các căn cứ địa cách mạng, từ hành trình ra đi tìm đường cứu nước đến việc xây dựng đất nước",
+    "backgroundVideoUrl": "/videos/ho-chi-minh/life-journey-intro.mp4",
+    "backgroundImageUrl": "/images/ho-chi-minh/bac-ho-journey-panorama.jpg",
+    "ctaButtons": [
+      {
+        "text": "Bắt đầu hành trình",
+        "type": "primary",
+        "action": "navigate",
+        "target": "/heritage-map",
+        "icon": "map"
+      },
+      {
+        "text": "Xem phim tài liệu",
+        "type": "secondary",
+        "action": "play-video",
+        "target": "/videos/ho-chi-minh/documentary-full.mp4",
+        "icon": "play"
+      },
+      {
+        "text": "Timeline cuộc đời Bác",
+        "type": "outline",
+        "action": "navigate",
+        "target": "/timeline/ho-chi-minh",
+        "icon": "clock"
+      }
+    ],
+    "statistics": [
+      {
+        "label": "Di tích lịch sử",
+        "value": "21+",
+        "icon": "monument",
+        "description": "Di tích gắn liền với Bác Hồ"
+      },
+      {
+        "label": "Năm hoạt động",
+        "value": "79",
+        "icon": "calendar",
+        "description": "Cuộc đời cống hiến (1890-1969)"
+      },
+      {
+        "label": "Tỉnh thành",
+        "value": "15+",
+        "icon": "map-pin",
+        "description": "Có dấu chân của Bác"
+      },
+      {
+        "label": "Tác phẩm",
+        "value": "500+",
+        "icon": "book-open",
+        "description": "Thơ văn và bài viết"
+      }
+    ],
+    "features": [
+      {
+        "title": "Bản đồ hành trình",
+        "description": "Theo dõi từng bước chân của Bác từ Kim Liên đến khắp đất nước",
+        "icon": "route"
+      },
+      {
+        "title": "VR 360° Experience",
+        "description": "Trải nghiệm thực tế ảo tại các di tích lịch sử quan trọng",
+        "icon": "vr-cardboard"
+      },
+      {
+        "title": "Timeline tương tác",
+        "description": "Khám phá cuộc đời Bác qua dòng thời gian sinh động",
+        "icon": "timeline"
+      },
+      {
+        "title": "Kho tài liệu số",
+        "description": "Thư viện thơ văn, hình ảnh và tư liệu quý hiếm",
+        "icon": "archive"
+      }
+    ],
+    "heroQuote": {
+      "text": "Không có gì quý hơn độc lập tự do",
+      "author": "Chủ tịch Hồ Chí Minh",
+      "context": "Tuyên ngôn độc lập 2/9/1945"
+    },
+    "isActive": true,
+    "scheduling": {
+      "publishAt": null,
+      "unpublishAt": null,
+      "timezone": "Asia/Ho_Chi_Minh"
+    },
+    "seo": {
+      "metaTitle": "Hành Trình Theo Dấu Chân Bác - Di tích Hồ Chí Minh",
+      "metaDescription": "Khám phá cuộc đời và sự nghiệp vĩ đại của Chủ tịch Hồ Chí Minh qua 21+ di tích lịch sử từ Kim Liên đến Pác Bó",
+      "keywords": ["Hồ Chí Minh", "Bác Hồ", "di tích", "Kim Liên", "Pác Bó", "cách mạng", "lịch sử Việt Nam"],
+      "ogImage": "/images/og/ho-chi-minh-journey-og.jpg"
+    },
+    "updatedAt": "2024-01-01T00:00:00Z"
+  },
+  "navigationContent": {
+    "id": "ho-chi-minh-navigation",
+    "branding": {
+      "logoUrl": "/images/logo/bac-ho-journey-logo.svg",
+      "logoText": "Dấu Chân Bác",
+      "tagline": "Following Uncle Ho's Footsteps"
+    },
+    "menuItems": [
+      {
+        "id": "home",
+        "label": "Trang chủ",
+        "href": "/",
+        "icon": "home",
+        "isActive": true,
+        "order": 1,
+        "children": []
+      },
+      {
+        "id": "heritage-journey",
+        "label": "Hành trình di tích",
+        "href": "/heritage-journey",
+        "icon": "map",
+        "isActive": true,
+        "order": 2,
+        "children": [
+          {
+            "id": "birthplace-journey",
+            "label": "Quê hương Kim Liên",
+            "href": "/heritage-journey/kim-lien",
+            "order": 1
+          },
+          {
+            "id": "departure-journey",
+            "label": "Ra đi tìm đường cứu nước",
+            "href": "/heritage-journey/departure",
+            "order": 2
+          },
+          {
+            "id": "revolutionary-bases",
+            "label": "Căn cứ địa cách mạng",
+            "href": "/heritage-journey/revolutionary-bases",
+            "order": 3
+          },
+          {
+            "id": "leadership-period",
+            "label": "Thời kỳ lãnh đạo",
+            "href": "/heritage-journey/leadership",
+            "order": 4
+          }
+        ]
+      },
+      {
+        "id": "timeline",
+        "label": "Timeline cuộc đời",
+        "href": "/timeline",
+        "icon": "clock",
+        "isActive": true,
+        "order": 3,
+        "children": [
+          {
+            "id": "early-life",
+            "label": "Tuổi thơ (1890-1911)",
+            "href": "/timeline/early-life",
+            "order": 1
+          },
+          {
+            "id": "seeking-path",
+            "label": "Tìm đường cứu nước (1911-1941)",
+            "href": "/timeline/seeking-path",
+            "order": 2
+          },
+          {
+            "id": "revolution-period",
+            "label": "Lãnh đạo cách mạng (1941-1969)",
+            "href": "/timeline/revolution-period",
+            "order": 3
+          }
+        ]
+      },
+      {
+        "id": "literary-works",
+        "label": "Thơ văn Bác Hồ",
+        "href": "/literary-works",
+        "icon": "book-open",
+        "isActive": true,
+        "order": 4,
+        "children": [
+          {
+            "id": "poetry",
+            "label": "Thơ",
+            "href": "/literary-works/poetry",
+            "order": 1
+          },
+          {
+            "id": "writings",
+            "label": "Bài viết",
+            "href": "/literary-works/writings",
+            "order": 2
+          },
+          {
+            "id": "speeches",
+            "label": "Diễn văn",
+            "href": "/literary-works/speeches",
+            "order": 3
+          },
+          {
+            "id": "diary-in-prison",
+            "label": "Nhật ký trong tù",
+            "href": "/literary-works/prison-diary",
+            "order": 4
+          }
+        ]
+      },
+      {
+        "id": "vr-experience",
+        "label": "Trải nghiệm VR",
+        "href": "/vr-experience",
+        "icon": "vr-cardboard",
+        "isActive": true,
+        "order": 5,
+        "children": [
+          {
+            "id": "kim-lien-vr",
+            "label": "Kim Liên 360°",
+            "href": "/vr-experience/kim-lien",
+            "order": 1
+          },
+          {
+            "id": "pac-bo-vr",
+            "label": "Hang Pác Bó VR",
+            "href": "/vr-experience/pac-bo",
+            "order": 2
+          },
+          {
+            "id": "tan-trao-vr",
+            "label": "Tân Trào VR",
+            "href": "/vr-experience/tan-trao",
+            "order": 3
+          }
+        ]
+      },
+      {
+        "id": "learning-activities",
+        "label": "Hoạt động học tập",
+        "href": "/learning",
+        "icon": "academic-cap",
+        "isActive": true,
+        "order": 6,
+        "children": [
+          {
+            "id": "quizzes",
+            "label": "Quiz kiến thức",
+            "href": "/learning/quizzes",
+            "order": 1
+          },
+          {
+            "id": "interactive-games",
+            "label": "Trò chơi tương tác",
+            "href": "/learning/games",
+            "order": 2
+          },
+          {
+            "id": "learning-modules",
+            "label": "Bài học theo chủ đề",
+            "href": "/learning/modules",
+            "order": 3
+          }
+        ]
+      }
+    ],
+    "languages": [
+      {
+        "code": "vi",
+        "name": "Tiếng Việt",
+        "flag": "/images/flags/vietnam.svg",
+        "isDefault": true
+      },
+      {
+        "code": "en",
+        "name": "English",
+        "flag": "/images/flags/usa.svg",
+        "isDefault": false
+      }
+    ],
+    "userMenu": [
+      {
+        "id": "profile",
+        "label": "Hồ sơ học tập",
+        "href": "/profile",
+        "icon": "user",
+        "requireAuth": true
+      },
+      {
+        "id": "progress",
+        "label": "Tiến độ khám phá",
+        "href": "/progress",
+        "icon": "chart-bar",
+        "requireAuth": true
+      },
+      {
+        "id": "favorites",
+        "label": "Yêu thích",
+        "href": "/favorites",
+        "icon": "heart",
+        "requireAuth": true
+      },
+      {
+        "id": "achievements",
+        "label": "Thành tích",
+        "href": "/achievements",
+        "icon": "trophy",
+        "requireAuth": true
+      }
+    ],
+    "searchConfig": {
+      "enabled": true,
+      "placeholder": "Tìm kiếm di tích, sự kiện lịch sử...",
+      "collections": ["enhancedHeritageSpots", "timeline", "literaryWorks"]
+    },
+    "isActive": true,
+    "updatedAt": "2024-01-01T00:00:00Z"
+  },
+  "footerContent": {
+    "id": "ho-chi-minh-footer",
+    "companyInfo": {
+      "name": "Hành Trình Theo Dấu Chân Bác",
+      "description": "Nền tảng giáo dục số về cuộc đời và sự nghiệp của Chủ tịch Hồ Chí Minh, góp phần giữ gìn và phát huy các giá trị văn hóa, lịch sử dân tộc",
+      "logoUrl": "/images/logo/bac-ho-journey-footer-logo.svg",
+      "address": "Khu di tích Kim Liên, Nam Đàn, Nghệ An",
+      "phone": "+84 238 3899 999",
+      "email": "info@dacchanbac.vn",
+      "established": "2024"
+    },
+    "linkSections": [
+      {
+        "title": "Hành trình khám phá",
+        "links": [
+          {
+            "label": "Quê hương Kim Liên",
+            "href": "/heritage-journey/kim-lien",
+            "isExternal": false
+          },
+          {
+            "label": "Căn cứ địa Pác Bó",
+            "href": "/heritage-journey/pac-bo",
+            "isExternal": false
+          },
+          {
+            "label": "Bến Nhà Rồng",
+            "href": "/heritage-journey/ben-nha-rong",
+            "isExternal": false
+          },
+          {
+            "label": "Timeline cuộc đời",
+            "href": "/timeline",
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "title": "Tài nguyên học tập",
+        "links": [
+          {
+            "label": "Thơ văn Bác Hồ",
+            "href": "/literary-works",
+            "isExternal": false
+          },
+          {
+            "label": "Quiz kiến thức",
+            "href": "/learning/quizzes",
+            "isExternal": false
+          },
+          {
+            "label": "VR Experience",
+            "href": "/vr-experience",
+            "isExternal": false
+          },
+          {
+            "label": "Tư liệu lịch sử",
+            "href": "/documents",
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "title": "Kết nối",
+        "links": [
+          {
+            "label": "Bảo tàng Hồ Chí Minh",
+            "href": "https://baotang.hochiminh.vn",
+            "isExternal": true
+          },
+          {
+            "label": "Khu di tích Kim Liên",
+            "href": "https://langsenkimlien.hochiminh.vn",
+            "isExternal": true
+          },
+          {
+            "label": "Căn cứ địa Pác Bó",
+            "href": "https://pacbo.hochiminh.vn",
+            "isExternal": true
+          },
+          {
+            "label": "Bến Nhà Rồng",
+            "href": "https://bennharong.hochiminh.vn",
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "title": "Về dự án",
+        "links": [
+          {
+            "label": "Giới thiệu",
+            "href": "/about",
+            "isExternal": false
+          },
+          {
+            "label": "Đội ngũ thực hiện",
+            "href": "/team",
+            "isExternal": false
+          },
+          {
+            "label": "Phản hồi",
+            "href": "/feedback",
+            "isExternal": false
+          },
+          {
+            "label": "Liên hệ",
+            "href": "/contact",
+            "isExternal": false
+          }
+        ]
+      }
+    ],
+    "inspirationalQuote": {
+      "text": "Con đường cũ em đi học, Nay anh đi cứu nước về...",
+      "author": "Chủ tịch Hồ Chí Minh",
+      "context": "Bài thơ về quê hương"
+    },
+    "socialLinks": [
+      {
+        "platform": "facebook",
+        "url": "https://facebook.com/dacchanbac",
+        "icon": "facebook",
+        "label": "Facebook"
+      },
+      {
+        "platform": "youtube",
+        "url": "https://youtube.com/@dacchanbac",
+        "icon": "youtube",
+        "label": "YouTube"
+      },
+      {
+        "platform": "zalo",
+        "url": "https://zalo.me/dacchanbac",
+        "icon": "zalo",
+        "label": "Zalo"
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Bộ Giáo dục và Đào tạo",
+        "logoUrl": "/images/certifications/moet.png",
+        "description": "Được bảo trợ bởi Bộ Giáo dục"
+      },
+      {
+        "name": "Bảo tàng Hồ Chí Minh",
+        "logoUrl": "/images/certifications/ho-chi-minh-museum.png",
+        "description": "Hợp tác với Bảo tàng Hồ Chí Minh"
+      }
+    ],
+    "legalText": {
+      "copyright": "© 2024 Hành Trình Theo Dấu Chân Bác. Mọi quyền được bảo lưu.",
+      "additionalNotes": "Phát triển nhằm tôn vinh và giáo dục về tư tưởng, đạo đức Hồ Chí Minh"
+    },
+    "isActive": true,
+    "updatedAt": "2024-01-01T00:00:00Z"
+  },
+  "siteConfig": {
+    "id": "ho-chi-minh-config",
+    "siteName": "Hành Trình Theo Dấu Chân Bác",
+    "siteDescription": "Khám phá cuộc đời và sự nghiệp của Chủ tịch Hồ Chí Minh",
+    "siteUrl": "https://dacchanbac.vn",
+    "theme": {
+      "primaryColor": "#dc2626",
+      "secondaryColor": "#fbbf24",
+      "accentColor": "#16a34a",
+      "backgroundColor": "#ffffff",
+      "textColor": "#374151",
+      "fontFamily": "Inter, system-ui, sans-serif",
+      "heroGradient": "linear-gradient(135deg, #dc2626 0%, #fbbf24 100%)",
+      "darkMode": {
+        "enabled": true,
+        "defaultMode": "light"
+      }
+    },
+    "features": {
+      "authentication": true,
+      "userProfiles": true,
+      "progressTracking": true,
+      "achievements": true,
+      "timeline": true,
+      "vrExperience": true,
+      "literaryWorks": true,
+      "interactiveQuizzes": true,
+      "multiLanguage": true,
+      "offline": true,
+      "printFriendly": true
+    },
+    "educationalSettings": {
+      "ageGroups": ["elementary", "middle-school", "high-school", "adult"],
+      "difficultyLevels": ["beginner", "intermediate", "advanced"],
+      "learningPaths": true,
+      "certifications": true,
+      "teacherTools": true
+    },
+    "contentCategories": [
+      "birthplace",
+      "early-life",
+      "departure-journey",
+      "revolutionary-base",
+      "leadership-period",
+      "literary-works",
+      "historical-documents"
+    ],
+    "isActive": true,
+    "updatedAt": "2024-01-01T00:00:00Z"
+  }
+}

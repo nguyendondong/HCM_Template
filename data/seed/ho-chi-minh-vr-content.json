@@ -1,0 +1,448 @@
+{
+  "vrExperiences": [
+    {
+      "id": "kim-lien-birthplace-vr",
+      "name": "Kim Liên - Quê hương Bác Hồ",
+      "title": "Trải nghiệm VR: Nhà sinh Chủ tịch Hồ Chí Minh",
+      "description": "Khám phá quê hương Kim Liên và ngôi nhà tranh nơi Bác Hồ sinh ra qua công nghệ thực tế ảo 360°",
+      "heritageSpotId": "kim-lien-heritage-site",
+      "vrType": "360-tour",
+      "difficulty": "easy",
+      "estimatedDuration": 15,
+      "scenes": [
+        {
+          "id": "overview-kim-lien",
+          "name": "Toàn cảnh Kim Liên",
+          "description": "Nhìn toàn cảnh làng Sen - Kim Liên từ trên cao",
+          "panoramaUrl": "/vr/kim-lien/overview-panorama.jpg",
+          "audioNarration": "/vr/kim-lien/overview-narration.mp3",
+          "hotspots": [
+            {
+              "id": "birth-house-entrance",
+              "position": { "x": 0.3, "y": 0.4 },
+              "type": "navigation",
+              "title": "Nhà sinh Bác Hồ",
+              "description": "Di chuyển đến ngôi nhà tranh nơi Bác Hồ sinh ra",
+              "targetScene": "birth-house-exterior"
+            },
+            {
+              "id": "lotus-pond-view",
+              "position": { "x": 0.7, "y": 0.6 },
+              "type": "navigation",
+              "title": "Ao sen Kim Liên",
+              "description": "Khám phá ao sen nổi tiếng của quê hương",
+              "targetScene": "lotus-pond"
+            }
+          ]
+        },
+        {
+          "id": "birth-house-exterior",
+          "name": "Bên ngoài nhà sinh",
+          "description": "Ngôi nhà tranh ba gian đơn sơ nơi Bác Hồ sinh ra",
+          "panoramaUrl": "/vr/kim-lien/birth-house-exterior.jpg",
+          "audioNarration": "/vr/kim-lien/birth-house-story.mp3",
+          "historicalContext": {
+            "period": "1890-1901",
+            "significance": "Nơi Nguyễn Sinh Cung (Bác Hồ) sinh ra và sống 11 năm đầu đời",
+            "architecture": "Nhà tranh ba gian truyền thống Bắc Trung Bộ"
+          },
+          "hotspots": [
+            {
+              "id": "house-interior",
+              "position": { "x": 0.5, "y": 0.3 },
+              "type": "navigation",
+              "title": "Bên trong nhà sinh",
+              "description": "Khám phá không gian sống của gia đình Bác Hồ",
+              "targetScene": "birth-house-interior"
+            },
+            {
+              "id": "family-altar",
+              "position": { "x": 0.2, "y": 0.4 },
+              "type": "information",
+              "title": "Bàn thờ gia tiên",
+              "description": "Nơi thờ cúng tổ tiên của gia đình",
+              "content": "Bàn thờ gia tiên được bố trí trang trọng, thể hiện truyền thống thờ cúng của người Việt"
+            }
+          ]
+        },
+        {
+          "id": "birth-house-interior",
+          "name": "Bên trong nhà sinh",
+          "description": "Không gian sống đơn sơ của gia đình Bác Hồ",
+          "panoramaUrl": "/vr/kim-lien/birth-house-interior.jpg",
+          "audioNarration": "/vr/kim-lien/interior-description.mp3",
+          "interactiveElements": [
+            {
+              "id": "sleeping-area",
+              "position": { "x": 0.3, "y": 0.5 },
+              "type": "artifact",
+              "title": "Nơi Bác Hồ ngủ",
+              "description": "Góc nghỉ ngơi đơn giản với chiếu cói và gối gỗ",
+              "image": "/images/artifacts/sleeping-area.jpg"
+            },
+            {
+              "id": "study-corner",
+              "position": { "x": 0.7, "y": 0.4 },
+              "type": "artifact",
+              "title": "Góc học tập",
+              "description": "Nơi Bác Hồ học chữ Hán cùng cha",
+              "image": "/images/artifacts/study-corner.jpg"
+            }
+          ]
+        },
+        {
+          "id": "lotus-pond",
+          "name": "Ao sen Kim Liên",
+          "description": "Ao sen biểu tượng của quê hương, nơi Bác Hồ thường chơi đùa",
+          "panoramaUrl": "/vr/kim-lien/lotus-pond.jpg",
+          "audioNarration": "/vr/kim-lien/lotus-pond-poem.mp3",
+          "poetryContent": {
+            "title": "Làng tôi có một cái ao sen",
+            "author": "Hồ Chí Minh",
+            "verses": [
+              "Làng tôi có một cái ao sen",
+              "Ao trong, sen đẹp lá xanh tươi",
+              "Trong lá có cây cau nước biếc",
+              "Cây cau báo hiệu gió mùa."
+            ]
+          },
+          "hotspots": [
+            {
+              "id": "lotus-flowers",
+              "position": { "x": 0.5, "y": 0.6 },
+              "type": "information",
+              "title": "Hoa sen nở",
+              "description": "Hoa sen Kim Liên nở quanh năm, biểu tượng cho sự trong sáng",
+              "content": "Sen Kim Liên được trồng từ thời Bác Hồ còn nhỏ, đã trở thành biểu tượng của quê hương"
+            }
+          ]
+        }
+      ],
+      "educationalContent": {
+        "keyLearnings": [
+          "Hiểu về hoàn cảnh và môi trường sống thời thơ ấu của Bác Hồ",
+          "Nhận biết kiến trúc truyền thống Việt Nam cuối thế kỷ 19",
+          "Cảm nhận tình yêu quê hương qua thơ văn của Bác Hồ"
+        ],
+        "historicalFacts": [
+          "Bác Hồ sinh ra ngày 19/5/1890 tại làng Sen",
+          "Nhà tranh ba gian theo kiến trúc truyền thống",
+          "Sống tại Kim Liên đến năm 1901 (11 tuổi)"
+        ]
+      },
+      "accessibilityFeatures": {
+        "audioDescription": true,
+        "subtitles": ["vi", "en"],
+        "signLanguage": false,
+        "simplifiedMode": true
+      },
+      "technicalRequirements": {
+        "vrHeadset": false,
+        "mobile": true,
+        "desktop": true,
+        "minimumBandwidth": "5 Mbps"
+      },
+      "isActive": true,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "pac-bo-cave-vr",
+      "name": "Hang Pác Bó - Cội nguồn cách mạng",
+      "title": "Trải nghiệm VR: Hang Pác Bó và suối Lê Nin",
+      "description": "Khám phá hang Pác Bó nơi Bác Hồ trở về nước và thành lập Việt Minh",
+      "heritageSpotId": "pac-bo-heritage-site",
+      "vrType": "360-immersive",
+      "difficulty": "medium",
+      "estimatedDuration": 20,
+      "scenes": [
+        {
+          "id": "pac-bo-landscape",
+          "name": "Phong cảnh Pác Bó",
+          "description": "Toàn cảnh vùng núi đá vôi Pác Bó hùng vĩ",
+          "panoramaUrl": "/vr/pac-bo/landscape-panorama.jpg",
+          "audioNarration": "/vr/pac-bo/landscape-description.mp3",
+          "historicalContext": {
+            "period": "1941-1943",
+            "significance": "Nơi Bác Hồ trở về sau 30 năm đi tìm đường cứu nước",
+            "geography": "Vùng núi đá vôi gần biên giới Việt-Trung"
+          },
+          "hotspots": [
+            {
+              "id": "pac-bo-cave-entrance",
+              "position": { "x": 0.4, "y": 0.5 },
+              "type": "navigation",
+              "title": "Hang Pác Bó",
+              "description": "Hang động nơi Bác Hồ ở và làm việc",
+              "targetScene": "pac-bo-cave-interior"
+            },
+            {
+              "id": "lenin-stream",
+              "position": { "x": 0.6, "y": 0.7 },
+              "type": "navigation",
+              "title": "Suối Lê Nin",
+              "description": "Suối nước trong được Bác Hồ đặt tên",
+              "targetScene": "lenin-stream"
+            },
+            {
+              "id": "karl-marx-mountain",
+              "position": { "x": 0.2, "y": 0.2 },
+              "type": "information",
+              "title": "Núi Các Mác",
+              "description": "Ngọn núi được Bác Hồ đặt tên theo Karl Marx",
+              "content": "Bác Hồ đặt tên núi Các Mác để tưởng nhớ nhà tư tưởng cách mạng vĩ đại"
+            }
+          ]
+        },
+        {
+          "id": "pac-bo-cave-interior",
+          "name": "Bên trong hang Pác Bó",
+          "description": "Không gian sinh hoạt và làm việc của Bác Hồ",
+          "panoramaUrl": "/vr/pac-bo/cave-interior.jpg",
+          "audioNarration": "/vr/pac-bo/cave-life-story.mp3",
+          "interactiveElements": [
+            {
+              "id": "sleeping-stone",
+              "position": { "x": 0.3, "y": 0.6 },
+              "type": "artifact",
+              "title": "Đá ngủ của Bác Hồ",
+              "description": "Tảng đá phẳng làm giường ngủ",
+              "image": "/images/artifacts/sleeping-stone.jpg"
+            },
+            {
+              "id": "work-table",
+              "position": { "x": 0.6, "y": 0.4 },
+              "type": "artifact",
+              "title": "Bàn làm việc",
+              "description": "Nơi Bác Hồ viết văn bản và thơ",
+              "image": "/images/artifacts/work-table.jpg"
+            },
+            {
+              "id": "writing-tools",
+              "position": { "x": 0.7, "y": 0.5 },
+              "type": "artifact",
+              "title": "Dụng cụ viết",
+              "description": "Bút lông và giấy viết thời bấy giờ",
+              "image": "/images/artifacts/writing-tools.jpg"
+            }
+          ],
+          "revolutionaryActivities": [
+            "Thành lập Mặt trận Việt Minh (19/5/1941)",
+            "Sáng tác 'Nhật ký trong tù'",
+            "Huấn luyện cán bộ cách mạng",
+            "Xây dựng căn cứ địa"
+          ]
+        },
+        {
+          "id": "lenin-stream",
+          "name": "Suối Lê Nin",
+          "description": "Dòng suối trong vắt chảy bên hang Pác Bó",
+          "panoramaUrl": "/vr/pac-bo/lenin-stream.jpg",
+          "audioNarration": "/vr/pac-bo/stream-story.mp3",
+          "poetryContent": {
+            "title": "Bài thơ về suối Lê Nin",
+            "author": "Hồ Chí Minh",
+            "verses": [
+              "Suối trong, trúc mát, hang sâu, núi cao",
+              "Tiếng chim hót ngân nga say sưa",
+              "Hoa đào trắng điểm những đồi xanh",
+              "Khói lam chiều tím ngút trời xa."
+            ]
+          },
+          "hotspots": [
+            {
+              "id": "stream-source",
+              "position": { "x": 0.2, "y": 0.3 },
+              "type": "information",
+              "title": "Nguồn suối",
+              "description": "Nguồn nước ngọt từ núi đá vôi",
+              "content": "Nước suối trong vắt, mát lành, cung cấp nước sinh hoạt cho Bác Hồ"
+            }
+          ]
+        }
+      ],
+      "educationalContent": {
+        "keyLearnings": [
+          "Hiểu về giai đoạn Bác Hồ trở về nước sau 30 năm",
+          "Nhận thức về sự ra đời của Việt Minh",
+          "Cảm nhận tinh thần cách mạng qua thơ văn"
+        ],
+        "historicalFacts": [
+          "Bác Hồ về Pác Bó ngày 28/1/1941",
+          "Việt Minh thành lập 19/5/1941",
+          "Sáng tác 'Nhật ký trong tù' tại đây"
+        ]
+      },
+      "accessibilityFeatures": {
+        "audioDescription": true,
+        "subtitles": ["vi", "en", "zh"],
+        "signLanguage": false,
+        "simplifiedMode": true
+      },
+      "technicalRequirements": {
+        "vrHeadset": true,
+        "mobile": true,
+        "desktop": true,
+        "minimumBandwidth": "10 Mbps"
+      },
+      "isActive": true,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "ben-nha-rong-departure-vr",
+      "name": "Bến Nhà Rồng 1911",
+      "title": "Trải nghiệm VR: Ra đi tìm đường cứu nước",
+      "description": "Tái hiện khoảnh khắc lịch sử Nguyễn Tất Thành lên tàu ra đi tìm đường cứu nước",
+      "heritageSpotId": "ben-nha-rong-ho-chi-minh-museum",
+      "vrType": "historical-recreation",
+      "difficulty": "medium",
+      "estimatedDuration": 18,
+      "scenes": [
+        {
+          "id": "saigon-port-1911",
+          "name": "Cảng Sài Gòn năm 1911",
+          "description": "Tái hiện cảng Sài Gòn nhộn nhịp đầu thế kỷ 20",
+          "panoramaUrl": "/vr/ben-nha-rong/saigon-port-1911.jpg",
+          "audioNarration": "/vr/ben-nha-rong/port-atmosphere.mp3",
+          "historicalContext": {
+            "period": "Đầu thế kỷ 20",
+            "significance": "Cảng quan trọng của Nam Kỳ thời Pháp thuộc",
+            "atmosphere": "Nhộn nhịp với tàu thuyền và thương gia"
+          },
+          "timeOfDay": "early-morning",
+          "weatherCondition": "sunny",
+          "hotspots": [
+            {
+              "id": "dragon-house-wharf",
+              "position": { "x": 0.5, "y": 0.4 },
+              "type": "navigation",
+              "title": "Bến Nhà Rồng",
+              "description": "Khu vực cảng chính",
+              "targetScene": "departure-moment"
+            },
+            {
+              "id": "french-ship",
+              "position": { "x": 0.7, "y": 0.3 },
+              "type": "information",
+              "title": "Tàu Amiral Latouche-Tréville",
+              "description": "Tàu mà Nguyễn Tất Thành sẽ lên",
+              "content": "Tàu hàng của hãng tàu Pháp Messageries Maritimes"
+            }
+          ]
+        },
+        {
+          "id": "departure-moment",
+          "name": "Khoảnh khắc ra đi",
+          "description": "Nguyễn Tất Thành lên tàu ngày 5/6/1911",
+          "panoramaUrl": "/vr/ben-nha-rong/departure-moment.jpg",
+          "audioNarration": "/vr/ben-nha-rong/departure-narration.mp3",
+          "characterPresence": [
+            {
+              "name": "Nguyễn Tất Thành",
+              "age": 21,
+              "position": { "x": 0.4, "y": 0.5 },
+              "description": "Chàng trai trẻ 21 tuổi với ước mơ cứu nước"
+            }
+          ],
+          "emotionalMoments": [
+            {
+              "timestamp": "06:00",
+              "description": "Nguyễn Tất Thành bước lên cầu tàu",
+              "emotion": "determined"
+            },
+            {
+              "timestamp": "06:30",
+              "description": "Tàu rời bến, hướng ra biển lớn",
+              "emotion": "hopeful"
+            }
+          ],
+          "interactiveElements": [
+            {
+              "id": "departure-letter",
+              "position": { "x": 0.3, "y": 0.6 },
+              "type": "document",
+              "title": "Tâm thư ra đi",
+              "description": "Suy nghĩ của Nguyễn Tất Thành khi ra đi",
+              "content": "Đi để tìm đường cứu nước, để trở về giải phóng dân tộc"
+            }
+          ]
+        },
+        {
+          "id": "ship-deck-view",
+          "name": "Trên boong tàu",
+          "description": "Nhìn lại đất nước từ boong tàu",
+          "panoramaUrl": "/vr/ben-nha-rong/ship-deck-view.jpg",
+          "audioNarration": "/vr/ben-nha-rong/farewell-thoughts.mp3",
+          "reflectiveContent": {
+            "title": "Suy tư của người ra đi",
+            "thoughts": [
+              "Tạm biệt quê hương để tìm đường cứu nước",
+              "Ước mơ học hỏi để phục vụ dân tộc",
+              "Quyết tâm sẽ trở về với kiến thức mới"
+            ]
+          },
+          "hotspots": [
+            {
+              "id": "homeland-view",
+              "position": { "x": 0.6, "y": 0.4 },
+              "type": "information",
+              "title": "Nhìn về quê hương",
+              "description": "Cảm xúc khi rời xa đất nước",
+              "content": "Dù xa quê hương nhưng trái tim luôn hướng về dân tộc"
+            }
+          ]
+        }
+      ],
+      "educationalContent": {
+        "keyLearnings": [
+          "Hiểu động cơ ra đi tìm đường cứu nước của Bác Hồ",
+          "Nhận thức về tinh thần hi sinh vì dân tộc",
+          "Cảm nhận quyết tâm và ý chí của người cách mạng trẻ"
+        ],
+        "historicalFacts": [
+          "Ra đi ngày 5/6/1911 từ Bến Nhà Rồng",
+          "21 tuổi, làm phụ bếp trên tàu",
+          "Hành trình 30 năm tìm đường cứu nước bắt đầu"
+        ]
+      },
+      "accessibilityFeatures": {
+        "audioDescription": true,
+        "subtitles": ["vi", "en", "fr"],
+        "signLanguage": true,
+        "simplifiedMode": true
+      },
+      "technicalRequirements": {
+        "vrHeadset": true,
+        "mobile": true,
+        "desktop": true,
+        "minimumBandwidth": "8 Mbps"
+      },
+      "isActive": true,
+      "createdAt": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "vrCollections": [
+    {
+      "id": "ho-chi-minh-life-journey",
+      "name": "Hành trình cuộc đời Bác Hồ",
+      "description": "Bộ sưu tập VR theo dấu chân Chủ tịch Hồ Chí Minh",
+      "experiences": [
+        "kim-lien-birthplace-vr",
+        "ben-nha-rong-departure-vr",
+        "pac-bo-cave-vr"
+      ],
+      "totalDuration": 53,
+      "difficultyLevel": "medium",
+      "recommendedAge": "12+",
+      "isActive": true
+    }
+  ],
+  "vrSettings": {
+    "defaultLanguage": "vi",
+    "supportedLanguages": ["vi", "en", "fr", "zh"],
+    "autoplay": false,
+    "showSubtitles": true,
+    "enableAudioDescription": true,
+    "vrQuality": "high",
+    "streamingQuality": "adaptive"
+  }
+}

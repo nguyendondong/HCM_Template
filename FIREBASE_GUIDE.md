@@ -926,8 +926,8 @@ firebase init hosting
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && firebase deploy --only hosting",
-    "deploy:preview": "npm run build && firebase hosting:channel:deploy preview"
+    "deploy": "yarn build && firebase deploy --only hosting",
+    "deploy:preview": "yarn build && firebase hosting:channel:deploy preview"
   }
 }
 ```
@@ -936,7 +936,7 @@ firebase init hosting
 
 ```bash
 # Build project
-npm run build
+yarn build
 
 # Deploy lên production
 firebase deploy --only hosting

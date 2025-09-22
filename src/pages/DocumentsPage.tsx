@@ -1,149 +1,112 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, FileText, Download, Image, Video, Search, Calendar, User, BookOpen } from 'lucide-react';
+import { ArrowLeft, FileText, Download, Image, Video, Search, Calendar, User, BookOpen, Globe, ExternalLink } from 'lucide-react';
+import { db } from '../lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
+
+// Interfaces for Firestore data
+interface DocumentCategory {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  url?: string; // URL cho liên kết ngoài nếu có
+  documents?: Document[];
+}
+
+interface Document {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  type: string;
+  size: string;
+  downloadUrl: string;
+  previewImage: string;
+  category: string;
+}
+
+// Map các icon string từ Firestore thành Lucide component
+const getIconComponent = (iconName: string): React.ElementType => {
+  const iconMap: Record<string, React.ElementType> = {
+    'FileText': FileText,
+    'GraduationCap': BookOpen,
+    'Ship': Video,
+    'Flag': FileText,
+    'BookOpen': BookOpen,
+    'Mail': Image,
+    'Building': FileText,
+    'Globe': Globe
+  };
+
+  return iconMap[iconName] || FileText; // Default to FileText if icon not found
+};
 
 const DocumentsPage: React.FC = () => {
   const navigate = useNavigate();
+  const [documentCategories, setDocumentCategories] = useState<DocumentCategory[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Fetch data from Firestore
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Fetch categories
+        const categoriesSnapshot = await getDocs(collection(db, 'document-categories'));
+        const categoriesData: DocumentCategory[] = categoriesSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as DocumentCategory));
+
+        // Fetch documents
+        const documentsSnapshot = await getDocs(collection(db, 'documents'));
+        const documentsData: Document[] = documentsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as Document));
+
+        // Add documents to their respective categories
+        const categoriesWithDocs = categoriesData.map(category => ({
+          ...category,
+          documents: documentsData.filter(doc => doc.category === category.id)
+        }));
+
+        setDocumentCategories(categoriesWithDocs);
+
+        // Set default selected category if we have categories
+        if (categoriesWithDocs.length > 0) {
+          setSelectedCategory(categoriesWithDocs[0].id);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data from Firestore:", error);
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const handleBackToHome = () => {
     // Store the target section (documents for Documents)
     sessionStorage.setItem('targetSection', 'documents');
     navigate('/');
   };
-  const documentCategories = [
-    {
-      id: 'declarations',
-      icon: FileText,
-      title: 'Tuyên ngôn và Văn kiện',
-      description: 'Các văn bản chính thức quan trọng nhất',
-      documents: [
-        {
-          id: 'tuyen-ngon-doc-lap',
-          title: 'Tuyên ngôn độc lập 2/9/1945',
-          description: 'Văn kiện lịch sử tuyên bố nền độc lập của nước Việt Nam Dân chủ Cộng hòa',
-          date: '2/9/1945',
-          type: 'PDF',
-          size: '2.3 MB',
-          downloadUrl: '#',
-          previewImage: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop'
-        },
-        {
-          id: 'di-chuc',
-          title: 'Di chúc của Chủ tịch Hồ Chí Minh',
-          description: 'Lời dặn dò cuối cùng của Bác với Đảng và nhân dân',
-          date: '10/5/1969',
-          type: 'PDF',
-          size: '1.8 MB',
-          downloadUrl: '#',
-          previewImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop'
-        },
-        {
-          id: 'loi-keu-goi',
-          title: 'Lời kêu gọi toàn quốc kháng chiến',
-          description: 'Bản kêu gọi toàn dân tộc đứng lên chống thực dân Pháp',
-          date: '19/12/1946',
-          type: 'PDF',
-          size: '1.5 MB',
-          downloadUrl: '#',
-          previewImage: 'https://images.unsplash.com/photo-1586769852836-bc069f19e1b6?w=400&h=300&fit=crop'
-        }
-      ]
-    },
-    {
-      id: 'writings',
-      icon: BookOpen,
-      title: 'Tác phẩm và Bài viết',
-      description: 'Những bài viết, tác phẩm của Chủ tịch Hồ Chí Minh',
-      documents: [
-        {
-          id: 'duong-kach-menh',
-          title: 'Đường Kách mệnh',
-          description: 'Tác phẩm viết về con đường cách mạng của nhân dân ta',
-          date: '1927',
-          type: 'PDF',
-          size: '5.2 MB',
-          downloadUrl: '#',
-          previewImage: 'https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=400&h=300&fit=crop'
-        },
-        {
-          id: 'nhat-ky-trong-tu',
-          title: 'Nhật ký trong tù',
-          description: 'Những bài thơ viết trong thời gian bị giam cầm tại Trung Quốc',
-          date: '1942-1943',
-          type: 'PDF',
-          size: '3.7 MB',
-          downloadUrl: '#',
-          previewImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'
-        }
-      ]
-    },
-    {
-      id: 'photos',
-      icon: Image,
-      title: 'Hình ảnh lịch sử',
-      description: 'Bộ sưu tập ảnh quý hiếm về cuộc đời Bác',
-      documents: [
-        {
-          id: 'anh-thoi-tre',
-          title: 'Ảnh thời trẻ ở Paris',
-          description: 'Những bức ảnh hiếm hoi về thời gian Bác học tập và hoạt động tại Pháp',
-          date: '1917-1923',
-          type: 'ZIP',
-          size: '45.6 MB',
-          downloadUrl: '#',
-          previewImage: 'https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=400&h=300&fit=crop'
-        },
-        {
-          id: 'anh-chien-khu',
-          title: 'Ảnh trong chiến khu Việt Bắc',
-          description: 'Những khoảnh khắc của Bác trong thời kỳ kháng chiến',
-          date: '1946-1954',
-          type: 'ZIP',
-          size: '67.8 MB',
-          downloadUrl: '#',
-          previewImage: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&h=300&fit=crop'
-        }
-      ]
-    },
-    {
-      id: 'videos',
-      icon: Video,
-      title: 'Video tư liệu',
-      description: 'Những thước phim quý giá ghi lại hoạt động của Bác',
-      documents: [
-        {
-          id: 'doc-tuyen-ngon',
-          title: 'Đọc Tuyên ngôn độc lập',
-          description: 'Cảnh Bác Hồ đọc Tuyên ngôn độc lập tại Quảng trường Ba Đình',
-          date: '2/9/1945',
-          type: 'MP4',
-          size: '156.3 MB',
-          downloadUrl: '#',
-          previewImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop'
-        },
-        {
-          id: 'gap-go-dan-toc',
-          title: 'Gặp gỡ đại biểu các dân tộc',
-          description: 'Bác Hồ tiếp các đại biểu dân tộc thiểu số',
-          date: '1968',
-          type: 'MP4',
-          size: '89.7 MB',
-          downloadUrl: '#',
-          previewImage: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop'
-        }
-      ]
-    }
-  ];
-
-  const [selectedCategory, setSelectedCategory] = useState(documentCategories[0].id);
-  const [searchTerm, setSearchTerm] = useState('');
 
   const getCurrentCategory = () => {
-    return documentCategories.find(cat => cat.id === selectedCategory) || documentCategories[0];
+    return documentCategories.find(cat => cat.id === selectedCategory) ||
+           (documentCategories.length > 0 ? documentCategories[0] : null);
   };
 
-  const filteredDocuments = getCurrentCategory().documents.filter(doc =>
+  // Get documents for the current category
+  const currentCategory = getCurrentCategory();
+  const categoryDocuments = currentCategory?.documents || [];
+
+  const filteredDocuments = categoryDocuments.filter(doc =>
     doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     doc.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -205,118 +168,154 @@ const DocumentsPage: React.FC = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                {documentCategories.map((category) => (
-                  <button
-                    key={category.id}
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full text-left p-3 rounded-lg transition-colors duration-200 ${
-                      selectedCategory === category.id
-                        ? 'bg-blue-100 text-blue-700 border-l-4 border-blue-500'
-                        : 'hover:bg-gray-50 text-gray-700'
-                    }`}
+              {loading ? (
+                <div className="py-20 text-center">
+                  <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-gray-600">Đang tải danh mục...</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {documentCategories.map((category) => {
+                    const IconComponent = getIconComponent(category.icon);
+                    return (
+                      <button
+                        key={category.id}
+                        onClick={() => setSelectedCategory(category.id)}
+                        className={`w-full text-left p-3 rounded-lg transition-colors duration-200 ${
+                          selectedCategory === category.id
+                            ? 'bg-blue-100 text-blue-700 border-l-4 border-blue-500'
+                            : 'hover:bg-gray-50 text-gray-700'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <IconComponent className="w-5 h-5" />
+                          <div>
+                            <div className="font-medium">{category.title}</div>
+                            <div className="text-xs text-gray-500">{category.documents?.length || 0} tài liệu</div>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+
+                  {/* Liên kết đến website chính thức */}
+                  <a
+                    href="https://hochiminh.vn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 mt-6 px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-800 text-white hover:from-blue-700 hover:to-blue-900 transition-all duration-300"
                   >
-                    <div className="flex items-center space-x-3">
-                      <category.icon className="w-5 h-5" />
-                      <div>
-                        <div className="font-medium">{category.title}</div>
-                        <div className="text-xs text-gray-500">{category.documents.length} tài liệu</div>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
+                    <Globe size={18} />
+                    <span className="font-medium">hochiminh.vn</span>
+                    <ExternalLink size={16} />
+                  </a>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <motion.div
-              key={selectedCategory}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              {/* Category Header */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg mb-8">
-                <div className="flex items-center space-x-4 mb-4">
-                  <div className="p-3 bg-blue-100 rounded-lg">
-                    {React.createElement(getCurrentCategory().icon, { className: "w-6 h-6 text-blue-600" })}
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900">{getCurrentCategory().title}</h2>
-                    <p className="text-gray-600">{getCurrentCategory().description}</p>
-                  </div>
-                </div>
-
-                <div className="text-sm text-gray-500">
-                  Tìm thấy {filteredDocuments.length} tài liệu
-                </div>
+            {loading ? (
+              <div className="py-32 text-center">
+                <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+                <p className="text-xl text-gray-600">Đang tải dữ liệu...</p>
               </div>
-
-              {/* Documents Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredDocuments.map((document, index) => (
-                  <motion.div
-                    key={document.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                  >
-                    <div className="relative">
-                      <img
-                        src={document.previewImage}
-                        alt={document.title}
-                        className="w-full h-48 object-cover"
-                      />
-                      <div className="absolute top-4 right-4 space-y-2">
-                        <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${getFileTypeColor(document.type)}`}>
-                          {document.type}
-                        </span>
-                        <div className="bg-black/60 text-white px-2 py-1 rounded text-xs">
-                          {document.size}
-                        </div>
+            ) : (
+              <motion.div
+                key={selectedCategory}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {/* Category Header */}
+                <div className="bg-white rounded-2xl p-6 shadow-lg mb-8">
+                  {currentCategory && (
+                    <div className="flex items-center space-x-4 mb-4">
+                      <div className="p-3 bg-blue-100 rounded-lg">
+                        {React.createElement(getIconComponent(currentCategory.icon), { className: "w-6 h-6 text-blue-600" })}
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-gray-900">{currentCategory.title}</h2>
+                        <p className="text-gray-600">{currentCategory.description}</p>
                       </div>
                     </div>
+                  )}
 
-                    <div className="p-6">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">{document.title}</h3>
-                      <p className="text-gray-600 text-sm mb-4">{document.description}</p>
-
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-2 text-sm text-gray-500">
-                          <Calendar className="w-4 h-4" />
-                          <span>{document.date}</span>
-                        </div>
-                        <div className="flex items-center space-x-2 text-sm text-gray-500">
-                          <User className="w-4 h-4" />
-                          <span>Chủ tịch Hồ Chí Minh</span>
-                        </div>
-                      </div>
-
-                      <div className="flex space-x-3">
-                        <button className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm">
-                          <FileText className="w-4 h-4" />
-                          <span>Xem chi tiết</span>
-                        </button>
-                        <button className="flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm">
-                          <Download className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {filteredDocuments.length === 0 && (
-                <div className="text-center py-12">
-                  <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Không tìm thấy tài liệu</h3>
-                  <p className="text-gray-500">Thử thay đổi từ khóa tìm kiếm hoặc chọn danh mục khác.</p>
+                  <div className="text-sm text-gray-500">
+                    Tìm thấy {filteredDocuments.length} tài liệu
+                  </div>
                 </div>
-              )}
-            </motion.div>
+
+                {/* Documents Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {filteredDocuments.map((document, index) => (
+                    <motion.div
+                      key={document.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    >
+                      <div className="relative">
+                        <img
+                          src={document.previewImage}
+                          alt={document.title}
+                          className="w-full h-48 object-cover"
+                        />
+                        <div className="absolute top-4 right-4 space-y-2">
+                          <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${getFileTypeColor(document.type)}`}>
+                            {document.type}
+                          </span>
+                          <div className="bg-black/60 text-white px-2 py-1 rounded text-xs">
+                            {document.size}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-6">
+                        <h3 className="text-lg font-bold text-gray-900 mb-2">{document.title}</h3>
+                        <p className="text-gray-600 text-sm mb-4">{document.description}</p>
+
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center space-x-2 text-sm text-gray-500">
+                            <Calendar className="w-4 h-4" />
+                            <span>{document.date}</span>
+                          </div>
+                          <div className="flex items-center space-x-2 text-sm text-gray-500">
+                            <User className="w-4 h-4" />
+                            <span>Chủ tịch Hồ Chí Minh</span>
+                          </div>
+                        </div>
+
+                        <div className="flex space-x-3">
+                          <button className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm">
+                            <FileText className="w-4 h-4" />
+                            <span>Xem chi tiết</span>
+                          </button>
+                          <a
+                            href={document.downloadUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm"
+                          >
+                            <Download className="w-4 h-4" />
+                          </a>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {filteredDocuments.length === 0 && (
+                  <div className="text-center py-12">
+                    <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Không tìm thấy tài liệu</h3>
+                    <p className="text-gray-500">Thử thay đổi từ khóa tìm kiếm hoặc chọn danh mục khác.</p>
+                  </div>
+                )}
+              </motion.div>
+            )}
           </div>
         </div>
 

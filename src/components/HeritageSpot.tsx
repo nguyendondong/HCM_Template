@@ -15,6 +15,10 @@ const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef, hideDot }) =>
   const controls = useAnimation();
   const lineControls = useAnimation();
 
+  // Use coordinates if available, otherwise fall back to mapPosition
+  const posX = spot.coordinates?.x ?? spot.mapPosition?.x ?? 0;
+  const posY = spot.coordinates?.y ?? spot.mapPosition?.y ?? 0;
+
   useEffect(() => {
     if (isInView) {
       controls.start({
@@ -37,8 +41,8 @@ const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef, hideDot }) =>
     const mapRect = mapRef.current.getBoundingClientRect();
     const spotRect = ref.current.getBoundingClientRect();
 
-    const mapCenterX = mapRect.left + (mapRect.width * spot.coordinates.x / 100);
-    const mapCenterY = mapRect.top + (mapRect.height * spot.coordinates.y / 100);
+    const mapCenterX = mapRect.left + (mapRect.width * posX / 100);
+    const mapCenterY = mapRect.top + (mapRect.height * posY / 100);
 
     const spotCenterX = spotRect.left + spotRect.width / 2;
     const spotCenterY = spotRect.top + spotRect.height / 2;
@@ -49,8 +53,8 @@ const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef, hideDot }) =>
     );
 
     return {
-      left: `${spot.coordinates.x}%`,
-      top: `${spot.coordinates.y}%`,
+      left: `${posX}%`,
+      top: `${posY}%`,
       width: `${distance}px`,
       transform: `rotate(${angle}rad)`,
       transformOrigin: '0 50%'
@@ -76,8 +80,8 @@ const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef, hideDot }) =>
           transition={{ duration: 0.5, delay: 0.8 }}
           className="absolute w-4 h-4 bg-yellow-400 rounded-full border-2 border-white shadow-lg pointer-events-none"
           style={{
-            left: `${spot.coordinates.x}%`,
-            top: `${spot.coordinates.y}%`,
+            left: `${posX}%`,
+            top: `${posY}%`,
             transform: 'translate(-50%, -50%)'
           }}
         />

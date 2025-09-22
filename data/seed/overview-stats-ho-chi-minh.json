@@ -1,0 +1,282 @@
+[
+  {
+    "id": "overview-statistics",
+    "title": "Thống kê tổng quan",
+    "description": "Những con số ấn tượng về di sản Hồ Chí Minh",
+    "category": "statistics",
+    "icon": "BarChart3",
+    "isActive": true,
+    "isFeatured": true,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "stats": [
+      {
+        "id": "heritage-sites",
+        "label": "Di tích lịch sử",
+        "value": 8,
+        "unit": "địa điểm",
+        "description": "Các khu di tích quan trọng gắn liền với cuộc đời và hoạt động của Chủ tịch Hồ Chí Minh",
+        "icon": "MapPin",
+        "color": "#ef4444",
+        "trend": "stable"
+      },
+      {
+        "id": "years-abroad",
+        "label": "Năm ở nước ngoài",
+        "value": 30,
+        "unit": "năm",
+        "description": "Thời gian Chủ tịch Hồ Chí Minh đi tìm đường cứu nước (1911-1941)",
+        "icon": "Plane",
+        "color": "#3b82f6",
+        "trend": "stable"
+      },
+      {
+        "id": "countries-visited",
+        "label": "Quốc gia đã đến",
+        "value": 12,
+        "unit": "nước",
+        "description": "Số lượng quốc gia Chủ tịch Hồ Chí Minh đã từng sinh sống và làm việc",
+        "icon": "Globe",
+        "color": "#10b981",
+        "trend": "stable"
+      },
+      {
+        "id": "literary-works",
+        "label": "Tác phẩm văn học",
+        "value": 50,
+        "unit": "tác phẩm",
+        "description": "Số lượng thơ, văn và bài viết nổi tiếng của Chủ tịch Hồ Chí Minh",
+        "icon": "BookOpen",
+        "color": "#f59e0b",
+        "trend": "stable"
+      },
+      {
+        "id": "museums",
+        "label": "Bảo tàng",
+        "value": 15,
+        "unit": "bảo tàng",
+        "description": "Số lượng bảo tàng Hồ Chí Minh trên toàn quốc",
+        "icon": "Building",
+        "color": "#8b5cf6",
+        "trend": "increasing"
+      },
+      {
+        "id": "annual-visitors",
+        "label": "Lượt khách hàng năm",
+        "value": 2000000,
+        "unit": "người",
+        "description": "Số lượng du khách tham quan các di tích Hồ Chí Minh mỗi năm",
+        "icon": "Users",
+        "color": "#06b6d4",
+        "trend": "increasing"
+      }
+    ]
+  },
+  {
+    "id": "historical-timeline",
+    "title": "Dòng thời gian lịch sử",
+    "description": "Các mốc thời gian quan trọng trong cuộc đời Chủ tịch Hồ Chí Minh",
+    "category": "timeline",
+    "icon": "Clock",
+    "isActive": true,
+    "isFeatured": true,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "timelineEvents": [
+      {
+        "year": 1890,
+        "title": "Sinh ra tại Kim Liên",
+        "description": "Nguyễn Sinh Cung sinh ra ngày 19/5/1890 tại làng Sen, Kim Liên, Nghệ An",
+        "importance": "high",
+        "category": "birth",
+        "location": "Kim Liên, Nghệ An"
+      },
+      {
+        "year": 1911,
+        "title": "Ra đi tìm đường cứu nước",
+        "description": "Lên tàu Amiral Latouche-Tréville tại Bến Nhà Rồng, bắt đầu hành trình 30 năm",
+        "importance": "high",
+        "category": "departure",
+        "location": "Sài Gòn"
+      },
+      {
+        "year": 1919,
+        "title": "Yêu sách 8 điều",
+        "description": "Gửi Yêu sách 8 điều tại Hội nghị Versailles đòi quyền tự do cho Việt Nam",
+        "importance": "high",
+        "category": "diplomacy",
+        "location": "Paris, Pháp"
+      },
+      {
+        "year": 1930,
+        "title": "Thành lập Đảng Cộng sản Việt Nam",
+        "description": "Sáng lập Đảng Cộng sản Việt Nam tại Hồng Kông",
+        "importance": "high",
+        "category": "party-founding",
+        "location": "Hồng Kông"
+      },
+      {
+        "year": 1941,
+        "title": "Trở về Tổ quốc",
+        "description": "Về nước tại Pác Bó sau 30 năm đi tìm đường cứu nước",
+        "importance": "high",
+        "category": "return",
+        "location": "Pác Bó, Cao Bằng"
+      },
+      {
+        "year": 1945,
+        "title": "Tuyên ngôn Độc lập",
+        "description": "Đọc Tuyên ngôn Độc lập, khai sinh nước Việt Nam Dân chủ Cộng hòa",
+        "importance": "highest",
+        "category": "independence",
+        "location": "Hà Nội"
+      },
+      {
+        "year": 1969,
+        "title": "Từ trần",
+        "description": "Chủ tịch Hồ Chí Minh từ trần ngày 2/9/1969 tại Hà Nội",
+        "importance": "high",
+        "category": "death",
+        "location": "Hà Nội"
+      }
+    ]
+  },
+  {
+    "id": "geographical-distribution",
+    "title": "Phân bố địa lý di tích",
+    "description": "Sự phân bố các di tích Hồ Chí Minh trên bản đồ Việt Nam",
+    "category": "geography",
+    "icon": "Map",
+    "isActive": true,
+    "isFeatured": true,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "regions": [
+      {
+        "name": "Bắc Trung Bộ",
+        "siteCount": 3,
+        "mainSites": ["Kim Liên", "Huế"],
+        "description": "Khu vực quê hương và thời niên thiếu",
+        "significance": "Nơi sinh và hình thành nhân cách"
+      },
+      {
+        "name": "Đông Bắc",
+        "siteCount": 2,
+        "mainSites": ["Pác Bó", "Tân Trào"],
+        "description": "Căn cứ địa cách mạng",
+        "significance": "Cội nguồn cách mạng Việt Nam"
+      },
+      {
+        "name": "Đồng Bằng Bắc Bộ",
+        "siteCount": 1,
+        "mainSites": ["Hà Nội"],
+        "description": "Trung tâm lãnh đạo quốc gia",
+        "significance": "Nơi lãnh đạo đất nước"
+      },
+      {
+        "name": "Đông Nam Bộ",
+        "siteCount": 1,
+        "mainSites": ["TP.HCM"],
+        "description": "Điểm khởi đầu hành trình",
+        "significance": "Nơi ra đi tìm đường cứu nước"
+      },
+      {
+        "name": "Đồng Bằng Sông Cửu Long",
+        "siteCount": 1,
+        "mainSites": ["Cần Thơ"],
+        "description": "Khu vực thăm viếng",
+        "significance": "Tình cảm với miền Tây Nam Bộ"
+      }
+    ]
+  },
+  {
+    "id": "revolutionary-impact",
+    "title": "Tác động cách mạng",
+    "description": "Ảnh hưởng của Chủ tịch Hồ Chí Minh đến cách mạng Việt Nam và thế giới",
+    "category": "impact",
+    "icon": "TrendingUp",
+    "isActive": true,
+    "isFeatured": true,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "impacts": [
+      {
+        "area": "Chính trị",
+        "description": "Thành lập Đảng Cộng sản Việt Nam, lãnh đạo cách mạng giành độc lập",
+        "significance": 10,
+        "keyAchievements": [
+          "Thành lập Đảng Cộng sản Việt Nam (1930)",
+          "Lãnh đạo Cách mạng Tháng Tám (1945)",
+          "Xây dựng nhà nước Việt Nam Dân chủ Cộng hòa"
+        ]
+      },
+      {
+        "area": "Văn hóa",
+        "description": "Tác phẩm văn học, tư tưởng văn hóa dân tộc",
+        "significance": 9,
+        "keyAchievements": [
+          "Sáng tác 'Nhật ký trong tù'",
+          "Nhiều bài thơ và bài viết nổi tiếng",
+          "Đề xuất xây dựng nền văn hóa dân tộc"
+        ]
+      },
+      {
+        "area": "Giáo dục",
+        "description": "Khuyến khích học tập, xóa nạn mù chữ",
+        "significance": 8,
+        "keyAchievements": [
+          "Phát động phong trào xóa nạn mù chữ",
+          "Thành lập các trường học",
+          "Đề xuất 'Học, học nữa, học mãi'"
+        ]
+      },
+      {
+        "area": "Quốc tế",
+        "description": "Ảnh hưởng đến các phong trào giải phóng dân tộc thế giới",
+        "significance": 9,
+        "keyAchievements": [
+          "Truyền cảm hứng cho các dân tộc bị áp bức",
+          "Mở đường ngoại giao cho Việt Nam",
+          "Được thế giới tôn trọng"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "preservation-efforts",
+    "title": "Công tác bảo tồn di sản",
+    "description": "Những nỗ lực bảo tồn và phát huy di sản Hồ Chí Minh",
+    "category": "preservation",
+    "icon": "Shield",
+    "isActive": true,
+    "isFeatured": false,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z",
+    "preservationStats": [
+      {
+        "category": "Di tích được xếp hạng",
+        "count": 8,
+        "level": "Quốc gia đặc biệt",
+        "status": "Được bảo tồn nghiêm ngặt"
+      },
+      {
+        "category": "Tài liệu số hóa",
+        "count": 5000,
+        "level": "Tài liệu gốc",
+        "status": "Đã số hóa và lưu trữ"
+      },
+      {
+        "category": "Chương trình giáo dục",
+        "count": 50,
+        "level": "Trên toàn quốc",
+        "status": "Đang triển khai"
+      },
+      {
+        "category": "Nghiên cứu khoa học",
+        "count": 200,
+        "level": "Luận văn và báo cáo",
+        "status": "Xuất bản hàng năm"
+      }
+    ]
+  }
+]

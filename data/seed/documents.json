@@ -1,0 +1,90 @@
+[
+  {
+    "id": "tuyen-ngon-doc-lap",
+    "title": "Tuyên ngôn Độc lập",
+    "description": "Bản gốc Tuyên ngôn Độc lập do Chủ tịch Hồ Chí Minh đọc ngày 2/9/1945",
+    "date": "2/9/1945",
+    "type": "PDF",
+    "size": "2.3 MB",
+    "downloadUrl": "/documents/independence-declaration.pdf",
+    "previewImage": "/images/documents/independence-declaration-thumb.jpg",
+    "category": "revolutionary-activities"
+  },
+  {
+    "id": "prison-diary",
+    "title": "Nhật ký trong tù",
+    "description": "Tác phẩm nổi tiếng viết trong thời gian bị giam giữ tại Trung Quốc",
+    "date": "1942-1943",
+    "type": "PDF",
+    "size": "1.8 MB",
+    "downloadUrl": "/documents/prison-diary.pdf",
+    "previewImage": "/images/documents/prison-diary-thumb.jpg",
+    "category": "literary-works"
+  },
+  {
+    "id": "di-chuc",
+    "title": "Di chúc của Chủ tịch Hồ Chí Minh",
+    "description": "Bản Di chúc cuối cùng của Chủ tịch Hồ Chí Minh viết và chỉnh sửa từ năm 1965-1969",
+    "date": "10/5/1969",
+    "type": "PDF",
+    "size": "1.5 MB",
+    "downloadUrl": "/documents/testament.pdf",
+    "previewImage": "/images/documents/testament-thumb.jpg",
+    "category": "personal-correspondence"
+  },
+  {
+    "id": "birth-certificate",
+    "title": "Giấy khai sinh",
+    "description": "Bản sao giấy khai sinh của Nguyễn Sinh Cung",
+    "date": "19/5/1890",
+    "type": "JPG",
+    "size": "0.8 MB",
+    "downloadUrl": "/documents/birth-certificate.jpg",
+    "previewImage": "/images/documents/birth-certificate-thumb.jpg",
+    "category": "early-life"
+  },
+  {
+    "id": "school-records",
+    "title": "Hồ sơ học tập tại Quốc học Huế",
+    "description": "Hồ sơ học tập và kết quả học tập tại trường Quốc học Huế",
+    "date": "1908",
+    "type": "PDF",
+    "size": "3.2 MB",
+    "downloadUrl": "/documents/school-records.pdf",
+    "previewImage": "/images/documents/school-records-thumb.jpg",
+    "category": "education"
+  },
+  {
+    "id": "passenger-list-1911",
+    "title": "Danh sách hành khách tàu Amiral Latouche-Tréville",
+    "description": "Danh sách hành khách có tên Văn Ba (Nguyễn Tất Thành) trên tàu ra đi ngày 5/6/1911",
+    "date": "5/6/1911",
+    "type": "PDF",
+    "size": "1.7 MB",
+    "downloadUrl": "/documents/passenger-list-1911.pdf",
+    "previewImage": "/images/documents/passenger-list-thumb.jpg",
+    "category": "overseas-journey"
+  },
+  {
+    "id": "constitution-drafts",
+    "title": "Dự thảo Hiến pháp 1946",
+    "description": "Dự thảo Hiến pháp đầu tiên của nước Việt Nam Dân chủ Cộng hòa",
+    "date": "9/11/1946",
+    "type": "PDF",
+    "size": "4.1 MB",
+    "downloadUrl": "/documents/constitution-drafts.pdf",
+    "previewImage": "/images/documents/constitution-drafts-thumb.jpg",
+    "category": "government-leadership"
+  },
+  {
+    "id": "diplomatic-notes",
+    "title": "Công hàm ngoại giao",
+    "description": "Các công hàm và văn bản ngoại giao gửi đến Liên hợp quốc",
+    "date": "17/1/1946",
+    "type": "PDF",
+    "size": "2.6 MB",
+    "downloadUrl": "/documents/diplomatic-notes.pdf",
+    "previewImage": "/images/documents/diplomatic-notes-thumb.jpg",
+    "category": "international-relations"
+  }
+]

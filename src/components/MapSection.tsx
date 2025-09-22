@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { heritageSpots } from '../data/heritageSpots';
+import { enhancedHeritageService } from '../services/enhancedHeritageService';
+import { HeritageSpot } from '../types/heritage';
 
 // Export function để scroll đến Hà Nội cho Navbar
 export const scrollToHanoi = () => {
@@ -10,46 +11,9 @@ export const scrollToHanoi = () => {
   if (mapSection) {
     // Delay ngắn để đảm bảo section đã render
     setTimeout(() => {
-      // Tìm tọa độ Hà Nội
-      const hanoiSpot = heritageSpots.find(spot => spot.id === 'ha-noi-complex');
-      if (hanoiSpot) {
-        // Tìm map container trong DOM
-        const mapContainer = mapSection.querySelector('img[alt="Vietnam Map"]')?.parentElement;
-        if (mapContainer) {
-          const mapRect = mapContainer.getBoundingClientRect();
-
-          // Tính vị trí thực tế của Hà Nội trên map
-          const hanoiY = mapRect.top + (mapRect.height * hanoiSpot.coordinates.y / 100);
-
-          // Tính scroll position để đưa Hà Nội về center của viewport
-          const currentScrollY = window.scrollY;
-          const viewportCenter = window.innerHeight / 2;
-          const targetScrollY = currentScrollY + (hanoiY - viewportCenter);
-
-          window.scrollTo({
-            top: Math.max(0, targetScrollY),
-            behavior: 'smooth'
-          });
-        } else {
-          // Fallback: scroll estimate
-          const mapSectionTop = mapSection.offsetTop;
-          const estimatedMapHeight = 500; // Ước tính
-          const hanoiPositionInMap = (hanoiSpot.coordinates.y / 100) * estimatedMapHeight;
-          const targetScrollTop = mapSectionTop + hanoiPositionInMap + 100;
-
-          window.scrollTo({
-            top: Math.max(0, targetScrollTop),
-            behavior: 'smooth'
-          });
-        }
-      } else {
-        // Fallback: scroll đến đầu section
-        const offsetTop = mapSection.offsetTop + 200;
-        window.scrollTo({
-          top: offsetTop,
-          behavior: 'smooth'
-        });
-      }
+      // Cần tham chiếu dynamic heritage spots từ component state
+      // Hiện tại sẽ fallback đến static behavior, sau này có thể cải thiện
+      mapSection.scrollIntoView({ behavior: 'smooth' });
 
       // Trigger Hà Nội selection sau khi scroll
       setTimeout(() => {
@@ -71,7 +35,29 @@ const MapSection: React.FC = () => {
   const [clickedSpotId, setClickedSpotId] = useState<string | null>(null); // Track spot đã click
   const [isNavbarTriggered, setIsNavbarTriggered] = useState(false); // Track khi được trigger từ navbar
   const [lastScrollY, setLastScrollY] = useState(0); // Track scroll position
+  const [heritageSpots, setHeritageSpots] = useState<HeritageSpot[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  // Load heritage spots từ service
+  useEffect(() => {
+    const loadHeritageSpots = async () => {
+      try {
+        console.log('Loading heritage spots from service...');
+        const spots = await enhancedHeritageService.getAllHeritageSpots();
+        console.log('Loaded heritage spots:', spots);
+        setHeritageSpots(spots);
+      } catch (error) {
+        console.error('Error loading heritage spots:', error);
+        // Fallback: có thể load từ static data hoặc hiển thị thông báo lỗi
+        setHeritageSpots([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadHeritageSpots();
+  }, []);
 
   // Handle click vào spot - Ưu tiên cao nhất
   const handleSpotClick = (e: React.MouseEvent, spotId: string) => {
@@ -370,7 +356,17 @@ const MapSection: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="relative">
+        {loading ? (
+          <div className="flex justify-center items-center h-96">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+            <span className="ml-4 text-gray-600">Đang tải di tích...</span>
+          </div>
+        ) : heritageSpots.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-600">Không có dữ liệu di tích. Vui lòng kiểm tra kết nối Firebase.</p>
+          </div>
+        ) : (
+          <div className="relative">
           {/* Vietnam Map Container */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 50 }}
@@ -395,31 +391,37 @@ const MapSection: React.FC = () => {
 
               {/* Heritage spots positioned absolutely on top of the map */}
               <div className="absolute inset-0 pointer-events-none">
-                {heritageSpots.map((spot, index) => (
-                  <motion.div
-                    key={spot.id}
-                    ref={el => spotRefs.current[index] = el}
-                    data-spot-id={spot.id}
-                    transition={{ duration: 0.5, delay: index * 0.2 }}
-                    className={`absolute w-6 h-6 rounded-full border-2 border-white shadow-lg transition-all duration-200 z-10 pointer-events-auto cursor-pointer ${
-                      selectedSpotId === spot.id && clickedSpotId === spot.id
-                        ? 'bg-red-500 scale-125 animate-none ring-2 ring-red-300'
-                        : selectedSpotId === spot.id && isHoveringSpot
-                        ? 'bg-orange-400 scale-115 animate-none'
-                        : selectedSpotId === spot.id
-                        ? 'bg-yellow-400 scale-110 animate-pulse'
-                        : 'bg-yellow-400 hover:scale-110 animate-pulse hover:animate-none'
-                    }`}
-                    style={{
-                      left: `${spot.coordinates.x}%`,
-                      top: `${spot.coordinates.y}%`,
-                      transform: 'translate(-50%, -50%)'
-                    }}
-                    onClick={(e) => handleSpotClick(e, spot.id)}
-                    onMouseEnter={() => handleSpotHover(spot.id)}
-                    onMouseLeave={handleSpotLeave}
-                  />
-                ))}
+                {heritageSpots.map((spot, index) => {
+                  // Use coordinates if available, otherwise fall back to mapPosition
+                  const posX = spot.coordinates?.x ?? spot.mapPosition?.x ?? 0;
+                  const posY = spot.coordinates?.y ?? spot.mapPosition?.y ?? 0;
+
+                  return (
+                    <motion.div
+                      key={spot.id}
+                      ref={el => spotRefs.current[index] = el}
+                      data-spot-id={spot.id}
+                      transition={{ duration: 0.5, delay: index * 0.2 }}
+                      className={`absolute w-6 h-6 rounded-full border-2 border-white shadow-lg transition-all duration-200 z-10 pointer-events-auto cursor-pointer ${
+                        selectedSpotId === spot.id && clickedSpotId === spot.id
+                          ? 'bg-red-500 scale-125 animate-none ring-2 ring-red-300'
+                          : selectedSpotId === spot.id && isHoveringSpot
+                          ? 'bg-orange-400 scale-115 animate-none'
+                          : selectedSpotId === spot.id
+                          ? 'bg-yellow-400 scale-110 animate-pulse'
+                          : 'bg-yellow-400 hover:scale-110 animate-pulse hover:animate-none'
+                      }`}
+                      style={{
+                        left: `${posX}%`,
+                        top: `${posY}%`,
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                      onClick={(e) => handleSpotClick(e, spot.id)}
+                      onMouseEnter={() => handleSpotHover(spot.id)}
+                      onMouseLeave={handleSpotLeave}
+                    />
+                  );
+                })}
               </div>
               {/* Popup hiển thị cho tất cả trạng thái (scroll/hover/click) - CHỈ KHI MapSection visible */}
               {selectedSpotId && sectionRef.current && (() => {
@@ -436,7 +438,11 @@ const MapSection: React.FC = () => {
                 const mapRect = mapRef.current.getBoundingClientRect();
                 const popupWidth = 380;
                 const popupHeight = 180;
-                const spotY = mapRect.top + (mapRect.height * spot.coordinates.y / 100);
+                // Use coordinates if available, otherwise fall back to mapPosition
+                const posX = spot.coordinates?.x ?? spot.mapPosition?.x ?? 0;
+                const posY = spot.coordinates?.y ?? spot.mapPosition?.y ?? 0;
+
+                const spotY = mapRect.top + (mapRect.height * posY / 100);
                 const popupLeft = spot.side === 'left'
                   ? mapRect.left - popupWidth - 32
                   : mapRect.right + 32;
@@ -444,8 +450,8 @@ const MapSection: React.FC = () => {
 
                 // Tính toạ độ center của spot
                 const dotCenter = {
-                  x: mapRect.left + mapRect.width * spot.coordinates.x / 100,
-                  y: mapRect.top + mapRect.height * spot.coordinates.y / 100
+                  x: mapRect.left + mapRect.width * posX / 100,
+                  y: mapRect.top + mapRect.height * posY / 100
                 };
 
                 // Tính điểm đầu (spot) và điểm cuối (popup) cho line
@@ -554,7 +560,8 @@ const MapSection: React.FC = () => {
               })()}
             </motion.div>
           </motion.div>
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );

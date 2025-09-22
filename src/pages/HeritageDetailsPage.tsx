@@ -1,20 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MapPin, Calendar, Globe, Clock, Heart, Users, Eye } from 'lucide-react';
-import { HeritageSpot } from '../types/heritage';
-import { heritageSpots } from '../data/heritageSpots';
+import { ArrowLeft, MapPin, Calendar, Clock, Heart, Users, Eye, ExternalLink, Globe } from 'lucide-react';
+import {
+  getExtendedHeritageSpotById,
+  ExtendedHeritageSpot,
+  extractHighlights,
+  extractHistoricalEvents,
+  extractGallery,
+  getEstablishmentInfo
+} from '../services/heritageDetailService';
 
 const HeritageDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [spot, setSpot] = useState<HeritageSpot | null>(null);
+  const [spot, setSpot] = useState<ExtendedHeritageSpot | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Scroll to top khi component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
-    if (id) {
-      const foundSpot = heritageSpots.find(s => s.id === id);
-      setSpot(foundSpot || null);
-    }
+    const loadSpot = async () => {
+      if (id) {
+        try {
+          setLoading(true);
+          const foundSpot = await getExtendedHeritageSpotById(id);
+          setSpot(foundSpot);
+        } catch (error) {
+          console.error('Error loading heritage spot:', error);
+          setSpot(null);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadSpot();
   }, [id]);
 
   const handleBackToHome = () => {
@@ -22,6 +46,17 @@ const HeritageDetailsPage: React.FC = () => {
     sessionStorage.setItem('targetSection', 'journey');
     navigate('/');
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+          <h2 className="text-xl font-medium text-gray-900">Đang tải thông tin di tích...</h2>
+        </div>
+      </div>
+    );
+  }
 
   if (!spot) {
     return (

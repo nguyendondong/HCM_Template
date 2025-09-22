@@ -89,7 +89,7 @@ if (hasErrors) {
   console.log('   2. Chọn project → Project Settings');
   console.log('   3. Copy Firebase config values');
   console.log('   4. Update .env file');
-  console.log('   5. Run: npm run check-env');
+  console.log('   5. Run: yarn check-env');
 
   process.exit(1);
 } else {

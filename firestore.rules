@@ -2,16 +2,15 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Video files - Public read
-    match /Video/{allPaths=**} {
-      allow read: if true;  // ai cũng xem được
-      allow write: if request.auth != null
-        && validFileSize()
-        && validFileType();
+    // Development mode - Allow all reads for emulator testing
+    // In production, these should be more restrictive
+    match /{document=**} {
+      allow read: if true; // Allow all reads for development
+      allow write: if true; // TEMPORARY: Allow writes for seeding (remove in production)
     }
 
     // Heritage Spots - Public read, authenticated write
-    match /heritageSpots/{spotId} {
+    match /heritage-spots/{spotId} {
       allow read: if true; // Cho phép tất cả đọc heritage spots
       allow write: if request.auth != null; // Chỉ user đã login mới write được
 
@@ -20,6 +19,48 @@ service cloud.firestore {
         && validateHeritageSpot();
       allow update: if request.auth != null
         && validateHeritageSpot();
+    }
+
+    // Legacy collection name support
+    match /heritageSpots/{spotId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Quizzes collection
+    match /quizzes/{quizId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Content collections
+    match /content/{contentId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Learning modules
+    match /learning-modules/{moduleId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // VR experiences
+    match /vr-experiences/{vrId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // User progress
+    match /user-progress/{progressId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // App settings
+    match /app-settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
     }
 
     // Users - Private, chỉ user đó mới được đọc/ghi

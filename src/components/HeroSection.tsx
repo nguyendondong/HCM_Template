@@ -1,19 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Star, Heart, Book, Users } from 'lucide-react';
+import { enhancedHeritageService } from '../services/enhancedHeritageService';
 
 const HeroSection: React.FC = () => {
+  const [stats, setStats] = useState([
+    { icon: Book, number: '...', label: 'Di tích quan trọng' },
+    { icon: Users, number: '50+', label: 'Năm hoạt động cách mạng' },
+    { icon: Heart, number: '1M+', label: 'Lượt tham quan' },
+    { icon: Star, number: '100%', label: 'Chính xác lịch sử' }
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  // Load thống kê từ service
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const spots = await enhancedHeritageService.getAllHeritageSpots();
+        const featuredSpots = await enhancedHeritageService.getFeaturedHeritageSpots();
+
+        setStats([
+          { icon: Book, number: `${spots.length}`, label: 'Di tích quan trọng' },
+          { icon: Users, number: '50+', label: 'Năm hoạt động cách mạng' },
+          { icon: Heart, number: '1M+', label: 'Lượt tham quan' },
+          { icon: Star, number: `${featuredSpots.length}`, label: 'Di tích nổi bật' }
+        ]);
+      } catch (error) {
+        console.error('Error loading stats:', error);
+        // Giữ giá trị mặc định nếu có lỗi
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStats();
+  }, []);
+
   const scrollToIntroduction = () => {
     const introSection = document.getElementById('introduction');
     introSection?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  const stats = [
-    { icon: Book, number: '9', label: 'Di tích quan trọng' },
-    { icon: Users, number: '50+', label: 'Năm hoạt động cách mạng' },
-    { icon: Heart, number: '1M+', label: 'Lượt tham quan' },
-    { icon: Star, number: '100%', label: 'Chính xác lịch sử' }
-  ];
 
   return (
     <section id="overview" className="min-h-screen relative overflow-hidden bg-gradient-to-br from-red-800 via-red-700 to-red-900 pt-16 lg:pt-20">
@@ -170,7 +196,15 @@ const HeroSection: React.FC = () => {
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-yellow-400 rounded-full mb-4">
                   <stat.icon className="w-6 h-6 text-red-800" />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{stat.number}</h3>
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                  {loading ? (
+                    <div className="animate-pulse">
+                      <div className="h-8 bg-white/20 rounded w-16 mx-auto"></div>
+                    </div>
+                  ) : (
+                    stat.number
+                  )}
+                </h3>
                 <p className="text-gray-200 text-sm font-medium">{stat.label}</p>
               </motion.div>
             ))}
