@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "check-env": "node scripts/check-env.js",
+    "seed:heritage": "node scripts/seed-heritage.js",
     "firebase:init": "firebase init",
     "firebase:login": "firebase login",
     "firebase:deploy": "yarn build && firebase deploy",

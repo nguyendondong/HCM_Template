@@ -31,10 +31,10 @@ VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
 
 ```bash
 # Check environment variables
-npm run check-env
+yarn check-env
 
 # Nếu OK, start development
-npm run dev
+yarn dev
 ```
 
 ## 🎯 Example Firebase Config
@@ -54,7 +54,7 @@ const firebaseConfig = {
 ## ✅ Success Output
 
 ```bash
-$ npm run check-env
+$ yarn check-env
 
 🔍 Checking Firebase Environment Variables...
 
@@ -72,7 +72,7 @@ $ npm run check-env
 
 📊 Summary:
 ✅ All required environment variables are set!
-🚀 Ready to start development: npm run dev
+🚀 Ready to start development: yarn dev
 ```
 
 ## 🚨 Error Troubleshooting
@@ -104,7 +104,7 @@ $ npm run check-env
 
 Sau khi setup xong environment variables:
 
-1. **Start development:** `npm run dev`
+1. **Start development:** `yarn dev`
 2. **Setup Firebase project:** Xem `FIREBASE_SETUP.md`
 3. **Deploy rules:** `npm run firebase:deploy:rules`
 4. **Deploy app:** `npm run firebase:deploy`

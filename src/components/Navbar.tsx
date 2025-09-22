@@ -79,10 +79,28 @@ const Navbar: React.FC = () => {
   const scrollToSection = (href: string) => {
     // If not on homepage, navigate to homepage first with section info
     if (!isHomePage) {
-      // Store the target section in sessionStorage
       const sectionId = href.replace('#', '');
       sessionStorage.setItem('targetSection', sectionId);
       navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+        // Đảm bảo trigger event cho video nếu là introduction
+        if (sectionId === 'introduction') {
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('introductionNavClick'));
+          }, 500);
+        }
+        // Đảm bảo scrollToHanoi nếu là map-section
+        if (sectionId === 'map-section') {
+          setTimeout(() => {
+            scrollToHanoi();
+          }, 500);
+        }
+      }, 400);
+      setIsOpen(false);
       return;
     }
 
@@ -98,7 +116,6 @@ const Navbar: React.FC = () => {
       const element = document.querySelector(href);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
-        // Dispatch event để IntroductionSection biết là từ navbar click
         setTimeout(() => {
           window.dispatchEvent(new CustomEvent('introductionNavClick'));
         }, 500);
@@ -219,9 +236,10 @@ const Navbar: React.FC = () => {
                 {navItems.map((item, index) => (
                   <motion.button
                     key={item.id}
-                    onClick={() => {
-                      scrollToSection(item.href);
+                    onClick={async () => {
                       setIsOpen(false);
+                      await new Promise(r => setTimeout(r, 120));
+                      scrollToSection(item.href);
                     }}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}

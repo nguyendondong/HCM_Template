@@ -33,17 +33,20 @@ const IntroductionSection: React.FC = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             if (!lastVisible) {
-              // Section vừa vào viewport: bật tiếng và play
-              video.muted = false;
-              setIsMuted(false);
-              if (video.paused && video.readyState >= 2) {
-                const playPromise = video.play();
-                if (playPromise !== undefined) {
-                  playPromise.catch(error => {
-                    console.log('Autoplay prevented:', error);
-                  });
-                }
-              }
+              // Section vừa vào viewport: luôn cố gắng play, nếu bị chặn thì bật mute để đảm bảo play
+              const tryPlay = () => {
+                video.play().then(() => {
+                  // Nếu play thành công, thử bật tiếng
+                  video.muted = false;
+                  setIsMuted(false);
+                }).catch(() => {
+                  // Nếu autoplay bị chặn, bật mute để play được
+                  video.muted = true;
+                  setIsMuted(true);
+                  video.play().catch(() => {});
+                });
+              };
+              tryPlay();
               lastVisible = true;
             }
           } else {
@@ -70,14 +73,16 @@ const IntroductionSection: React.FC = () => {
     // Event listener cho navbar click (giữ nguyên logic mute/unmute)
     const handleNavbarIntroClick = () => {
       setTimeout(() => {
-        video.muted = false;
-        setIsMuted(false);
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.log('Navbar autoplay prevented:', error);
-          });
-        }
+        const video = videoRef.current;
+        if (!video) return;
+        video.play().then(() => {
+          video.muted = false;
+          setIsMuted(false);
+        }).catch(() => {
+          video.muted = true;
+          setIsMuted(true);
+          video.play().catch(() => {});
+        });
       }, 800);
     };
 
@@ -87,7 +92,7 @@ const IntroductionSection: React.FC = () => {
       observer.disconnect();
       window.removeEventListener('introductionNavClick', handleNavbarIntroClick);
     };
-  }, []);
+  }, [videoUrl]);
 
   const handleVideoClick = () => {
     const video = videoRef.current;

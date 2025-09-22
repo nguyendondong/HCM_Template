@@ -68,7 +68,7 @@ const firebaseConfig = {
 
 ```bash
 # Install Firebase CLI globally
-npm install -g firebase-tools
+yarn global add firebase-tools
 
 # Login to Firebase
 firebase login
@@ -85,7 +85,7 @@ firebase init
 firebase deploy --only firestore:rules,storage
 
 # Build và deploy app
-npm run firebase:deploy
+yarn firebase:deploy
 ```
 
 ## Bước 9: Setup Security Rules (Production)
@@ -102,7 +102,7 @@ File này đã được tạo sẵn với rules bảo mật phù hợp.
 
 1. **Test Authentication:**
    ```bash
-   npm run dev
+   yarn dev
    ```
    - Thử đăng ký/đăng nhập
    - Thử đăng nhập Google
