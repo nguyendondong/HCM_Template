@@ -2,37 +2,59 @@ import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Globe, BookOpen, Play } from 'lucide-react';
 import { Volume2, VolumeX } from 'lucide-react';
+import { getFileDownloadURL } from '../services/storageService';
 
 const IntroductionSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [videoUrl, setVideoUrl] = useState<string>('');
 
-  // Auto-play khi section visible hoặc navbar click
+  // Lấy URL video từ Firebase Storage
+  useEffect(() => {
+    getFileDownloadURL('Video/testvideo.mp4')
+      .then(url => setVideoUrl(url))
+      .catch(err => {
+        console.error('Không lấy được video URL:', err);
+        setVideoUrl('');
+      });
+  }, []);
+
+  // Auto-play và auto-unmute khi section visible, auto-pause và mute khi ra khỏi viewport
   useEffect(() => {
     const video = videoRef.current;
     const section = sectionRef.current;
 
     if (!video || !section) return;
 
-    // Intersection Observer để detect khi section visible
+    let lastVisible = false;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Section đang visible - auto play video nếu đang pause
-            if (video.paused) {
-              const playPromise = video.play();
-              if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                  console.log('Autoplay prevented:', error);
-                });
+            if (!lastVisible) {
+              // Section vừa vào viewport: bật tiếng và play
+              video.muted = false;
+              setIsMuted(false);
+              if (video.paused && video.readyState >= 2) {
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                  playPromise.catch(error => {
+                    console.log('Autoplay prevented:', error);
+                  });
+                }
               }
+              lastVisible = true;
             }
           } else {
-            // Section không visible - pause video nếu đang playing
-            if (!video.paused) {
-              video.pause();
+            if (lastVisible) {
+              // Section vừa ra khỏi viewport: tắt tiếng và pause
+              video.muted = true;
+              setIsMuted(true);
+              if (!video.paused) {
+                video.pause();
+              }
+              lastVisible = false;
             }
           }
         });
@@ -45,10 +67,11 @@ const IntroductionSection: React.FC = () => {
 
     observer.observe(section);
 
-    // Event listener cho navbar click
+    // Event listener cho navbar click (giữ nguyên logic mute/unmute)
     const handleNavbarIntroClick = () => {
-      // Delay nhỏ để đảm bảo scroll hoàn thành
       setTimeout(() => {
+        video.muted = false;
+        setIsMuted(false);
         const playPromise = video.play();
         if (playPromise !== undefined) {
           playPromise.catch(error => {
@@ -58,7 +81,6 @@ const IntroductionSection: React.FC = () => {
       }, 800);
     };
 
-    // Listen cho custom event từ navbar
     window.addEventListener('introductionNavClick', handleNavbarIntroClick);
 
     return () => {
@@ -139,7 +161,9 @@ const IntroductionSection: React.FC = () => {
                 playsInline
                 preload="metadata"
               >
-                <source src="/src/data/video/9018C0AF-BD7B-470D-9E38-33900630D830.mp4" type="video/mp4" />
+                {videoUrl && (
+                  <source src={videoUrl} type="video/mp4" />
+                )}
                 <p className="text-gray-600 text-center p-8">
                   Trình duyệt của bạn không hỗ trợ phát video.
                 </p>

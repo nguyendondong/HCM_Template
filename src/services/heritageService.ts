@@ -31,7 +31,6 @@ export const addHeritageSpot = async (spotData: Omit<FirebaseHeritageSpot, 'id' 
       updatedAt: Timestamp.now()
     });
 
-    console.log('Heritage spot added with ID: ', docRef.id);
     return docRef.id;
   } catch (error) {
     console.error('Error adding heritage spot: ', error);
@@ -55,7 +54,6 @@ export const addHeritageSpotWithId = async (
       updatedAt: Timestamp.now()
     });
 
-    console.log('Heritage spot added with custom ID: ', id);
     return id;
   } catch (error) {
     console.error('Error adding heritage spot with custom ID: ', error);
@@ -174,8 +172,6 @@ export const updateHeritageSpot = async (
       ...updates,
       updatedAt: Timestamp.now()
     });
-
-    console.log('Heritage spot updated successfully');
   } catch (error) {
     console.error('Error updating heritage spot: ', error);
     throw error;
@@ -191,7 +187,6 @@ export const updateHeritageSpotCoordinates = async (
 ) => {
   try {
     await updateHeritageSpot(id, { coordinates });
-    console.log('Heritage spot coordinates updated');
   } catch (error) {
     console.error('Error updating heritage spot coordinates: ', error);
     throw error;
@@ -204,7 +199,6 @@ export const updateHeritageSpotCoordinates = async (
 export const updateHeritageSpotImage = async (id: string, imageUrl: string) => {
   try {
     await updateHeritageSpot(id, { imageUrl });
-    console.log('Heritage spot image updated');
   } catch (error) {
     console.error('Error updating heritage spot image: ', error);
     throw error;
@@ -220,8 +214,6 @@ export const deleteHeritageSpot = async (id: string) => {
   try {
     const spotDoc = doc(db, 'heritageSpots', id);
     await deleteDoc(spotDoc);
-
-    console.log('Heritage spot deleted successfully');
   } catch (error) {
     console.error('Error deleting heritage spot: ', error);
     throw error;
@@ -298,7 +290,6 @@ export const initializeHeritageSpots = async (localSpots: any[]) => {
     }
 
     await Promise.all(batch);
-    console.log('All heritage spots initialized successfully');
   } catch (error) {
     console.error('Error initializing heritage spots: ', error);
     throw error;

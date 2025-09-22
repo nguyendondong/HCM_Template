@@ -344,7 +344,6 @@ const MapSection: React.FC = () => {
 
   // Debug effect
   useEffect(() => {
-    console.log('State changed:', { selectedSpotId, showLine, isHoveringSpot, isHoveringPopup, clickedSpotId });
   }, [selectedSpotId, showLine, isHoveringSpot, isHoveringPopup, clickedSpotId]);
 
   return (

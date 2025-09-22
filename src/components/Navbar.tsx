@@ -140,6 +140,7 @@ const Navbar: React.FC = () => {
             <span className={`text-xl font-bold transition-colors duration-300 ${
               scrolled || !isHomePage ? 'text-gray-900' : 'text-white'
             }`}>
+
             </span>
           </motion.div>
 

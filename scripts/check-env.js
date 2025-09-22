@@ -22,8 +22,6 @@ const optionalEnvVars = [
   'VITE_FIREBASE_MEASUREMENT_ID'
 ];
 
-console.log('🔍 Checking Firebase Environment Variables...\n');
-
 // Check if .env file exists
 const envPath = path.join(process.cwd(), '.env');
 if (!fs.existsSync(envPath)) {
@@ -52,40 +50,26 @@ let hasErrors = false;
 const missingVars = [];
 const emptyVars = [];
 
-console.log('📋 Required Variables:');
 requiredEnvVars.forEach(varName => {
   if (!envVars[varName]) {
     missingVars.push(varName);
-    console.log(`   ❌ ${varName}: MISSING`);
     hasErrors = true;
   } else if (envVars[varName] === 'your-api-key-here' ||
              envVars[varName].includes('your-') ||
              envVars[varName].length < 10) {
     emptyVars.push(varName);
-    console.log(`   ⚠️  ${varName}: PLACEHOLDER (${envVars[varName]})`);
     hasErrors = true;
-  } else {
-    const maskedValue = envVars[varName].substring(0, 8) + '***';
-    console.log(`   ✅ ${varName}: ${maskedValue}`);
   }
 });
 
 // Check optional variables
-console.log('\n📋 Optional Variables:');
 optionalEnvVars.forEach(varName => {
   if (envVars[varName]) {
-    const maskedValue = envVars[varName].substring(0, 8) + '***';
-    console.log(`   ✅ ${varName}: ${maskedValue}`);
-  } else {
-    console.log(`   ⚪ ${varName}: Not set (optional)`);
   }
 });
 
 // Summary
-console.log('\n📊 Summary:');
 if (hasErrors) {
-  console.log('❌ Environment setup incomplete!');
-
   if (missingVars.length > 0) {
     console.log(`\n🔧 Missing variables (${missingVars.length}):`);
     missingVars.forEach(varName => {
@@ -108,9 +92,4 @@ if (hasErrors) {
   console.log('   5. Run: npm run check-env');
 
   process.exit(1);
-} else {
-  console.log('✅ All required environment variables are set!');
-  console.log('🚀 Ready to start development: npm run dev');
 }
-
-console.log('');

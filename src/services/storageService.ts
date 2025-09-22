@@ -41,7 +41,6 @@ export const uploadFile = async (
           async () => {
             try {
               const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-              console.log('File uploaded successfully:', downloadURL);
               resolve(downloadURL);
             } catch (error) {
               reject(error);
@@ -53,7 +52,6 @@ export const uploadFile = async (
       // Upload đơn giản
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
-      console.log('File uploaded successfully:', downloadURL);
       return downloadURL;
     }
   } catch (error: any) {
@@ -204,7 +202,6 @@ export const deleteFile = async (path: string): Promise<void> => {
   try {
     const storageRef = ref(storage, path);
     await deleteObject(storageRef);
-    console.log('File deleted successfully:', path);
   } catch (error: any) {
     console.error('Error deleting file:', error);
     throw handleStorageError(error);
@@ -218,7 +215,6 @@ export const deleteFileByURL = async (downloadURL: string): Promise<void> => {
   try {
     const storageRef = ref(storage, downloadURL);
     await deleteObject(storageRef);
-    console.log('File deleted successfully by URL');
   } catch (error: any) {
     console.error('Error deleting file by URL:', error);
     throw handleStorageError(error);
@@ -235,8 +231,6 @@ export const deleteHeritageImages = async (spotId: string): Promise<void> => {
 
     const deletePromises = result.items.map(itemRef => deleteObject(itemRef));
     await Promise.all(deletePromises);
-
-    console.log('All heritage images deleted for spot:', spotId);
   } catch (error: any) {
     console.error('Error deleting heritage images:', error);
     throw handleStorageError(error);
@@ -253,8 +247,6 @@ export const deleteHeritageDocuments = async (spotId: string): Promise<void> => 
 
     const deletePromises = result.items.map(itemRef => deleteObject(itemRef));
     await Promise.all(deletePromises);
-
-    console.log('All heritage documents deleted for spot:', spotId);
   } catch (error: any) {
     console.error('Error deleting heritage documents:', error);
     throw handleStorageError(error);
@@ -270,8 +262,6 @@ export const deleteHeritageFolder = async (spotId: string): Promise<void> => {
       deleteHeritageImages(spotId),
       deleteHeritageDocuments(spotId)
     ]);
-
-    console.log('All heritage files deleted for spot:', spotId);
   } catch (error) {
     console.error('Error deleting heritage folder:', error);
     throw error;

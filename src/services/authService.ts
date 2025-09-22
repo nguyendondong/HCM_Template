@@ -47,11 +47,8 @@ export const signUpWithEmail = async (
     // Tạo user document trong Firestore
     await createUserDocument(user, { displayName });
 
-    console.log('User signed up successfully:', user.uid);
     return user;
   } catch (error: any) {
-    console.error('Error signing up:', error);
-
     // Handle specific error codes
     switch (error.code) {
       case 'auth/email-already-in-use':
@@ -80,11 +77,8 @@ export const signInWithEmail = async (
     // Ensure user document exists in Firestore
     await createUserDocument(user);
 
-    console.log('User signed in successfully:', user.uid);
     return user;
   } catch (error: any) {
-    console.error('Error signing in:', error);
-
     // Handle specific error codes
     switch (error.code) {
       case 'auth/user-not-found':
@@ -114,11 +108,8 @@ export const signInWithGoogle = async (): Promise<FirebaseUser> => {
     // Tạo hoặc cập nhật user document trong Firestore
     await createUserDocument(user);
 
-    console.log('User signed in with Google:', user.uid);
     return user;
   } catch (error: any) {
-    console.error('Error signing in with Google:', error);
-
     // Handle specific error codes
     switch (error.code) {
       case 'auth/popup-closed-by-user':
@@ -139,9 +130,7 @@ export const signInWithGoogle = async (): Promise<FirebaseUser> => {
 export const signOutUser = async (): Promise<void> => {
   try {
     await signOut(auth);
-    console.log('User signed out successfully');
   } catch (error) {
-    console.error('Error signing out:', error);
     throw new Error('Đăng xuất thất bại');
   }
 };
@@ -154,7 +143,6 @@ export const signOutUser = async (): Promise<void> => {
 export const resetPassword = async (email: string): Promise<void> => {
   try {
     await sendPasswordResetEmail(auth, email);
-    console.log('Password reset email sent');
   } catch (error: any) {
     console.error('Error sending password reset email:', error);
 
@@ -188,7 +176,6 @@ export const changePassword = async (
 
     // Update password
     await updatePassword(user, newPassword);
-    console.log('Password updated successfully');
   } catch (error: any) {
     console.error('Error changing password:', error);
 
@@ -232,7 +219,6 @@ const createUserDocument = async (
       };
 
       await setDoc(userDoc, userData);
-      console.log('User document created in Firestore');
     } else {
       // Cập nhật thông tin nếu có thay đổi
       const existingData = userSnapshot.data() as User;
@@ -248,7 +234,6 @@ const createUserDocument = async (
 
       if (Object.keys(updates).length > 0) {
         await updateDoc(userDoc, updates);
-        console.log('User document updated in Firestore');
       }
     }
   } catch (error) {
@@ -306,8 +291,6 @@ export const updateUserProfile = async (
         photoURL: updates.photoURL || user.photoURL
       });
     }
-
-    console.log('User profile updated successfully');
   } catch (error) {
     console.error('Error updating user profile:', error);
     throw error;
@@ -327,7 +310,6 @@ export const addVisitedSpot = async (uid: string, spotId: string): Promise<void>
     if (!userData.visitedSpots.includes(spotId)) {
       const updatedVisitedSpots = [...userData.visitedSpots, spotId];
       await updateUserProfile(uid, { visitedSpots: updatedVisitedSpots });
-      console.log('Visited spot added:', spotId);
     }
   } catch (error) {
     console.error('Error adding visited spot:', error);
@@ -347,7 +329,6 @@ export const removeVisitedSpot = async (uid: string, spotId: string): Promise<vo
 
     const updatedVisitedSpots = userData.visitedSpots.filter(id => id !== spotId);
     await updateUserProfile(uid, { visitedSpots: updatedVisitedSpots });
-    console.log('Visited spot removed:', spotId);
   } catch (error) {
     console.error('Error removing visited spot:', error);
     throw error;
