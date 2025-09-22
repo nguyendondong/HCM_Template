@@ -1,10 +1,12 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Globe, BookOpen, Play } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 
 const IntroductionSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
 
   // Auto-play khi section visible hoặc navbar click
   useEffect(() => {
@@ -18,16 +20,20 @@ const IntroductionSection: React.FC = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Section đang visible - auto play video
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-              playPromise.catch(error => {
-                console.log('Autoplay prevented:', error);
-              });
+            // Section đang visible - auto play video nếu đang pause
+            if (video.paused) {
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                  console.log('Autoplay prevented:', error);
+                });
+              }
             }
           } else {
-            // Section không visible - pause video
-            video.pause();
+            // Section không visible - pause video nếu đang playing
+            if (!video.paused) {
+              video.pause();
+            }
           }
         });
       },
@@ -69,6 +75,14 @@ const IntroductionSection: React.FC = () => {
       } else {
         video.pause();
       }
+    }
+  };
+
+  const handleToggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMuted(m => !m);
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
     }
   };
 
@@ -120,7 +134,7 @@ const IntroductionSection: React.FC = () => {
               <video
                 ref={videoRef}
                 className="w-full h-full object-cover"
-                muted
+                muted={isMuted}
                 loop
                 playsInline
                 preload="metadata"
@@ -130,6 +144,16 @@ const IntroductionSection: React.FC = () => {
                   Trình duyệt của bạn không hỗ trợ phát video.
                 </p>
               </video>
+
+              {/* Nút bật/tắt âm thanh */}
+              <button
+                className="absolute top-4 right-4 bg-white/80 rounded-full p-2 shadow z-20 hover:bg-white"
+                onClick={handleToggleMute}
+                tabIndex={0}
+                aria-label={isMuted ? 'Bật âm thanh' : 'Tắt âm thanh'}
+              >
+                {isMuted ? <VolumeX className="w-6 h-6 text-gray-800" /> : <Volume2 className="w-6 h-6 text-gray-800" />}
+              </button>
 
               {/* Play button overlay khi video pause */}
               <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">

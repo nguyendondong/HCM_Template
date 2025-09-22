@@ -5,8 +5,8 @@
  * Usage: node scripts/check-env.js
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 const requiredEnvVars = [
   'VITE_FIREBASE_API_KEY',
@@ -14,7 +14,7 @@ const requiredEnvVars = [
   'VITE_FIREBASE_PROJECT_ID',
   'VITE_FIREBASE_STORAGE_BUCKET',
   'VITE_FIREBASE_MESSAGING_SENDER_ID',
-  'VITE_FIREBASE_APP_ID'
+  'VITE_FIREBASE_APP_ID',
 ];
 
 const optionalEnvVars = [
