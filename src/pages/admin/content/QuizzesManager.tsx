@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, deleteDoc, addDoc, updateDoc, query, orderBy } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db } from '../../../lib/firebase';
 import {
   Brain,
   Plus,
@@ -232,7 +232,7 @@ const QuizzesManager: React.FC<QuizzesManagerProps> = () => {
                 Quiz
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Di sản
+                Địa điểm
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Câu hỏi
@@ -331,7 +331,7 @@ const QuizzesManager: React.FC<QuizzesManagerProps> = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Di sản
+                    Địa điểm
                   </label>
                   <select
                     value={formData.spotId}
@@ -339,7 +339,7 @@ const QuizzesManager: React.FC<QuizzesManagerProps> = () => {
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   >
-                    <option value="">Chọn di sản</option>
+                    <option value="">Chọn Địa điểm </option>
                     {heritageSpots.map(spot => (
                       <option key={spot.id} value={spot.id}>{spot.name}</option>
                     ))}

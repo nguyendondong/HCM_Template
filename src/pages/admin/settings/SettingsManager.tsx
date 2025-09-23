@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db } from '../../../lib/firebase';
 import {
   Settings,
   Save,
@@ -73,7 +73,7 @@ interface SettingsManagerProps {}
 const SettingsManager: React.FC<SettingsManagerProps> = () => {
   const [settings, setSettings] = useState<AppSettings>({
     appName: 'Heritage Journey',
-    appDescription: 'Khám phá di sản văn hóa Hồ Chí Minh',
+    appDescription: 'Khám phá Địa điểm  văn hóa Hồ Chí Minh',
     appVersion: '1.0.0',
     maintenanceMode: false,
     enableComments: true,
@@ -321,7 +321,7 @@ const SettingsManager: React.FC<SettingsManagerProps> = () => {
 
                 <div className="space-y-4">
                   {[
-                    { key: 'enableComments', label: 'Bình luận', desc: 'Cho phép người dùng bình luận trên di sản' },
+                    { key: 'enableComments', label: 'Bình luận', desc: 'Cho phép người dùng bình luận trên Địa điểm ' },
                     { key: 'enableQuizzes', label: 'Quiz', desc: 'Kích hoạt tính năng quiz kiến thức' },
                     { key: 'enableMiniGames', label: 'Mini Games', desc: 'Cho phép chơi mini games' },
                     { key: 'enableVRContent', label: 'Nội dung VR', desc: 'Hiển thị trải nghiệm thực tế ảo' },

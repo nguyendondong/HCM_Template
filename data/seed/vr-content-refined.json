@@ -1,0 +1,383 @@
+{
+  "vrExperiences": [
+    {
+      "id": "kim-lien-village-360",
+      "title": "Làng Sen Kim Liên - Quê hương Bác Hồ",
+      "description": "Trải nghiệm thực tế ảo tại quê hương Chủ tịch Hồ Chí Minh, khám phá ngôi nhà sinh, ao sen và những kỷ niệm thời thơ ấu",
+      "category": "heritage_site",
+      "difficulty": "Dễ",
+      "duration": "15-20 phút",
+      "image": "/images/vr/kim-lien-360-preview.jpg",
+      "thumbnailUrl": "/images/vr/kim-lien-thumb.jpg",
+      "vrUrl": "/vr/experiences/kim-lien-360.html",
+      "videoPreview": "/videos/vr-previews/kim-lien-preview.mp4",
+      "location": {
+        "name": "Kim Liên, Nam Đàn, Nghệ An",
+        "coordinates": [18.6646, 105.6769]
+      },
+      "features": [
+        "Tham quan nhà sinh của Bác Hồ",
+        "Khám phá ao sen Kim Liên",
+        "Tương tác với không gian làng quê",
+        "Nghe kể chuyện thời thơ ấu"
+      ],
+      "interactiveElements": [
+        {
+          "id": "birthplace-house",
+          "name": "Nhà sinh Bác Hồ",
+          "type": "3d_model",
+          "description": "Mô hình 3D ngôi nhà tranh nơi Bác Hồ sinh ra"
+        },
+        {
+          "id": "lotus-pond",
+          "name": "Ao sen",
+          "type": "interactive_scene",
+          "description": "Không gian tương tác với ao sen và hoa sen"
+        },
+        {
+          "id": "village-road",
+          "name": "Con đường làng",
+          "type": "walkthrough",
+          "description": "Đi bộ qua những con đường làng thời xưa"
+        }
+      ],
+      "supportedDevices": ["desktop", "mobile", "vr_headset"],
+      "languages": ["vi", "en"],
+      "rating": 4.8,
+      "totalRatings": 1245,
+      "viewCount": 15678,
+      "isActive": true,
+      "isFeatured": true,
+      "order": 1
+    },
+
+    {
+      "id": "pac-bo-cave-exploration",
+      "title": "Hang Pác Bó - Nơi Bác trở về",
+      "description": "Khám phá hang động Pác Bó nơi Chủ tịch Hồ Chí Minh ở và làm việc sau 30 năm tìm đường cứu nước",
+      "category": "historical_site",
+      "difficulty": "Trung bình",
+      "duration": "20-25 phút",
+      "image": "/images/vr/pac-bo-360-preview.jpg",
+      "thumbnailUrl": "/images/vr/pac-bo-thumb.jpg",
+      "vrUrl": "/vr/experiences/pac-bo-360.html",
+      "videoPreview": "/videos/vr-previews/pac-bo-preview.mp4",
+      "location": {
+        "name": "Pác Bó, Hà Quảng, Cao Bằng",
+        "coordinates": [22.6833, 106.2500]
+      },
+      "features": [
+        "Khám phá hang động Pác Bó",
+        "Tham quan suối Lênin",
+        "Chiêm ngưỡng núi Các Mác",
+        "Tìm hiểu cuộc sống của Bác tại đây"
+      ],
+      "interactiveElements": [
+        {
+          "id": "pac-bo-cave",
+          "name": "Hang Pác Bó",
+          "type": "cave_exploration",
+          "description": "Khám phá bên trong hang động"
+        },
+        {
+          "id": "lenin-stream",
+          "name": "Suối Lênin",
+          "type": "nature_scene",
+          "description": "Không gian thiên nhiên bên suối"
+        },
+        {
+          "id": "karl-marx-mountain",
+          "name": "Núi Các Mác",
+          "type": "mountain_view",
+          "description": "Ngắm nhìn toàn cảnh từ núi Các Mác"
+        }
+      ],
+      "supportedDevices": ["desktop", "mobile", "vr_headset"],
+      "languages": ["vi", "en"],
+      "rating": 4.7,
+      "totalRatings": 987,
+      "viewCount": 12456,
+      "isActive": true,
+      "isFeatured": true,
+      "order": 2
+    },
+
+    {
+      "id": "ba-dinh-independence-1945",
+      "title": "Quảng trường Ba Đình 1945 - Ngày Độc lập",
+      "description": "Tái hiện lại khoảnh khắc lịch sử ngày 2/9/1945 khi Chủ tịch Hồ Chí Minh đọc Tuyên ngôn Độc lập",
+      "category": "historical_moment",
+      "difficulty": "Trung bình",
+      "duration": "25-30 phút",
+      "image": "/images/vr/ba-dinh-1945-preview.jpg",
+      "thumbnailUrl": "/images/vr/ba-dinh-1945-thumb.jpg",
+      "vrUrl": "/vr/experiences/ba-dinh-1945.html",
+      "videoPreview": "/videos/vr-previews/ba-dinh-1945-preview.mp4",
+      "location": {
+        "name": "Quảng trường Ba Đình, Hà Nội",
+        "coordinates": [21.0368, 105.8342]
+      },
+      "features": [
+        "Chứng kiến lễ đọc Tuyên ngôn Độc lập",
+        "Đắm chìm trong không khí lễ hội",
+        "Tương tác với đám đông lịch sử",
+        "Nghe toàn văn Tuyên ngôn Độc lập"
+      ],
+      "interactiveElements": [
+        {
+          "id": "podium-1945",
+          "name": "Bục phát biểu",
+          "type": "historical_scene",
+          "description": "Nơi Bác Hồ đọc Tuyên ngôn Độc lập"
+        },
+        {
+          "id": "crowd-simulation",
+          "name": "Đám đông nhân dân",
+          "type": "crowd_interaction",
+          "description": "Tương tác với đám đông tham dự"
+        },
+        {
+          "id": "independence-audio",
+          "name": "Tuyên ngôn Độc lập",
+          "type": "audio_experience",
+          "description": "Nghe bài phát biểu nguyên bản"
+        }
+      ],
+      "supportedDevices": ["desktop", "mobile", "vr_headset"],
+      "languages": ["vi", "en"],
+      "rating": 4.9,
+      "totalRatings": 2156,
+      "viewCount": 25689,
+      "isActive": true,
+      "isFeatured": true,
+      "order": 3
+    },
+
+    {
+      "id": "presidential-palace-daily-life",
+      "title": "Phủ Chủ tịch - Cuộc sống thường ngày của Bác",
+      "description": "Khám phá nơi sinh hoạt và làm việc của Chủ tịch Hồ Chí Minh tại Phủ Chủ tịch, tìm hiểu lối sống giản dị của Người",
+      "category": "daily_life",
+      "difficulty": "Dễ",
+      "duration": "18-22 phút",
+      "image": "/images/vr/presidential-palace-preview.jpg",
+      "thumbnailUrl": "/images/vr/presidential-palace-thumb.jpg",
+      "vrUrl": "/vr/experiences/presidential-palace-360.html",
+      "videoPreview": "/videos/vr-previews/presidential-palace-preview.mp4",
+      "location": {
+        "name": "Phủ Chủ tịch, Ba Đình, Hà Nội",
+        "coordinates": [21.0370, 105.8335]
+      },
+      "features": [
+        "Tham quan nhà sàn Bác Hồ",
+        "Khám phá ao cá và vườn rau",
+        "Tìm hiểu thói quen sinh hoạt",
+        "Cảm nhận lối sống giản dị"
+      ],
+      "interactiveElements": [
+        {
+          "id": "stilt-house",
+          "name": "Nhà sàn",
+          "type": "interior_tour",
+          "description": "Tham quan bên trong nhà sàn của Bác"
+        },
+        {
+          "id": "fish-pond",
+          "name": "Ao cá Bác Hồ",
+          "type": "garden_scene",
+          "description": "Không gian ao cá yêu thích của Bác"
+        },
+        {
+          "id": "vegetable-garden",
+          "name": "Vườn rau",
+          "type": "interactive_garden",
+          "description": "Vườn rau Bác tự tay chăm sóc"
+        }
+      ],
+      "supportedDevices": ["desktop", "mobile", "vr_headset"],
+      "languages": ["vi", "en"],
+      "rating": 4.6,
+      "totalRatings": 876,
+      "viewCount": 11234,
+      "isActive": true,
+      "isFeatured": false,
+      "order": 4
+    },
+
+    {
+      "id": "ben-nha-rong-departure",
+      "title": "Bến Nhà Rồng - Điểm khởi hành tìm đường cứu nước",
+      "description": "Trải nghiệm khoảnh khắc Nguyễn Tất Thành lên tàu Amiral Latouche Tréville rời Việt Nam tìm đường cứu nước năm 1911",
+      "category": "historical_journey",
+      "difficulty": "Trung bình",
+      "duration": "16-20 phút",
+      "image": "/images/vr/ben-nha-rong-preview.jpg",
+      "thumbnailUrl": "/images/vr/ben-nha-rong-thumb.jpg",
+      "vrUrl": "/vr/experiences/ben-nha-rong-1911.html",
+      "videoPreview": "/videos/vr-previews/ben-nha-rong-preview.mp4",
+      "location": {
+        "name": "Bến Nhà Rồng, TP. Hồ Chí Minh",
+        "coordinates": [10.7683, 106.7051]
+      },
+      "features": [
+        "Tham quan tàu Amiral Latouche Tréville",
+        "Khám phá cảng Sài Gòn năm 1911",
+        "Cảm nhận tâm trạng khởi hành",
+        "Tìm hiểu hành trình sắp tới"
+      ],
+      "interactiveElements": [
+        {
+          "id": "ship-interior",
+          "name": "Tàu Amiral Latouche Tréville",
+          "type": "ship_exploration",
+          "description": "Khám phá bên trong con tàu"
+        },
+        {
+          "id": "saigon-port-1911",
+          "name": "Cảng Sài Gòn 1911",
+          "type": "historical_port",
+          "description": "Cảng Sài Gòn thời thuộc địa"
+        },
+        {
+          "id": "departure-moment",
+          "name": "Khoảnh khắc chia tay",
+          "type": "emotional_scene",
+          "description": "Cảm xúc lúc rời quê hương"
+        }
+      ],
+      "supportedDevices": ["desktop", "mobile", "vr_headset"],
+      "languages": ["vi", "en"],
+      "rating": 4.5,
+      "totalRatings": 654,
+      "viewCount": 8901,
+      "isActive": true,
+      "isFeatured": false,
+      "order": 5
+    },
+
+    {
+      "id": "tan-trao-revolutionary-base",
+      "title": "Căn cứ Tân Trào - Chuẩn bị Cách mạng Tháng Tám",
+      "description": "Khám phá căn cứ cách mạng Tân Trào, nơi chuẩn bị cho Cách mạng Tháng Tám và họp Đại hội Đảng lần thứ nhất",
+      "category": "revolutionary_base",
+      "difficulty": "Khó",
+      "duration": "30-35 phút",
+      "image": "/images/vr/tan-trao-preview.jpg",
+      "thumbnailUrl": "/images/vr/tan-trao-thumb.jpg",
+      "vrUrl": "/vr/experiences/tan-trao-1945.html",
+      "videoPreview": "/videos/vr-previews/tan-trao-preview.mp4",
+      "location": {
+        "name": "Tân Trào, Sơn Dương, Tuyên Quang",
+        "coordinates": [21.8167, 105.3333]
+      },
+      "features": [
+        "Tham quan nhà Nà Lừa",
+        "Khám phá hội trường Tân Trào",
+        "Tìm hiểu các hoạt động cách mạng",
+        "Cảm nhận không khí chuẩn bị khởi nghĩa"
+      ],
+      "interactiveElements": [
+        {
+          "id": "na-lua-house",
+          "name": "Nhà Nà Lừa",
+          "type": "historical_building",
+          "description": "Nơi Bác Hồ ở và làm việc"
+        },
+        {
+          "id": "tan-trao-hall",
+          "name": "Hội trường Tân Trào",
+          "type": "meeting_hall",
+          "description": "Nơi diễn ra các cuộc họp quan trọng"
+        },
+        {
+          "id": "revolutionary-activities",
+          "name": "Hoạt động cách mạng",
+          "type": "activity_simulation",
+          "description": "Mô phỏng các hoạt động chuẩn bị khởi nghĩa"
+        }
+      ],
+      "supportedDevices": ["desktop", "mobile", "vr_headset"],
+      "languages": ["vi", "en"],
+      "rating": 4.4,
+      "totalRatings": 432,
+      "viewCount": 6789,
+      "isActive": true,
+      "isFeatured": false,
+      "order": 6
+    }
+  ],
+
+  "vrCollections": [
+    {
+      "id": "ho-chi-minh-life-journey",
+      "title": "Hành trình cuộc đời Bác Hồ",
+      "description": "Bộ sưu tập VR hoàn chỉnh theo dõi toàn bộ cuộc đời của Chủ tịch Hồ Chí Minh",
+      "experiences": [
+        "kim-lien-village-360",
+        "ben-nha-rong-departure",
+        "pac-bo-cave-exploration",
+        "tan-trao-revolutionary-base",
+        "ba-dinh-independence-1945",
+        "presidential-palace-daily-life"
+      ],
+      "estimatedTotalTime": "2-3 giờ",
+      "difficulty": "Đa cấp độ",
+      "image": "/images/collections/life-journey-collection.jpg",
+      "isActive": true,
+      "isFeatured": true,
+      "order": 1
+    },
+
+    {
+      "id": "revolutionary-heritage-sites",
+      "title": "Di tích cách mạng",
+      "description": "Khám phá các di tích cách mạng quan trọng gắn liền với Chủ tịch Hồ Chí Minh",
+      "experiences": [
+        "pac-bo-cave-exploration",
+        "tan-trao-revolutionary-base",
+        "ba-dinh-independence-1945"
+      ],
+      "estimatedTotalTime": "1.5-2 giờ",
+      "difficulty": "Trung bình - Khó",
+      "image": "/images/collections/revolutionary-sites-collection.jpg",
+      "isActive": true,
+      "isFeatured": false,
+      "order": 2
+    }
+  ],
+
+  "vrSettings": {
+    "defaultQuality": "high",
+    "supportedQualities": ["low", "medium", "high", "ultra"],
+    "autoQualityAdjustment": true,
+    "audioEnabled": true,
+    "subtitlesEnabled": true,
+    "languageOptions": ["vi", "en"],
+    "accessibilityFeatures": [
+      "audio_descriptions",
+      "high_contrast",
+      "large_text",
+      "keyboard_navigation"
+    ],
+    "performanceSettings": {
+      "enableFrameRateOptimization": true,
+      "adaptiveRendering": true,
+      "batteryOptimization": true
+    },
+    "socialFeatures": {
+      "sharing": true,
+      "comments": true,
+      "ratings": true,
+      "multiplayerMode": false
+    }
+  },
+
+  "metadata": {
+    "totalExperiences": 6,
+    "totalCollections": 2,
+    "supportedDevices": ["desktop", "mobile", "vr_headset"],
+    "lastUpdated": "2025-09-23",
+    "version": "2.0.0",
+    "maintainer": "Heritage Journey VR Team"
+  }
+}

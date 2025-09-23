@@ -1,11 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Glasses, Play, Pause, Volume2, VolumeX, Maximize, RotateCcw, Info } from 'lucide-react';
+import { useSmartNavigation } from '../hooks/useSmartNavigation';
 
 const VRExperiencePage: React.FC = () => {
-  const navigate = useNavigate();
-  const [selectedExperience, setSelectedExperience] = useState<string | null>(null);
+  const { id: routeId } = useParams<{ id: string }>();
+  const { isDetailView, goBack, goToDetail } = useSmartNavigation({
+    listPath: '/vr-experience',
+    targetSection: 'vr-technology'
+  });
+
+  // Use routeId if available, otherwise fall back to state-based selection
+  const [selectedExperience, setSelectedExperience] = useState<string | null>(routeId || null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.7);
   const [isMuted, setIsMuted] = useState(false);
@@ -13,11 +20,16 @@ const VRExperiencePage: React.FC = () => {
   const [duration, setDuration] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const handleBackToHome = () => {
-    // Store the target section (vr-technology for VR Experience)
-    sessionStorage.setItem('targetSection', 'vr-technology');
-    navigate('/');
-  };
+  // Update selected experience when route changes
+  useEffect(() => {
+    if (routeId) {
+      console.log('Setting selectedExperience to:', routeId);
+      setSelectedExperience(routeId);
+    } else {
+      console.log('Clearing selectedExperience because no routeId');
+      setSelectedExperience(null);
+    }
+  }, [routeId]);
 
   const vrExperiences = [
     {
@@ -133,6 +145,12 @@ const VRExperiencePage: React.FC = () => {
     return vrExperiences.find(exp => exp.id === selectedExperience);
   };
 
+  console.log('=== RENDER DEBUG ===');
+  console.log('routeId:', routeId);
+  console.log('selectedExperience:', selectedExperience);
+  console.log('isDetailView:', isDetailView);
+  console.log('Current URL:', window.location.pathname);
+
   if (selectedExperience) {
     const experience = getCurrentExperience();
     if (!experience) return null;
@@ -150,16 +168,42 @@ const VRExperiencePage: React.FC = () => {
 
           {/* Video Controls Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20">
+            {/* Prominent Back Button */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                console.log('=== BACK BUTTON CLICKED ===');
+                console.log('isDetailView:', isDetailView);
+                console.log('routeId:', routeId);
+                console.log('selectedExperience:', selectedExperience);
+                console.log('Current URL:', window.location.pathname);
+
+                if (routeId) {
+                  // If we came from a direct URL with ID, always go back to list
+                  console.log('Using goBack() because routeId exists');
+                  goBack();
+                } else if (selectedExperience) {
+                  // If we're in same-page mode, just close the player
+                  console.log('Closing player because no routeId but selectedExperience exists');
+                  setSelectedExperience(null);
+                } else {
+                  // Fallback
+                  console.log('Fallback - using goBack()');
+                  goBack();
+                }
+              }}
+              className="absolute top-20 left-4 bg-black/70 hover:bg-black/90 backdrop-blur-sm text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-200 flex items-center space-x-3 z-50 border border-white/20 hover:border-white/40"
+              style={{ zIndex: 9999 }}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+
             {/* Top Bar */}
-            <div className="absolute top-0 left-0 right-0 p-6 bg-gradient-to-b from-black/60 to-transparent">
+            <div className="absolute top-0 left-0 right-0 p-6 pt-20 bg-gradient-to-b from-black/60 to-transparent">
               <div className="flex items-center justify-between">
-                <button
-                  onClick={() => setSelectedExperience(null)}
-                  className="flex items-center space-x-2 text-white hover:text-yellow-400 transition-colors duration-200"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                  <span>Quay lại</span>
-                </button>
+                <div></div> {/* Empty space to balance the layout */}
 
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2 text-white">
@@ -171,9 +215,7 @@ const VRExperiencePage: React.FC = () => {
                   </button>
                 </div>
               </div>
-            </div>
-
-            {/* Bottom Controls */}
+            </div>            {/* Bottom Controls */}
             <div className="absolute bottom-0 left-0 right-0 p-6">
               <div className="bg-black/60 backdrop-blur-sm rounded-2xl p-6">
                 <div className="mb-4">
@@ -259,11 +301,11 @@ const VRExperiencePage: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <button
-              onClick={handleBackToHome}
+              onClick={goBack}
               className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors duration-200"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
-              Quay về trang chủ
+              {isDetailView ? 'Quay về danh sách' : 'Quay về trang chủ'}
             </button>
 
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -330,7 +372,15 @@ const VRExperiencePage: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={() => setSelectedExperience(experience.id)}
+                  onClick={() => {
+                    if (isDetailView) {
+                      // If already in detail view, just set the selected experience
+                      setSelectedExperience(experience.id);
+                    } else {
+                      // Navigate to detail route
+                      goToDetail(experience.id);
+                    }
+                  }}
                   className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium"
                 >
                   <Play className="w-4 h-4" />

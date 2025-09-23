@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, deleteDoc, query, orderBy } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db } from '../../../lib/firebase';
 import { User } from '../../types/firebase';
 import {
   Plus,
@@ -137,7 +137,7 @@ const UsersManager: React.FC<UsersManagerProps> = () => {
                   Ngày tham gia
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Di sản đã xem
+                  Địa điểm  đã xem
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Thao tác
@@ -276,7 +276,7 @@ const UsersManager: React.FC<UsersManagerProps> = () => {
                       <p className="text-2xl font-bold text-blue-900">
                         {selectedUser.visitedSpots?.length || 0}
                       </p>
-                      <p className="text-blue-600 text-sm">Di sản đã xem</p>
+                      <p className="text-blue-600 text-sm">Địa điểm  đã xem</p>
                     </div>
                   </div>
                 </div>
@@ -308,7 +308,7 @@ const UsersManager: React.FC<UsersManagerProps> = () => {
 
               {/* Visited Spots */}
               <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">Di sản đã xem</h4>
+                <h4 className="text-lg font-semibold text-gray-900 mb-3">Địa điểm  đã xem</h4>
                 {selectedUser.visitedSpots && selectedUser.visitedSpots.length > 0 ? (
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <div className="flex flex-wrap gap-2">
@@ -323,7 +323,7 @@ const UsersManager: React.FC<UsersManagerProps> = () => {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-gray-500">Chưa xem di sản nào</p>
+                  <p className="text-gray-500">Chưa xem Địa điểm  nào</p>
                 )}
               </div>
 

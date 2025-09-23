@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, deleteDoc, addDoc, updateDoc, query, orderBy } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../../lib/firebase';
+import { db, storage } from '../../../lib/firebase';
 import {
   Gamepad2,
   Plus,
@@ -523,7 +523,7 @@ const MiniGamesManager: React.FC<MiniGamesManagerProps> = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Di sản
+                    Địa điểm
                   </label>
                   <select
                     value={formData.spotId}
@@ -531,7 +531,7 @@ const MiniGamesManager: React.FC<MiniGamesManagerProps> = () => {
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   >
-                    <option value="">Chọn di sản</option>
+                    <option value="">Chọn Địa điểm </option>
                     {heritageSpots.map(spot => (
                       <option key={spot.id} value={spot.id}>{spot.name}</option>
                     ))}

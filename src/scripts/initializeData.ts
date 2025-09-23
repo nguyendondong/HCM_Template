@@ -1,6 +1,5 @@
 import { contentService } from '../services/contentService';
 import { initializeDefaultHeritageData } from '../services/enhancedHeritageService';
-import { initializeDefaultPageContent } from '../services/pageContentService';
 
 /**
  * Script khởi tạo tất cả dữ liệu mặc định cho Firebase
@@ -22,7 +21,7 @@ export async function initializeAllDefaultData(): Promise<void> {
 
     // 3. Khởi tạo nội dung trang (Documents, VR, Mini Games)
     console.log('📱 Khởi tạo nội dung trang...');
-    await initializeDefaultPageContent();
+    await contentService.initializeDefaultPageContent();
     console.log('✅ Hoàn thành nội dung trang');
 
     console.log('🎉 Khởi tạo dữ liệu hoàn tất!');
@@ -32,7 +31,7 @@ export async function initializeAllDefaultData(): Promise<void> {
     console.log('   - Menu Navigation');
     console.log('   - Footer Content');
     console.log('   - Cấu hình trang web');
-    console.log('   - Di tích di sản nâng cao');
+    console.log('   - Di tích Địa điểm  nâng cao');
     console.log('   - Nội dung trang Documents');
     console.log('   - Nội dung trang VR Experience');
     console.log('   - Nội dung trang Mini Games');

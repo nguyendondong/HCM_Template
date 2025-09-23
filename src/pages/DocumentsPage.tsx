@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, FileText, Download, Image, Video, Search, Calendar, User, BookOpen, Globe, ExternalLink } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { useSmartNavigation } from '../hooks/useSmartNavigation';
 
 // Interfaces for Firestore data
 interface DocumentCategory {
@@ -44,11 +45,23 @@ const getIconComponent = (iconName: string): React.ElementType => {
 };
 
 const DocumentsPage: React.FC = () => {
-  const navigate = useNavigate();
+  const { id: routeId } = useParams<{ id: string }>();
+  const { isDetailView, goBack, goToDetail } = useSmartNavigation({
+    listPath: '/documents',
+    targetSection: 'documents'
+  });
+
   const [documentCategories, setDocumentCategories] = useState<DocumentCategory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>(routeId || '');
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Update selected category when route changes
+  useEffect(() => {
+    if (routeId) {
+      setSelectedCategory(routeId);
+    }
+  }, [routeId]);
 
   // Fetch data from Firestore
   useEffect(() => {
@@ -91,10 +104,17 @@ const DocumentsPage: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleBackToHome = () => {
-    // Store the target section (documents for Documents)
-    sessionStorage.setItem('targetSection', 'documents');
-    navigate('/');
+  const handleBack = () => {
+    if (isDetailView && !selectedCategory) {
+      // If in detail route but no category selected, go back to list
+      goBack();
+    } else if (selectedCategory) {
+      // If category is selected, close detail and stay on current page
+      setSelectedCategory('');
+    } else {
+      // Default back navigation
+      goBack();
+    }
   };
 
   const getCurrentCategory = () => {
@@ -131,11 +151,11 @@ const DocumentsPage: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <button
-              onClick={handleBackToHome}
+              onClick={handleBack}
               className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors duration-200"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
-              Quay về trang chủ
+              {isDetailView && !selectedCategory ? 'Quay về danh sách' : 'Quay về trang chủ'}
             </button>
 
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -180,7 +200,15 @@ const DocumentsPage: React.FC = () => {
                     return (
                       <button
                         key={category.id}
-                        onClick={() => setSelectedCategory(category.id)}
+                        onClick={() => {
+                          if (isDetailView) {
+                            // If already in detail view, just set the selected category
+                            setSelectedCategory(category.id);
+                          } else {
+                            // Navigate to detail route
+                            goToDetail(category.id);
+                          }
+                        }}
                         className={`w-full text-left p-3 rounded-lg transition-colors duration-200 ${
                           selectedCategory === category.id
                             ? 'bg-blue-100 text-blue-700 border-l-4 border-blue-500'
@@ -349,7 +377,7 @@ const DocumentsPage: React.FC = () => {
             <div className="bg-white rounded-xl p-6 text-center shadow-lg">
               <FileText size={64} className="mx-auto text-yellow-500 mb-4" />
               <p className="text-gray-600 font-medium">Văn kiện lịch sử quan trọng nhất</p>
-              <p className="text-sm text-gray-500 mt-2">Được UNESCO công nhận là Di sản tài liệu thế giới</p>
+              <p className="text-sm text-gray-500 mt-2">Được UNESCO công nhận là Địa điểm  tài liệu thế giới</p>
             </div>
           </div>
         </motion.div>

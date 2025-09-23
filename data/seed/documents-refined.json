@@ -1,0 +1,266 @@
+{
+  "categories": [
+    {
+      "id": "historical-documents",
+      "name": "Văn bản lịch sử",
+      "description": "Tuyên ngôn độc lập, Di chúc, các bài viết và diễn văn quan trọng của Chủ tịch Hồ Chí Minh",
+      "icon": "FileText",
+      "color": "blue",
+      "order": 1,
+      "isActive": true
+    },
+    {
+      "id": "historical-images",
+      "name": "Hình ảnh lịch sử",
+      "description": "Bộ sưu tập ảnh quý hiếm về cuộc đời và sự nghiệp của Chủ tịch Hồ Chí Minh",
+      "icon": "Image",
+      "color": "green",
+      "order": 2,
+      "isActive": true
+    },
+    {
+      "id": "video-documents",
+      "name": "Video tư liệu",
+      "description": "Những thước phim quý giá ghi lại hoạt động của Chủ tịch Hồ Chí Minh",
+      "icon": "Video",
+      "color": "purple",
+      "order": 3,
+      "isActive": true
+    },
+    {
+      "id": "audio-recordings",
+      "name": "Ghi âm lịch sử",
+      "description": "Các bản ghi âm bài phát biểu và diễn văn của Chủ tịch Hồ Chí Minh",
+      "icon": "Mic",
+      "color": "orange",
+      "order": 4,
+      "isActive": true
+    }
+  ],
+
+  "documents": [
+    {
+      "id": "tuyen-ngon-doc-lap-1945",
+      "title": "Tuyên ngôn Độc lập 1945",
+      "description": "Bản Tuyên ngôn Độc lập khai sinh ra nước Việt Nam Dân chủ Cộng hòa, được Chủ tịch Hồ Chí Minh đọc tại Quảng trường Ba Đình ngày 2/9/1945",
+      "categoryId": "historical-documents",
+      "type": "text",
+      "content": "Toàn văn Tuyên ngôn Độc lập...",
+      "fileUrl": "/documents/tuyen-ngon-doc-lap-1945.pdf",
+      "thumbnailUrl": "/images/documents/tuyen-ngon-doc-lap.jpg",
+      "metadata": {
+        "author": "Chủ tịch Hồ Chí Minh",
+        "date": "1945-09-02",
+        "location": "Quảng trường Ba Đình, Hà Nội",
+        "significance": "Khai sinh nước Việt Nam Dân chủ Cộng hòa",
+        "language": "vi",
+        "pages": 3,
+        "fileSize": "2.5 MB"
+      },
+      "tags": ["độc lập", "tuyên ngôn", "1945", "ba đình", "lịch sử"],
+      "isPublic": true,
+      "isFeatured": true,
+      "downloadCount": 15234,
+      "viewCount": 45678,
+      "order": 1,
+      "isActive": true
+    },
+
+    {
+      "id": "di-chuc-bac-ho",
+      "title": "Di chúc của Chủ tịch Hồ Chí Minh",
+      "description": "Bản di chúc thiêng liêng của Chủ tịch Hồ Chí Minh gửi lại cho Đảng, cho nhân dân và thế hệ mai sau",
+      "categoryId": "historical-documents",
+      "type": "text",
+      "content": "Toàn văn Di chúc...",
+      "fileUrl": "/documents/di-chuc-bac-ho.pdf",
+      "thumbnailUrl": "/images/documents/di-chuc-bac-ho.jpg",
+      "metadata": {
+        "author": "Chủ tịch Hồ Chí Minh",
+        "date": "1969-05-10",
+        "location": "Hà Nội",
+        "significance": "Di chúc thiêng liêng của Chủ tịch Hồ Chí Minh",
+        "language": "vi",
+        "pages": 2,
+        "fileSize": "1.8 MB"
+      },
+      "tags": ["di chúc", "hồ chí minh", "1969", "thiêng liêng"],
+      "isPublic": true,
+      "isFeatured": true,
+      "downloadCount": 12456,
+      "viewCount": 38901,
+      "order": 2,
+      "isActive": true
+    },
+
+    {
+      "id": "bai-viet-dao-duc-cach-mang",
+      "title": "Đạo đức cách mạng",
+      "description": "Những bài viết của Chủ tịch Hồ Chí Minh về đạo đức cách mạng, tu dưỡng bản thân",
+      "categoryId": "historical-documents",
+      "type": "text",
+      "content": "Tuyển tập các bài viết về đạo đức...",
+      "fileUrl": "/documents/dao-duc-cach-mang.pdf",
+      "thumbnailUrl": "/images/documents/dao-duc-cach-mang.jpg",
+      "metadata": {
+        "author": "Chủ tịch Hồ Chí Minh",
+        "date": "1958-1966",
+        "location": "Việt Nam",
+        "significance": "Tư tưởng về đạo đức cách mạng",
+        "language": "vi",
+        "pages": 45,
+        "fileSize": "8.2 MB"
+      },
+      "tags": ["đạo đức", "cách mạng", "tu dưỡng", "tư tưởng"],
+      "isPublic": true,
+      "isFeatured": true,
+      "downloadCount": 8901,
+      "viewCount": 23456,
+      "order": 3,
+      "isActive": true
+    },
+
+    {
+      "id": "anh-bac-ho-thoi-tre-paris",
+      "title": "Ảnh Bác Hồ thời trẻ ở Paris",
+      "description": "Bộ ảnh quý hiếm về thời gian Nguyễn Ái Quốc sinh hoạt tại Paris (1917-1923)",
+      "categoryId": "historical-images",
+      "type": "image",
+      "content": "Bộ sưu tập ảnh...",
+      "fileUrl": "/images/collections/bac-ho-paris-collection.zip",
+      "thumbnailUrl": "/images/documents/bac-ho-paris-thumb.jpg",
+      "metadata": {
+        "photographer": "Nhiều tác giả",
+        "date": "1917-1923",
+        "location": "Paris, Pháp",
+        "significance": "Thời kỳ hoạt động cách mạng đầu tiên",
+        "imageCount": 25,
+        "resolution": "High Resolution",
+        "fileSize": "15.6 MB"
+      },
+      "tags": ["paris", "thời trẻ", "nguyễn ái quốc", "1917-1923"],
+      "isPublic": true,
+      "isFeatured": true,
+      "downloadCount": 6789,
+      "viewCount": 18765,
+      "order": 4,
+      "isActive": true
+    },
+
+    {
+      "id": "video-doc-tuyen-ngon-doc-lap",
+      "title": "Video đọc Tuyên ngôn Độc lập",
+      "description": "Thước phim lịch sử ghi lại khoảnh khắc Chủ tịch Hồ Chí Minh đọc Tuyên ngôn Độc lập ngày 2/9/1945",
+      "categoryId": "video-documents",
+      "type": "video",
+      "content": "Video tư liệu lịch sử...",
+      "fileUrl": "/videos/doc-tuyen-ngon-doc-lap-1945.mp4",
+      "thumbnailUrl": "/images/documents/video-tuyen-ngon-thumb.jpg",
+      "metadata": {
+        "duration": "8:45",
+        "date": "1945-09-02",
+        "location": "Quảng trường Ba Đình, Hà Nội",
+        "significance": "Khoảnh khắc lịch sử độc lập",
+        "quality": "HD Restored",
+        "language": "vi",
+        "fileSize": "125 MB"
+      },
+      "tags": ["video", "tuyên ngôn", "độc lập", "ba đình", "1945"],
+      "isPublic": true,
+      "isFeatured": true,
+      "downloadCount": 4567,
+      "viewCount": 34890,
+      "order": 5,
+      "isActive": true
+    },
+
+    {
+      "id": "ghi-am-bai-phat-bieu-quoc-khanh",
+      "title": "Ghi âm bài phát biểu Quốc khánh",
+      "description": "Bản ghi âm bài phát biểu của Chủ tịch Hồ Chí Minh nhân dịp Quốc khánh 2/9",
+      "categoryId": "audio-recordings",
+      "type": "audio",
+      "content": "Bản ghi âm lịch sử...",
+      "fileUrl": "/audio/phat-bieu-quoc-khanh.mp3",
+      "thumbnailUrl": "/images/documents/audio-quoc-khanh-thumb.jpg",
+      "metadata": {
+        "duration": "12:30",
+        "date": "1960-09-02",
+        "location": "Hà Nội",
+        "significance": "Bài phát biểu Quốc khánh",
+        "quality": "Restored Audio",
+        "language": "vi",
+        "fileSize": "18.5 MB"
+      },
+      "tags": ["audio", "phát biểu", "quốc khánh", "1960"],
+      "isPublic": true,
+      "isFeatured": false,
+      "downloadCount": 2345,
+      "viewCount": 12678,
+      "order": 6,
+      "isActive": true
+    },
+
+    {
+      "id": "anh-bac-ho-voi-nhan-dan",
+      "title": "Ảnh Bác Hồ với nhân dân",
+      "description": "Bộ sưu tập ảnh về mối quan hệ gần gũi, thân thiết của Chủ tịch Hồ Chí Minh với nhân dân",
+      "categoryId": "historical-images",
+      "type": "image",
+      "content": "Bộ sưu tập ảnh...",
+      "fileUrl": "/images/collections/bac-ho-nhan-dan.zip",
+      "thumbnailUrl": "/images/documents/bac-ho-nhan-dan-thumb.jpg",
+      "metadata": {
+        "photographer": "Nhiều tác giả",
+        "date": "1945-1969",
+        "location": "Việt Nam",
+        "significance": "Mối quan hệ Bác Hồ với nhân dân",
+        "imageCount": 50,
+        "resolution": "High Resolution",
+        "fileSize": "28.4 MB"
+      },
+      "tags": ["nhân dân", "gần gũi", "thân thiết", "bác hồ"],
+      "isPublic": true,
+      "isFeatured": true,
+      "downloadCount": 5432,
+      "viewCount": 19876,
+      "order": 7,
+      "isActive": true
+    },
+
+    {
+      "id": "thu-gui-dong-bao-chien-si",
+      "title": "Thư gửi đồng bào, chiến sĩ",
+      "description": "Tuyển tập thư của Chủ tịch Hồ Chí Minh gửi đồng bào và chiến sĩ trong các thời kỳ",
+      "categoryId": "historical-documents",
+      "type": "text",
+      "content": "Tuyển tập thư...",
+      "fileUrl": "/documents/thu-gui-dong-bao-chien-si.pdf",
+      "thumbnailUrl": "/images/documents/thu-dong-bao-thumb.jpg",
+      "metadata": {
+        "author": "Chủ tịch Hồ Chí Minh",
+        "date": "1945-1969",
+        "location": "Việt Nam",
+        "significance": "Thể hiện tình cảm với đồng bào, chiến sĩ",
+        "language": "vi",
+        "pages": 78,
+        "fileSize": "12.3 MB"
+      },
+      "tags": ["thư", "đồng bào", "chiến sĩ", "tình cảm"],
+      "isPublic": true,
+      "isFeatured": false,
+      "downloadCount": 3456,
+      "viewCount": 15432,
+      "order": 8,
+      "isActive": true
+    }
+  ],
+
+  "metadata": {
+    "totalDocuments": 8,
+    "totalCategories": 4,
+    "lastUpdated": "2025-09-23",
+    "version": "1.0.0",
+    "maintainer": "Heritage Journey Team"
+  }
+}

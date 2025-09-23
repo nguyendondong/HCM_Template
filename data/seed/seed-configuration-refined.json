@@ -1,0 +1,306 @@
+{
+  "seedConfiguration": {
+    "version": "2.0.0",
+    "projectName": "Heritage Journey - Hành Trình Theo Dấu Chân Bác",
+    "description": "Comprehensive seed data for Ho Chi Minh Heritage Journey application",
+    "lastUpdated": "2025-09-23",
+    "maintainer": "Heritage Journey Development Team"
+  },
+
+  "collections": [
+    {
+      "name": "landingPageContent",
+      "firebaseCollection": "pageContent",
+      "documentId": "landing-page",
+      "file": "landing-page-content.json",
+      "description": "Content for all landing page sections (Hero, Introduction, Documents, VR, Mini Games)",
+      "priority": 1,
+      "isRequired": true,
+      "dependencies": []
+    },
+    {
+      "name": "heritageSpots",
+      "firebaseCollection": "heritage-spots",
+      "file": "heritage-spots-refined.json",
+      "description": "Heritage sites and historical locations related to Ho Chi Minh",
+      "priority": 2,
+      "isRequired": true,
+      "dependencies": []
+    },
+    {
+      "name": "documents",
+      "firebaseCollection": "documents",
+      "file": "documents-refined.json",
+      "description": "Historical documents, images, videos, and audio recordings",
+      "priority": 3,
+      "isRequired": true,
+      "dependencies": ["documentCategories"]
+    },
+    {
+      "name": "miniGames",
+      "firebaseCollection": "mini-games",
+      "file": "mini-games-refined.json",
+      "description": "Educational mini games and interactive activities",
+      "priority": 4,
+      "isRequired": true,
+      "dependencies": []
+    },
+    {
+      "name": "vrContent",
+      "firebaseCollection": "vr-content",
+      "file": "vr-content-refined.json",
+      "description": "Virtual reality experiences and collections",
+      "priority": 5,
+      "isRequired": true,
+      "dependencies": ["heritageSpots"]
+    },
+    {
+      "name": "navigationContent",
+      "firebaseCollection": "navigationContent",
+      "documentId": "main-navigation",
+      "description": "Main navigation menu configuration",
+      "priority": 6,
+      "isRequired": true,
+      "dependencies": [],
+      "staticData": {
+        "logo": {
+          "text": "Heritage Journey",
+          "iconName": "Star"
+        },
+        "menuItems": [
+          {
+            "id": "overview",
+            "label": "Tổng quan",
+            "href": "#overview",
+            "order": 1,
+            "isActive": true
+          },
+          {
+            "id": "introduction",
+            "label": "Giới thiệu",
+            "href": "#introduction",
+            "order": 2,
+            "isActive": true
+          },
+          {
+            "id": "journey",
+            "label": "Hành trình theo chân Bác",
+            "href": "#map-section",
+            "targetSection": "map-section",
+            "order": 3,
+            "isActive": true
+          },
+          {
+            "id": "documents",
+            "label": "Tư liệu về Chủ tịch Hồ Chí Minh",
+            "href": "#documents",
+            "order": 4,
+            "isActive": true
+          },
+          {
+            "id": "vr-technology",
+            "label": "Ứng dụng công nghệ VR",
+            "href": "#vr-technology",
+            "order": 5,
+            "isActive": true
+          },
+          {
+            "id": "mini-game",
+            "label": "Mini Game",
+            "href": "#mini-game",
+            "order": 6,
+            "isActive": true
+          }
+        ],
+        "brandSettings": {
+          "showIcon": true,
+          "showText": true,
+          "customIconUrl": null
+        },
+        "menuSettings": {
+          "showLabels": true,
+          "highlightActiveSection": true,
+          "smoothScroll": true
+        },
+        "mobileSettings": {
+          "showMobileMenu": true,
+          "overlayEnabled": true,
+          "animationEnabled": true
+        },
+        "title": "Navigation Menu",
+        "mobileMenuEnabled": true,
+        "isActive": true,
+        "lastUpdated": "2025-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "name": "footerContent",
+      "firebaseCollection": "footerContent",
+      "documentId": "main-footer",
+      "description": "Footer content and links",
+      "priority": 7,
+      "isRequired": true,
+      "dependencies": [],
+      "staticData": {
+        "quote": "Độc lập - Tự do - Hạnh phúc",
+        "description": "Khám phá di sản văn hóa Việt Nam thông qua công nghệ hiện đại",
+        "actionButton": {
+          "text": "Ghé thăm",
+          "action": "/heritage-journey"
+        },
+        "copyright": "© 2025 Heritage Journey Following Uncle Ho. Honoring the legacy of Vietnam's beloved leader.",
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "url": "https://www.facebook.com/hethongtruongngothoinhiem",
+            "icon": "Facebook"
+          },
+          {
+            "platform": "YouTube",
+            "url": "https://www.youtube.com/channel/UCanpXIMKYwTqLtp4acn9i8g",
+            "icon": "Youtube"
+          }
+        ],
+        "backgroundElements": {
+          "enableStars": true,
+          "starCount": 12
+        },
+        "contactInfo": {
+          "address": "19 Ngõ 19, Phố Nguyễn Trãi, Quận Thanh Xuân, Hà Nội, Việt Nam",
+          "phone": "+84 24 3557 8026",
+          "email": "info@heritagejourney.vn"
+        },
+        "additionalLinks": [
+          {
+            "label": "About Us",
+            "url": "/about"
+          },
+          {
+            "label": "Contact",
+            "url": "/contact"
+          },
+          {
+            "label": "Privacy Policy",
+            "url": "/privacy"
+          },
+          {
+            "label": "Terms of Service",
+            "url": "/terms"
+          }
+        ],
+        "isActive": true
+      }
+    },
+    {
+      "name": "siteConfig",
+      "firebaseCollection": "siteConfig",
+      "documentId": "main",
+      "description": "Global site configuration and settings",
+      "priority": 8,
+      "isRequired": true,
+      "dependencies": [],
+      "staticData": {
+        "siteName": "Heritage Journey - Hành Trình Theo Dấu Chân Bác",
+        "siteDescription": "Khám phá di sản văn hóa và lịch sử Việt Nam thông qua công nghệ VR/AR",
+        "logoUrl": "/logo.png",
+        "faviconUrl": "/favicon.ico",
+        "primaryColor": "#1f2937",
+        "secondaryColor": "#3b82f6",
+        "accentColor": "#f59e0b",
+        "features": {
+          "vrEnabled": true,
+          "quizEnabled": true,
+          "commentsEnabled": true,
+          "analyticsEnabled": true,
+          "multiLanguageEnabled": false
+        },
+        "seo": {
+          "metaTitle": "Heritage Journey - Khám Phá Di Sản Văn Hóa Việt Nam",
+          "metaDescription": "Trải nghiệm tương tác với di sản văn hóa Việt Nam qua công nghệ VR/AR hiện đại",
+          "keywords": ["di sản văn hóa", "Việt Nam", "Hồ Chí Minh", "VR", "AR", "lịch sử", "du lịch"],
+          "ogImageUrl": "/og-image.jpg"
+        },
+        "socialMedia": {
+          "facebook": "https://facebook.com/heritagejourney",
+          "youtube": "https://youtube.com/heritagejourney"
+        },
+        "contact": {
+          "email": "info@heritagejourney.vn",
+          "phone": "+84 123 456 789",
+          "address": "Hà Nội, Việt Nam"
+        },
+        "maintenance": {
+          "enabled": false,
+          "message": "Website đang bảo trì, vui lòng quay lại sau."
+        }
+      }
+    }
+  ],
+
+  "seedingOrder": [
+    "siteConfig",
+    "navigationContent",
+    "footerContent",
+    "landingPageContent",
+    "heritageSpots",
+    "documents",
+    "miniGames",
+    "vrContent"
+  ],
+
+  "environment": {
+    "development": {
+      "clearExistingData": true,
+      "batchSize": 25,
+      "validateData": true,
+      "generateTestUsers": true
+    },
+    "production": {
+      "clearExistingData": false,
+      "batchSize": 10,
+      "validateData": true,
+      "generateTestUsers": false,
+      "requireConfirmation": true
+    }
+  },
+
+  "validation": {
+    "requiredFields": {
+      "heritageSpots": ["id", "name", "location", "mapPosition", "isActive"],
+      "documents": ["id", "title", "categoryId", "type", "isActive"],
+      "miniGames": ["id", "title", "gameType", "difficulty", "isActive"],
+      "vrContent": ["id", "title", "category", "duration", "isActive"]
+    },
+    "uniqueFields": {
+      "heritageSpots": ["id"],
+      "documents": ["id"],
+      "miniGames": ["id"],
+      "vrContent": ["id"]
+    }
+  },
+
+  "postSeedActions": [
+    {
+      "name": "createIndexes",
+      "description": "Create Firestore indexes for optimized queries",
+      "collections": ["heritage-spots", "documents", "mini-games", "vr-content"]
+    },
+    {
+      "name": "generateSitemap",
+      "description": "Generate sitemap for SEO",
+      "enabled": true
+    },
+    {
+      "name": "cacheWarmup",
+      "description": "Warm up cache for frequently accessed data",
+      "enabled": true
+    }
+  ],
+
+  "statistics": {
+    "expectedTotalDocuments": 50,
+    "expectedCollections": 8,
+    "estimatedSeedTime": "2-3 minutes",
+    "dataSize": "~5MB"
+  }
+}

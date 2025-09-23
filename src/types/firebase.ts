@@ -5,7 +5,7 @@ export interface FirebaseHeritageSpot {
   id: string;
   name: string;
   description: string;
-  coordinates: {
+  mapPosition: {
     x: number; // Percentage from left
     y: number; // Percentage from top
   };

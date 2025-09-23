@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, deleteDoc, updateDoc, query, orderBy } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db } from '../../../lib/firebase';
 import { Comment } from '../../types/firebase';
 import {
   MessageSquare,
@@ -273,7 +273,7 @@ const CommentsManager: React.FC<CommentsManagerProps> = () => {
                     <p className="text-gray-700 mb-3">{comment.content}</p>
 
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      <span>Di sản: {comment.spotId}</span>
+                      <span>Địa điểm : {comment.spotId}</span>
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                         status === 'approved' ? 'bg-green-100 text-green-800' :

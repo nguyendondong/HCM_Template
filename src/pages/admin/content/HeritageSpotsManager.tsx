@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, deleteDoc, updateDoc, addDoc, Timestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../../lib/firebase';
+import { db, storage } from '../../../lib/firebase';
 import { FirebaseHeritageSpot } from '../../types/firebase';
 import {
   Plus,
@@ -21,7 +21,7 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
   const [formData, setFormData] = useState<Partial<FirebaseHeritageSpot>>({
     name: '',
     description: '',
-    coordinates: { x: 0, y: 0 },
+    mapPosition: { x: 0, y: 0 },
     side: 'left',
     imageUrl: ''
   });
@@ -40,8 +40,8 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
         return {
           id: doc.id,
           ...data,
-          // Ensure coordinates exists with default values
-          coordinates: data.coordinates || { x: 0, y: 0 }
+          // Ensure mapPosition exists with default values
+          mapPosition: data.mapPosition || { x: 0, y: 0 }
         };
       }) as FirebaseHeritageSpot[];
       setSpots(spotsData);
@@ -96,7 +96,7 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
     setFormData({
       name: spot.name,
       description: spot.description,
-      coordinates: spot.coordinates || { x: 0, y: 0 },
+      mapPosition: spot.mapPosition || { x: 0, y: 0 },
       side: spot.side,
       imageUrl: spot.imageUrl || ''
     });
@@ -109,7 +109,7 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
     setFormData({
       name: '',
       description: '',
-      coordinates: { x: 0, y: 0 },
+      mapPosition: { x: 0, y: 0 },
       side: 'left',
       imageUrl: ''
     });
@@ -167,13 +167,13 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Quản lý Di sản</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Địa điểm</h1>
         <button
           onClick={() => setShowForm(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
         >
           <Plus size={20} />
-          Thêm di sản
+          Thêm Map
         </button>
       </div>
 
@@ -198,7 +198,7 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
               <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
                 <div className="flex items-center gap-1">
                   <MapPin size={16} />
-                  Vị trí: {spot.coordinates?.x ?? 0}%, {spot.coordinates?.y ?? 0}%
+                  Vị trí: {spot.mapPosition?.x ?? 0}%, {spot.mapPosition?.y ?? 0}%
                 </div>
               </div>
 
@@ -237,7 +237,7 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
           <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">
-                {editingSpot ? 'Chỉnh sửa di sản' : 'Thêm di sản mới'}
+                {editingSpot ? 'Chỉnh sửa Địa điểm ' : 'Thêm Địa điểm  mới'}
               </h2>
               <button
                 onClick={handleCloseForm}
@@ -250,7 +250,7 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Tên di sản *
+                  Tên Địa điểm  *
                 </label>
                 <input
                   type="text"
@@ -283,8 +283,8 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
                   </label>
                   <input
                     type="number"
-                    name="coordinates.x"
-                    value={formData.coordinates?.x || 0}
+                    name="mapPosition.x"
+                    value={formData.mapPosition?.x || 0}
                     onChange={handleInputChange}
                     min="0"
                     max="100"
@@ -300,8 +300,8 @@ const HeritageSpotsManager: React.FC<HeritageSpotsManagerProps> = () => {
                   </label>
                   <input
                     type="number"
-                    name="coordinates.y"
-                    value={formData.coordinates?.y || 0}
+                    name="mapPosition.y"
+                    value={formData.mapPosition?.y || 0}
                     onChange={handleInputChange}
                     min="0"
                     max="100"

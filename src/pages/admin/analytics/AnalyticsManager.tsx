@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db } from '../../../lib/firebase';
 import {
   Users,
   MapPin,
@@ -291,7 +291,7 @@ const AnalyticsManager: React.FC<AnalyticsManagerProps> = () => {
             <MapPin className="h-8 w-8 text-green-600" />
             <div className="ml-3">
               <p className="text-2xl font-bold text-green-900">{analytics.totalSpots}</p>
-              <p className="text-green-600 text-sm">Di sản</p>
+              <p className="text-green-600 text-sm">Địa điểm </p>
               <p className="text-xs text-gray-500">
                 {analytics.popularSpots.length} được ghé thăm nhiều
               </p>
@@ -434,7 +434,7 @@ const AnalyticsManager: React.FC<AnalyticsManagerProps> = () => {
       {/* Popular Heritage Spots */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow-sm border p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Di sản Phổ biến nhất</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Địa điểm  Phổ biến nhất</h3>
           <div className="space-y-3">
             {analytics.popularSpots.slice(0, 5).map((spot, index) => (
               <div key={spot.spotId} className="flex items-center justify-between">

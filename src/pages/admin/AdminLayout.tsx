@@ -21,15 +21,19 @@ import {
 
 // Import admin components
 import AdminDashboard from './AdminDashboard';
-import HeritageSpotsManager from './HeritageSpotsManager';
-import UsersManager from './UsersManager';
-import ContentManager from './ContentManager';
-import CommentsManager from './CommentsManager';
-import QuizzesManager from './QuizzesManager';
-import VRContentManager from './VRContentManager';
-import MiniGamesManager from './MiniGamesManager';
-import AnalyticsManager from './AnalyticsManager';
-import SettingsManager from './SettingsManager';
+import {
+  ContentManager,
+  ContentDetails,
+  SectionEditor,
+  DocumentManager,
+  HeritageSpotsManager,
+  QuizzesManager,
+  VRContentManager,
+  MiniGamesManager
+} from './content';
+import { UsersManager, CommentsManager } from './user-management';
+import { AnalyticsManager } from './analytics';
+import { SettingsManager } from './settings';
 
 const AdminLayout: React.FC = () => {
   const { currentUser, loading } = useAuth();
@@ -58,8 +62,9 @@ const AdminLayout: React.FC = () => {
 
   const navigation = [
     { name: 'Tổng quan', href: '/admin', icon: LayoutDashboard },
-    { name: 'Di sản', href: '/admin/heritage-spots', icon: MapPin },
+    { name: 'Địa điểm ', href: '/admin/heritage-spots', icon: MapPin },
     { name: 'Nội dung', href: '/admin/content', icon: FileText },
+    { name: 'Tài liệu', href: '/admin/documents', icon: FileText },
     { name: 'Người dùng', href: '/admin/users', icon: Users },
     { name: 'Bình luận', href: '/admin/comments', icon: MessageSquare },
     { name: 'Câu hỏi', href: '/admin/quizzes', icon: HelpCircle },
@@ -165,6 +170,9 @@ const AdminLayout: React.FC = () => {
             <Route path="/" element={<AdminDashboard />} />
             <Route path="/heritage-spots" element={<HeritageSpotsManager />} />
             <Route path="/content" element={<ContentManager />} />
+            <Route path="/content/details/:id" element={<ContentDetails />} />
+            <Route path="/content/section-editor" element={<SectionEditor />} />
+            <Route path="/documents" element={<DocumentManager />} />
             <Route path="/users" element={<UsersManager />} />
             <Route path="/comments" element={<CommentsManager />} />
             <Route path="/quizzes" element={<QuizzesManager />} />
