@@ -1,49 +1,31 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Glasses, Smartphone, Monitor, Users } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
+import { useVRTechnologySection } from '../contexts/ContentContext';
+
+// Helper function to get icon from icon name
+const getIcon = (iconName: string): React.ComponentType<{ className?: string }> => {
+  const Icon = (LucideIcons as any)[iconName];
+  return Icon || LucideIcons.Circle;
+};
 
 const VRTechnologySection: React.FC = () => {
-  const vrFeatures = [
-    {
-      icon: Glasses,
-      title: 'Thực tế ảo immersive',
-      description: 'Trải nghiệm như đang thực sự có mặt tại các di tích lịch sử'
-    },
-    {
-      icon: Smartphone,
-      title: 'Tương thích đa nền tảng',
-      description: 'Hoạt động trên điện thoại, máy tính bảng và kính VR'
-    },
-    {
-      icon: Monitor,
-      title: 'Chất lượng 4K',
-      description: 'Hình ảnh siêu nét, âm thanh 3D sống động'
-    },
-    {
-      icon: Users,
-      title: 'Học tập tương tác',
-      description: 'Tham gia các hoạt động giáo dục tương tác'
-    }
-  ];
+  const { content, isLoading, features, experiences } = useVRTechnologySection();
 
-  const vrExperiences = [
-    {
-      title: 'Thăm quan Kim Liên',
-      description: 'Khám phá quê hương Bác trong môi trường VR',
-      image: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&h=300&fit=crop'
-    },
-    {
-      title: 'Chứng kiến Tuyên ngôn độc lập',
-      description: 'Tham dự lễ đọc Tuyên ngôn độc lập tại Ba Đình',
-      image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop'
-    },
-    {
-      title: 'Hành trình ra nước ngoài',
-      description: 'Đi cùng chàng thanh niên Nguyễn Tất Thành',
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'
-    }
-  ];
+  if (isLoading) {
+    return (
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="animate-pulse">Đang tải...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!content) {
+    return null;
+  }
 
   return (
     <section id="vr-technology" className="py-20 bg-white">
@@ -56,32 +38,35 @@ const VRTechnologySection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Ứng dụng công nghệ VR trong dạy học
+            {content.title}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Mang lại trải nghiệm học tập sống động và hấp dẫn thông qua công nghệ thực tế ảo,
-            giúp học sinh cảm nhận được không khí lịch sử một cách chân thực nhất.
+            {content.subtitle}
           </p>
         </motion.div>
 
         {/* VR Features */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {vrFeatures.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="text-center p-6 bg-gray-50 rounded-2xl hover:bg-red-50 transition-colors duration-300"
-            >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
-                <feature.icon className="w-8 h-8 text-red-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">{feature.title}</h3>
-              <p className="text-gray-600 text-sm">{feature.description}</p>
-            </motion.div>
-          ))}
+          {features.map((feature, index) => {
+            const IconComponent = getIcon(feature.icon);
+
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="text-center p-6 bg-gray-50 rounded-2xl hover:bg-red-50 transition-colors duration-300"
+              >
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+                  <IconComponent className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">{feature.title}</h3>
+                <p className="text-gray-600 text-sm">{feature.description}</p>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* VR Experiences */}
@@ -97,9 +82,9 @@ const VRTechnologySection: React.FC = () => {
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {vrExperiences.map((experience, index) => (
+            {experiences.map((experience, index) => (
               <motion.div
-                key={index}
+                key={experience.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -111,9 +96,13 @@ const VRTechnologySection: React.FC = () => {
                     src={experience.image}
                     alt={experience.title}
                     className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      // Fallback nếu image không load được
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&h=300&fit=crop';
+                    }}
                   />
                   <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                    VR
+                    {experience.duration}
                   </div>
                 </div>
                 <div className="p-6">
@@ -143,8 +132,7 @@ const VRTechnologySection: React.FC = () => {
             Lợi ích trong giáo dục
           </h3>
           <p className="text-red-100 mb-6 max-w-2xl mx-auto">
-            Công nghệ VR giúp học sinh không chỉ học về lịch sử mà còn "sống" trong lịch sử,
-            tạo ra những kỷ niệm học tập khó quên và hiểu biết sâu sắc hơn.
+            {content.description || 'Công nghệ VR giúp học sinh không chỉ học về lịch sử mà còn "sống" trong lịch sử, tạo ra những kỷ niệm học tập khó quên và hiểu biết sâu sắc hơn.'}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <div>
@@ -160,6 +148,19 @@ const VRTechnologySection: React.FC = () => {
               <div className="text-red-100">Hiểu bài học tốt hơn</div>
             </div>
           </div>
+
+          {/* Dynamic Call to Action */}
+          {content.callToAction && (
+            <div className="mt-6">
+              <Link
+                to={content.callToAction.href}
+                className="inline-flex items-center px-6 py-3 bg-white text-red-600 font-semibold rounded-lg hover:bg-red-50 transition-all duration-300"
+              >
+                {content.callToAction.text}
+                <LucideIcons.ArrowRight className="ml-2 w-4 h-4" />
+              </Link>
+            </div>
+          )}
         </motion.div>
       </div>
     </section>

@@ -108,11 +108,11 @@ graph TB
 | `miniGameContent` | Game content và scoring | Quiz questions, achievements, leaderboards |
 
 ### 🏛️ Enhanced Heritage Collections
-**Hệ thống di sản nâng cao với tính năng tương tác**
+**Hệ thống Địa điểm  nâng cao với tính năng tương tác**
 
 | Collection | Purpose | Key Features |
 |------------|---------|--------------|
-| `enhancedHeritageSpots` | Điểm di sản nâng cao | Rich media, real-time data, SEO metadata |
+| `enhancedHeritageSpots` | Điểm Địa điểm  nâng cao | Rich media, real-time data, SEO metadata |
 | `quizzes` | Quiz và đánh giá kiến thức | Multiple question types, scoring, analytics |
 | `userProgress` | Tiến độ học tập người dùng | Achievement tracking, learning paths |
 | `heritageComments` | Bình luận và đánh giá | Moderation system, rating aggregation |
@@ -124,7 +124,7 @@ graph TB
 | Collection | Purpose | Key Features |
 |------------|---------|--------------|
 | `siteAnalytics` | Thống kê website tổng quan | Visitor metrics, performance data |
-| `spotAnalytics` | Thống kê từng điểm di sản | Popular content, user engagement |
+| `spotAnalytics` | Thống kê từng điểm Địa điểm  | Popular content, user engagement |
 | `systemNotifications` | Thông báo hệ thống | Real-time alerts, admin messaging |
 | `contentVersions` | Versioning cho nội dung | Revision history, rollback capabilities |
 | `contentSchedule` | Lên lịch phát hành nội dung | Publish scheduling, content calendar |

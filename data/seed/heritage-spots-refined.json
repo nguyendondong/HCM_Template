@@ -1,0 +1,192 @@
+[
+  {
+    "id": "kim-lien-heritage-site",
+    "name": "Khu di tích Kim Liên - Quê hương Chủ tịch Hồ Chí Minh",
+    "description": "Khu di tích Kim Liên là nơi sinh và trưởng thành của Chủ tịch Hồ Chí Minh (Nguyễn Sinh Cung, 1890-1969). Đây được coi là 'đất thánh' của cách mạng Việt Nam, nơi bắt đầu hành trình vĩ đại của một người con ưu tú của dân tộc Việt Nam.",
+    "mapPosition": {
+      "x": 25,
+      "y": 26
+    },
+    "side": "center",
+    "url": "https://kimlienvn.gov.vn/",
+    "tags": [
+      "Chủ tịch Hồ Chí Minh",
+      "quê hương",
+      "tuổi thơ",
+      "cách mạng",
+      "Kim Liên",
+      "Nghệ An"
+    ],
+    "isActive": true,
+    "featured": true,
+    "order": 1
+  },
+  {
+    "id": "pac-bo-heritage-site",
+    "name": "Khu di tích Pác Bó - Cội nguồn cách mạng Việt Nam",
+    "description": "Pác Bó là nơi Chủ tịch Hồ Chí Minh về nước sau 30 năm đi tìm đường cứu nước (1941), đây là cội nguồn của cách mạng Việt Nam hiện đại. Tại đây, Người đã thành lập Đảng Cộng sản Đông Dương và lãnh đạo cách mạng Việt Nam giành thắng lợi.",
+    "mapPosition": {
+      "x": 35,
+      "y": 5
+    },
+    "side": "left",
+    "url": "https://pacbo.hochiminh.vn/",
+    "tags": [
+      "Chủ tịch Hồ Chí Minh",
+      "cách mạng",
+      "Việt Minh",
+      "Pác Bó",
+      "Cao Bằng",
+      "căn cứ địa"
+    ],
+    "isActive": true,
+    "featured": true,
+    "order": 2
+  },
+  {
+    "id": "ben-nha-rong-heritage-site",
+    "name": "Bến Nhà Rồng",
+    "description": "Bảo tàng Hồ Chí Minh - Nơi chàng thanh niên Nguyễn Tất Thành bước lên con tàu Amiral Latouche Tréville ra đi tìm đường cứu nước.",
+    "mapPosition": {
+      "x": 45,
+      "y": 81
+    },
+    "side": "right",
+    "url": "https://baotanghochiminh.vn/chi-nhanh-ben-nha-rong",
+    "tags": [
+      "Chủ tịch Hồ Chí Minh",
+      "xuất dương",
+      "tìm đường cứu nước",
+      "Sài Gòn",
+      "1911"
+    ],
+    "isActive": true,
+    "featured": false,
+    "order": 3
+  },
+  {
+    "id": "ha-noi-complex-heritage-site",
+    "name": "Khu di tích Hà Nội",
+    "description": "Bao gồm Bảo tàng Hồ Chí Minh, Phủ Chủ tịch, Di tích 48 Hàng Ngang và Vạn Phúc - Nơi ghi dấu những hoạt động quan trọng của Bác tại Thủ đô.",
+    "mapPosition": {
+      "x": 35,
+      "y": 15
+    },
+    "side": "left",
+    "url": "https://baotanghochiminh.vn/",
+    "tags": [
+      "Chủ tịch Hồ Chí Minh",
+      "Ba Đình",
+      "Tuyên ngôn độc lập",
+      "Hà Nội",
+      "thủ đô"
+    ],
+    "isActive": true,
+    "featured": false,
+    "order": 4
+  },
+  {
+    "id": "hue-heritage-site",
+    "name": "Khu di tích Huế",
+    "description": "Nơi ghi dấu những năm tháng hoạt động cách mạng của Bác Hồ tại Thừa Thiên Huế.",
+    "mapPosition": {
+      "x": 55,
+      "y": 45
+    },
+    "side": "right",
+    "url": "https://baotanghcmtthue.hochiminh.vn/",
+    "tags": [
+      "Chủ tịch Hồ Chí Minh",
+      "Huế",
+      "Quốc học",
+      "học tập",
+      "hoạt động cách mạng"
+    ],
+    "isActive": true,
+    "featured": false,
+    "order": 5
+  },
+  {
+    "id": "binh-dinh-heritage-site",
+    "name": "Khu di tích Bình Định",
+    "description": "Nơi ghi dấu những năm tháng hoạt động cách mạng của Bác Hồ tại Bình Định.",
+    "mapPosition": {
+      "x": 62,
+      "y": 54
+    },
+    "side": "right",
+    "url": "https://binhdinh.hochiminh.vn/",
+    "tags": [
+      "Chủ tịch Hồ Chí Minh",
+      "Bình Định",
+      "miền Trung",
+      "hoạt động cách mạng"
+    ],
+    "isActive": true,
+    "featured": false,
+    "order": 6
+  },
+  {
+    "id": "tan-trao-heritage-site",
+    "name": "Khu di tích Tân Trào",
+    "description": "Thủ đô Khu giải phóng - Nơi diễn ra Đại hội Quốc dân đầu tiên, ra đời nước Việt Nam Dân chủ Cộng hòa.",
+    "mapPosition": {
+      "x": 25,
+      "y": 7
+    },
+    "side": "left",
+    "url": "https://tantrao.hochiminh.vn/",
+    "tags": [
+      "Chủ tịch Hồ Chí Minh",
+      "Tân Trào",
+      "căn cứ cách mạng",
+      "Cách mạng Tháng Tám",
+      "Tuyên Quang"
+    ],
+    "isActive": true,
+    "featured": false,
+    "order": 7
+  },
+  {
+    "id": "co-to-heritage-site",
+    "name": "Khu lưu niệm Cô Tô",
+    "description": "Nơi lưu giữ kỷ niệm về chuyến thăm của Bác Hồ đến đảo Cô Tô, thể hiện tình cảm của Người với ngư dân và biển đảo.",
+    "mapPosition": {
+      "x": 45,
+      "y": 18
+    },
+    "side": "right",
+    "url": "https://vr360.com.vn/projects/khu-luu-niem-chu-tich-ho-chi-minh/",
+    "tags": [
+      "Chủ tịch Hồ Chí Minh",
+      "Cô Tô",
+      "biển đảo",
+      "ngư dân",
+      "Quảng Ninh"
+    ],
+    "isActive": true,
+    "featured": false,
+    "order": 8
+  },
+  {
+    "id": "can-tho-heritage-site",
+    "name": "Bảo tàng Hồ Chí Minh Cần Thơ",
+    "description": "Chi nhánh Đồng bằng sông Cửu Long - Nơi lưu giữ những kỷ niệm về chuyến thăm lịch sử của Bác đến miền Tây Nam Bộ.",
+    "mapPosition": {
+      "x": 33,
+      "y": 85
+    },
+    "side": "left",
+    "url": "https://cantho.hochiminh.vn/",
+    "tags": [
+      "Chủ tịch Hồ Chí Minh",
+      "Cần Thơ",
+      "miền Tây",
+      "Đồng bằng sông Cửu Long",
+      "Nam Bộ"
+    ],
+    "isActive": true,
+    "featured": false,
+    "order": 9
+  }
+]

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { enhancedHeritageService } from '../services/enhancedHeritageService';
-import { HeritageSpot } from '../types/heritage';
+import { FirebaseHeritageSpot } from '../types/firebase';
 
 // Export function để scroll đến Hà Nội cho Navbar
 export const scrollToHanoi = () => {
@@ -15,10 +15,13 @@ export const scrollToHanoi = () => {
       // Hiện tại sẽ fallback đến static behavior, sau này có thể cải thiện
       mapSection.scrollIntoView({ behavior: 'smooth' });
 
-      // Trigger Hà Nội selection sau khi scroll
+      // Trigger Hà Nội selection sau khi scroll hoàn tất
+      // Tăng delay để đảm bảo scroll animation hoàn thành
       setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('selectHanoi'));
-      }, 800);
+        window.dispatchEvent(new CustomEvent('selectHanoi', {
+          detail: { forceSelect: true } // Thêm flag để force selection
+        }));
+      }, 1200); // Tăng từ 800ms lên 1200ms
     }, 100); // Delay ngắn để DOM ready
   }
 };
@@ -35,7 +38,7 @@ const MapSection: React.FC = () => {
   const [clickedSpotId, setClickedSpotId] = useState<string | null>(null); // Track spot đã click
   const [isNavbarTriggered, setIsNavbarTriggered] = useState(false); // Track khi được trigger từ navbar
   const [lastScrollY, setLastScrollY] = useState(0); // Track scroll position
-  const [heritageSpots, setHeritageSpots] = useState<HeritageSpot[]>([]);
+  const [heritageSpots, setHeritageSpots] = useState<FirebaseHeritageSpot[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -43,10 +46,10 @@ const MapSection: React.FC = () => {
   useEffect(() => {
     const loadHeritageSpots = async () => {
       try {
-        console.log('Loading heritage spots from service...');
         const spots = await enhancedHeritageService.getAllHeritageSpots();
-        console.log('Loaded heritage spots:', spots);
+      if (spots) {
         setHeritageSpots(spots);
+      }
       } catch (error) {
         console.error('Error loading heritage spots:', error);
         // Fallback: có thể load từ static data hoặc hiển thị thông báo lỗi
@@ -60,20 +63,13 @@ const MapSection: React.FC = () => {
   }, []);
 
   // Handle click vào spot - Ưu tiên cao nhất
-  const handleSpotClick = (e: React.MouseEvent, spotId: string) => {
-    e.stopPropagation();
-    console.log('Spot clicked:', spotId);
-    setIsNavbarTriggered(false);
-    setClickedSpotId(spotId); // Đánh dấu spot được click
-    setSelectedSpotId(spotId);
-    setShowLine(true);
-    setLastScrollY(window.scrollY); // Set current scroll position
+  const handleSpotClick = (spotId: string) => {
+    setClickedSpotId(spotId);
   };
 
   // Handle hover vào spot - Chỉ hiển thị khi chưa có spot được click
   const handleSpotHover = (spotId: string) => {
     if (!clickedSpotId) { // Chỉ hover khi chưa có spot được click
-      console.log('Hovering spot:', spotId);
       setIsHoveringSpot(true);
       setSelectedSpotId(spotId);
       setShowLine(true);
@@ -83,7 +79,6 @@ const MapSection: React.FC = () => {
   // Handle hover ra khỏi spot
   const handleSpotLeave = () => {
     if (!clickedSpotId) { // Chỉ xử lý khi chưa có spot được click
-      console.log('Left hover');
       setIsHoveringSpot(false);
       setSelectedSpotId(null);
       setShowLine(false);
@@ -106,39 +101,14 @@ const MapSection: React.FC = () => {
   };
 
   // Handle click ra ngoài để reset clicked spot
-  const handleClickOutside = (e: React.MouseEvent) => {
-    // Kiểm tra xem click có phải vào spot, popup, hoặc button không
-    const target = e.target as HTMLElement;
-    const isSpotClick = target.closest('[data-spot-id]');
-    const isPopupClick = target.closest('[data-popup]');
-    const isButtonClick = target.tagName === 'BUTTON' || target.closest('button');
-    const isLinkClick = target.tagName === 'A' || target.closest('a');
-
-    console.log('Click detected:', {
-      target: target.tagName,
-      isSpotClick: !!isSpotClick,
-      isPopupClick: !!isPopupClick,
-      isButtonClick: !!isButtonClick,
-      isLinkClick: !!isLinkClick,
-      clickedSpotId
-    });
-
-    // Nếu click vào spot, popup, button hoặc link thì không reset
-    if (isSpotClick || isPopupClick || isButtonClick || isLinkClick) {
-      console.log('Click ignored - target is interactive element');
-      return;
+  const handleMapClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (e.target === e.currentTarget) {
+      setClickedSpotId(null);
+      setSelectedSpotId(null);
+      setIsHoveringSpot(false);
+      setShowLine(false);
     }
-
-    console.log('Clicked outside, resetting clicked spot');
-    setClickedSpotId(null); // Reset clicked spot priority
-    setIsNavbarTriggered(false);
-    setIsHoveringSpot(false);
-    setIsHoveringPopup(false);
-    // Trigger auto-selection ngay lập tức
-    setTimeout(() => {
-      handleScroll();
-    }, 50);
-  };
+  }, []);
 
   // Scroll detection - Reset ưu tiên khi scroll và auto-select spot gần nhất
   const handleScroll = useCallback(() => {
@@ -151,7 +121,6 @@ const MapSection: React.FC = () => {
     // Nếu MapSection không trong viewport, clear selection
     if (!isMapSectionVisible) {
       if (selectedSpotId && !isNavbarTriggered) {
-        console.log('MapSection not in viewport, clearing popup');
         setSelectedSpotId(null);
         setShowLine(false);
         setClickedSpotId(null);
@@ -203,14 +172,12 @@ const MapSection: React.FC = () => {
           // Chỉ auto-select nếu viewport center trong vùng ±30px của spot Y
           if (distanceFromSpotY <= 30) {
             if (foundId !== selectedSpotId) {
-              console.log('Auto-selecting spot via scroll:', foundId);
               setSelectedSpotId(foundId);
               setShowLine(true);
             }
           } else {
             // Ngoài vùng ±30px - clear auto-selection
             if (selectedSpotId && !isHoveringSpot) {
-              console.log('Outside Y range, clearing auto-selection');
               setSelectedSpotId(null);
               setShowLine(false);
             }
@@ -219,7 +186,6 @@ const MapSection: React.FC = () => {
       } else if (!foundId && !isHoveringSpot) {
         // Không có spot nào trong viewport - clear auto-selection
         if (selectedSpotId) {
-          console.log('No spot in viewport, clearing auto-selection');
           setSelectedSpotId(null);
           setShowLine(false);
         }
@@ -258,7 +224,6 @@ const MapSection: React.FC = () => {
       // Nếu click outside section hoặc click trong section nhưng không phải interactive elements
       if (!isClickInSection || (!isSpotClick && !isPopupClick && !isButtonClick && !isLinkClick)) {
         if (clickedSpotId) {
-          console.log('Document click - resetting clicked spot');
           setClickedSpotId(null);
           setIsNavbarTriggered(false);
           setIsHoveringSpot(false);
@@ -269,18 +234,22 @@ const MapSection: React.FC = () => {
         }
       }
     };    // Event listener cho việc select Hà Nội từ navbar
-    const handleSelectHanoi = () => {
-      console.log('Selecting Hanoi from navbar');
+    const handleSelectHanoi = (event: Event) => {
+      const customEvent = event as CustomEvent;
+
+      // Kiểm tra có force flag không
+      const forceSelect = customEvent?.detail?.forceSelect || false;
 
       // Kiểm tra MapSection có visible không trước khi set state
       if (sectionRef.current) {
         const sectionRect = sectionRef.current.getBoundingClientRect();
         const isMapSectionVisible = sectionRect.top < window.innerHeight && sectionRect.bottom > 0;
 
-        if (isMapSectionVisible) {
+        // Nếu có forceSelect hoặc section visible thì proceed
+        if (forceSelect || isMapSectionVisible) {
           setIsNavbarTriggered(true);
-          setClickedSpotId('ha-noi-complex');
-          setSelectedSpotId('ha-noi-complex');
+          setClickedSpotId('ha-noi-complex-heritage-site');
+          setSelectedSpotId('ha-noi-complex-heritage-site');
           setShowLine(true);
           setIsHoveringSpot(false);
           setIsHoveringPopup(false);
@@ -291,11 +260,17 @@ const MapSection: React.FC = () => {
             setTimeout(() => setLineProgress(1), 200);
           }, 200);
 
-          // Tự động reset navbar trigger sau 1 giây để cho phép scroll detection
+          // Tự động reset navbar trigger sau 1.5 giây để cho phép scroll detection
           setTimeout(() => {
-            console.log('Auto-resetting navbar trigger to allow scroll detection');
             setIsNavbarTriggered(false);
-          }, 1000);
+          }, 1500);
+        } else {
+          // Retry sau 500ms nếu chưa visible
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('selectHanoi', {
+              detail: { forceSelect: true }
+            }));
+          }, 500);
         }
       }
     };
@@ -337,7 +312,7 @@ const MapSection: React.FC = () => {
       ref={sectionRef}
       id="map-section"
       className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-20"
-      onClick={(e) => handleClickOutside(e)}
+      onClick={(e) => handleMapClick(e)}
     >
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
@@ -393,8 +368,8 @@ const MapSection: React.FC = () => {
               <div className="absolute inset-0 pointer-events-none">
                 {heritageSpots.map((spot, index) => {
                   // Use coordinates if available, otherwise fall back to mapPosition
-                  const posX = spot.coordinates?.x ?? spot.mapPosition?.x ?? 0;
-                  const posY = spot.coordinates?.y ?? spot.mapPosition?.y ?? 0;
+                  const posX = spot.mapPosition?.x ?? 0;
+                  const posY = spot.mapPosition?.y ?? 0;
 
                   return (
                     <motion.div
@@ -416,7 +391,7 @@ const MapSection: React.FC = () => {
                         top: `${posY}%`,
                         transform: 'translate(-50%, -50%)'
                       }}
-                      onClick={(e) => handleSpotClick(e, spot.id)}
+                      onClick={() => handleSpotClick(spot.id)}
                       onMouseEnter={() => handleSpotHover(spot.id)}
                       onMouseLeave={handleSpotLeave}
                     />
@@ -439,8 +414,8 @@ const MapSection: React.FC = () => {
                 const popupWidth = 380;
                 const popupHeight = 180;
                 // Use coordinates if available, otherwise fall back to mapPosition
-                const posX = spot.coordinates?.x ?? spot.mapPosition?.x ?? 0;
-                const posY = spot.coordinates?.y ?? spot.mapPosition?.y ?? 0;
+                const posX = spot.mapPosition?.x ?? 0;
+                const posY = spot.mapPosition?.y ?? 0;
 
                 const spotY = mapRect.top + (mapRect.height * posY / 100);
                 const popupLeft = spot.side === 'left'

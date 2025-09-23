@@ -60,8 +60,9 @@ export interface DocumentsContent {
   title: string;
   subtitle: string;
   description: string;
-  categories: DocumentCategory[];
-  featuredDocument: FeaturedDocument;
+  categories: string[]; // Reference to document categories IDs
+  featuredDocumentId?: string; // Reference to a featured document
+  layout?: 'grid' | 'list' | 'masonry';
   createdAt: Timestamp;
   updatedAt: Timestamp;
   isActive: boolean;
@@ -69,19 +70,32 @@ export interface DocumentsContent {
 
 export interface DocumentCategory {
   id: string;
-  icon: string;
   title: string;
   description: string;
-  items: string[];
-  downloadUrl?: string;
+  icon: string;
+  documents?: Document[];
+  tags?: string[];
+  isActive?: boolean;
+  isFeatured?: boolean;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
 }
 
-export interface FeaturedDocument {
+export interface Document {
+  id: string;
   title: string;
-  quote: string;
   description: string;
-  documentUrl?: string;
-  previewImageUrl?: string;
+  type: string; // pdf, image, video...
+  language?: string;
+  year?: number;
+  location?: string;
+  digitalUrl: string;
+  thumbnailUrl: string;
+  significance?: string;
+  tags?: string[];
+  category: string;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 // VR Technology Section Data
@@ -218,7 +232,7 @@ export interface EnhancedHeritageSpot {
   id: string;
   name: string;
   description: string;
-  coordinates: {
+  mapPosition: {
     x: number;
     y: number;
   };

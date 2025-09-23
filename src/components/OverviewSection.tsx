@@ -7,7 +7,7 @@ const OverviewSection: React.FC = () => {
     { icon: Book, number: '50+', label: 'Di tích lịch sử' },
     { icon: Users, number: '1M+', label: 'Lượt tham quan' },
     { icon: Target, number: '100%', label: 'Chính xác lịch sử' },
-    { icon: Award, number: '#1', label: 'Nền tảng di sản' }
+    { icon: Award, number: '#1', label: 'Nền tảng Địa điểm ' }
   ];
 
   return (

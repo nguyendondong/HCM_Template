@@ -4,11 +4,7 @@ import {
   VRContent,
   MiniGameContent
 } from '../types/content';
-import {
-  documentsService,
-  vrContentService,
-  miniGameContentService
-} from '../services/pageContentService';
+import { contentService } from '../services/contentService';
 
 // ===== PAGE CONTENT CONTEXT INTERFACES =====
 
@@ -69,9 +65,9 @@ export function PageContentProvider({
         vrData,
         miniGameData
       ] = await Promise.all([
-        documentsService.getDocumentsContent(),
-        vrContentService.getVRContent(),
-        miniGameContentService.getMiniGameContent()
+        contentService.getDocumentsContent(),
+        contentService.getVRContent(),
+        contentService.getMiniGameContent()
       ]);
 
       // Update state
@@ -100,19 +96,19 @@ export function PageContentProvider({
     const unsubscribers: (() => void)[] = [];
 
     // Subscribe to documents content changes
-    const unsubscribeDocuments = documentsService.subscribeToDocumentsContent((content) => {
+    const unsubscribeDocuments = contentService.subscribeToContent<DocumentsContent>('documentsContent', (content: DocumentsContent | null) => {
       setDocumentsContent(content);
     });
     unsubscribers.push(unsubscribeDocuments);
 
     // Subscribe to VR content changes
-    const unsubscribeVR = vrContentService.subscribeToVRContent((content) => {
+    const unsubscribeVR = contentService.subscribeToContent<VRContent>('vrContent', (content: VRContent | null) => {
       setVRContent(content);
     });
     unsubscribers.push(unsubscribeVR);
 
     // Subscribe to mini game content changes
-    const unsubscribeMiniGame = miniGameContentService.subscribeToMiniGameContent((content) => {
+    const unsubscribeMiniGame = contentService.subscribeToContent<MiniGameContent>('miniGameContent', (content: MiniGameContent | null) => {
       setMiniGameContent(content);
     });
     unsubscribers.push(unsubscribeMiniGame);
@@ -131,7 +127,7 @@ export function PageContentProvider({
 
   const refreshDocumentsContent = async (): Promise<void> => {
     try {
-      const content = await documentsService.getDocumentsContent();
+      const content = await contentService.getDocumentsContent();
       setDocumentsContent(content);
     } catch (err) {
       console.error('Error refreshing documents content:', err);
@@ -140,7 +136,7 @@ export function PageContentProvider({
 
   const refreshVRContent = async (): Promise<void> => {
     try {
-      const content = await vrContentService.getVRContent();
+      const content = await contentService.getVRContent();
       setVRContent(content);
     } catch (err) {
       console.error('Error refreshing VR content:', err);
@@ -149,7 +145,7 @@ export function PageContentProvider({
 
   const refreshMiniGameContent = async (): Promise<void> => {
     try {
-      const content = await miniGameContentService.getMiniGameContent();
+      const content = await contentService.getMiniGameContent();
       setMiniGameContent(content);
     } catch (err) {
       console.error('Error refreshing mini game content:', err);
@@ -205,7 +201,7 @@ export function useDocumentsContent(): {
   isLoading: boolean;
   refresh: () => Promise<void>;
   categories: DocumentsContent['categories'] | [];
-  featuredDocument: DocumentsContent['featuredDocument'] | null;
+  featuredDocumentId: DocumentsContent['featuredDocumentId'] | null;
 } {
   const { documentsContent, isLoading, refreshDocumentsContent } = usePageContent();
 
@@ -214,7 +210,7 @@ export function useDocumentsContent(): {
     isLoading,
     refresh: refreshDocumentsContent,
     categories: documentsContent?.categories || [],
-    featuredDocument: documentsContent?.featuredDocument || null
+    featuredDocumentId: documentsContent?.featuredDocumentId || null
   };
 }
 

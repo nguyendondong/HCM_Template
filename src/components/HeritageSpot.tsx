@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
-import { HeritageSpot as HeritageSpotType } from '../types/heritage';
+import { FirebaseHeritageSpot } from '../types/firebase';
+
 
 interface HeritageSpotProps {
-  spot: HeritageSpotType;
+  spot: FirebaseHeritageSpot;
   mapRef: React.RefObject<HTMLDivElement>;
   hideDot?: boolean;
 }
@@ -16,8 +17,8 @@ const HeritageSpot: React.FC<HeritageSpotProps> = ({ spot, mapRef, hideDot }) =>
   const lineControls = useAnimation();
 
   // Use coordinates if available, otherwise fall back to mapPosition
-  const posX = spot.coordinates?.x ?? spot.mapPosition?.x ?? 0;
-  const posY = spot.coordinates?.y ?? spot.mapPosition?.y ?? 0;
+  const posX = spot.mapPosition?.x ?? 0;
+  const posY = spot.mapPosition?.y ?? 0;
 
   useEffect(() => {
     if (isInView) {

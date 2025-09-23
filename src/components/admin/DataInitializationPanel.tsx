@@ -10,7 +10,7 @@ import {
   Settings,
   Info
 } from 'lucide-react';
-import { initializeAllDefaultData, resetAndInitializeData } from '../../scripts/initializeData';
+import { initializeRefinedSeedData, quickSeedRefined } from '../../scripts/seedRefined';
 
 const DataInitializationPanel: React.FC = () => {
   const [isInitializing, setIsInitializing] = useState(false);
@@ -22,9 +22,13 @@ const DataInitializationPanel: React.FC = () => {
     try {
       setIsInitializing(true);
       setStatus('idle');
-      setMessage('Đang khởi tạo dữ liệu...');
+      setMessage('Đang khởi tạo dữ liệu mới...');
 
-      await initializeAllDefaultData();
+      await initializeRefinedSeedData({
+        clearExisting: false,
+        batchSize: 25,
+        validateData: true
+      });
 
       setStatus('success');
       setMessage('Khởi tạo dữ liệu thành công! Tất cả nội dung đã được tạo trên Firebase.');
@@ -47,7 +51,7 @@ const DataInitializationPanel: React.FC = () => {
       setStatus('idle');
       setMessage('Đang reset và khởi tạo lại dữ liệu...');
 
-      await resetAndInitializeData();
+      await quickSeedRefined();
 
       setStatus('success');
       setMessage('Reset và khởi tạo dữ liệu thành công!');
@@ -114,35 +118,31 @@ const DataInitializationPanel: React.FC = () => {
         </h3>
         <div className="space-y-2 text-sm text-gray-600">
           <div className="flex items-center justify-between">
-            <span>• Nội dung Hero Section</span>
+            <span>• Landing Page Content (Hero, Intro, Documents, VR, Games)</span>
             <span className="text-green-600 font-medium">Sẵn sàng</span>
           </div>
           <div className="flex items-center justify-between">
-            <span>• Menu Navigation</span>
+            <span>• Navigation & Footer Content</span>
             <span className="text-green-600 font-medium">Sẵn sàng</span>
           </div>
           <div className="flex items-center justify-between">
-            <span>• Footer Content</span>
+            <span>• Heritage Spots (8 di tích lịch sử)</span>
             <span className="text-green-600 font-medium">Sẵn sàng</span>
           </div>
           <div className="flex items-center justify-between">
-            <span>• Cấu hình trang web</span>
+            <span>• Documents & Categories (8 tài liệu, 4 danh mục)</span>
             <span className="text-green-600 font-medium">Sẵn sàng</span>
           </div>
           <div className="flex items-center justify-between">
-            <span>• Dữ liệu di tích nâng cao</span>
+            <span>• Mini Games (6 trò chơi giáo dục)</span>
             <span className="text-green-600 font-medium">Sẵn sàng</span>
           </div>
           <div className="flex items-center justify-between">
-            <span>• Nội dung trang Documents</span>
+            <span>• VR Experiences (6 trải nghiệm, 2 bộ sưu tập)</span>
             <span className="text-green-600 font-medium">Sẵn sàng</span>
           </div>
           <div className="flex items-center justify-between">
-            <span>• Nội dung trang VR Experience</span>
-            <span className="text-green-600 font-medium">Sẵn sàng</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span>• Nội dung trang Mini Games</span>
+            <span>• Site Configuration & Settings</span>
             <span className="text-green-600 font-medium">Sẵn sàng</span>
           </div>
         </div>
@@ -188,8 +188,9 @@ const DataInitializationPanel: React.FC = () => {
           <div className="text-sm text-yellow-800">
             <p className="font-medium mb-1">Lưu ý quan trọng:</p>
             <ul className="space-y-1 text-xs">
-              <li>• Khởi tạo dữ liệu sẽ tạo nội dung mặc định trên Firebase</li>
-              <li>• Reset dữ liệu chỉ nên sử dụng trong môi trường development</li>
+              <li>• Khởi tạo dữ liệu sẽ tạo tất cả nội dung theo cấu trúc mới trên Firebase</li>
+              <li>• Reset dữ liệu sẽ xóa và tạo lại toàn bộ (chỉ dùng trong development)</li>
+              <li>• Dữ liệu bao gồm: Landing page, Di tích, Tài liệu, VR, Mini games</li>
               <li>• Đảm bảo cấu hình Firebase đã được thiết lập đúng</li>
               <li>• Kiểm tra kết nối internet trước khi thực hiện</li>
             </ul>

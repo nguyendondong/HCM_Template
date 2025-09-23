@@ -83,7 +83,6 @@ export const getExtendedHeritageSpotById = async (id: string): Promise<ExtendedH
     const spotSnapshot = await getDoc(spotDoc);
 
     if (!spotSnapshot.exists()) {
-      console.log('No such heritage spot!');
       return null;
     }
 

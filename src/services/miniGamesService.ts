@@ -1,5 +1,313 @@
-import { collection, getDocs, query, where, orderBy, doc, getDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  doc,
+  getDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp,
+  limit
+} from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { db, storage } from '../lib/firebase';
+
+// New comprehensive interface for modern mini games
+export interface ModernMiniGame {
+  id: string;
+  title: string;
+  description: string;
+  gameType: 'timeline_quiz' | 'multiple_choice_quiz' | 'jigsaw_puzzle' | 'matching_game' | 'exploration_game' | 'sorting_game';
+  difficulty: 'Dễ' | 'Trung bình' | 'Khó';
+  estimatedTime: string;
+  category: 'history' | 'knowledge' | 'puzzle' | 'literature' | 'exploration' | 'timeline';
+  players: number;
+  maxScore: number;
+  icon: string;
+  color: string;
+  tags: string[];
+  isActive: boolean;
+  isFeatured: boolean;
+  order: number;
+  gameData: {
+    questions?: Array<{
+      id: string;
+      question: string;
+      options: string[];
+      correctAnswer: number;
+      explanation?: string;
+      imageUrl?: string;
+      year?: number;
+    }>;
+    puzzlePieces?: Array<{
+      id: string;
+      imageUrl: string;
+      position: { x: number; y: number };
+    }>;
+    matchingPairs?: Array<{
+      id: string;
+      item: string;
+      match: string;
+      imageUrl?: string;
+    }>;
+    locations?: Array<{
+      id: string;
+      name: string;
+      description: string;
+      coordinates: { lat: number; lng: number };
+      imageUrl?: string;
+    }>;
+    timelineEvents?: Array<{
+      id: string;
+      year: number;
+      event: string;
+      description: string;
+      imageUrl?: string;
+    }>;
+    sortingItems?: Array<{
+      id: string;
+      name: string;
+      category: string;
+      imageUrl?: string;
+    }>;
+    completedImage?: string;
+    gridSize?: { rows: number; cols: number };
+  };
+  rewards: {
+    points: number;
+    badges: string[];
+    unlocks: string[];
+  };
+  createdAt?: any;
+  updatedAt?: any;
+}
+
+// Interface for Mini Game from Firestore (legacy compatibility)
+export interface FirestoreMiniGame {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  playerCount: string;
+  timeEstimate: string;
+  category: string;
+  questions: {
+    id: string;
+    type: 'multiple-choice' | 'true-false' | 'matching' | 'ordering';
+    question: string;
+    options: {
+      [key: string]: string;
+    };
+    correctAnswer: string | string[];
+    explanation: string;
+    points: number;
+    timeLimit?: number;
+  }[];
+  achievements?: {
+    id: string;
+    title: string;
+    description: string;
+    icon: string;
+    requirement: string;
+    points: number;
+  }[];
+  scoring: {
+    maxPoints: number;
+    passingScore: number;
+    timeBonus: boolean;
+  };
+  media?: {
+    images?: string[];
+    videos?: string[];
+  };
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Interface for MiniGamesPage component (legacy format)
+export interface MiniGame {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: string;
+  timeLimit: string;
+  totalQuestions: number;
+  icon: any; // Lucide icon component
+  color: string;
+  questions: {
+    id: number;
+    question: string;
+    options: string[];
+    correct: number;
+    explanation: string;
+  }[];
+}
+
+export interface Achievement {
+  icon: string;
+  title: string;
+  count: string;
+  description: string;
+}
+
+export interface GameSession {
+  id: string;
+  gameId: string;
+  userId: string;
+  score: number;
+  completedAt: any;
+  timeSpent: number;
+  answers?: any[];
+  achievements: string[];
+}
+
+/**
+ * Modern Mini Games Service for comprehensive game management
+ */
+export class ModernMiniGamesService {
+  private gamesCollection = collection(db, 'mini-games');
+  private sessionsCollection = collection(db, 'game-sessions');
+
+  // Game CRUD operations
+  async createGame(gameData: Omit<ModernMiniGame, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    const docRef = await addDoc(this.gamesCollection, {
+      ...gameData,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+    return docRef.id;
+  }
+
+  async updateGame(gameId: string, updates: Partial<ModernMiniGame>): Promise<void> {
+    const gameRef = doc(this.gamesCollection, gameId);
+    await updateDoc(gameRef, {
+      ...updates,
+      updatedAt: serverTimestamp()
+    });
+  }
+
+  async deleteGame(gameId: string): Promise<void> {
+    const gameRef = doc(this.gamesCollection, gameId);
+    await deleteDoc(gameRef);
+  }
+
+  async getGame(gameId: string): Promise<ModernMiniGame | null> {
+    const gameRef = doc(this.gamesCollection, gameId);
+    const gameSnap = await getDoc(gameRef);
+
+    if (gameSnap.exists()) {
+      return { id: gameSnap.id, ...gameSnap.data() } as ModernMiniGame;
+    }
+    return null;
+  }
+
+  async getAllGames(filters?: {
+    category?: string;
+    difficulty?: string;
+    gameType?: string;
+    isActive?: boolean;
+    isFeatured?: boolean;
+  }): Promise<ModernMiniGame[]> {
+    let gameQuery = query(this.gamesCollection, orderBy('order', 'asc'));
+
+    if (filters?.isActive !== undefined) {
+      gameQuery = query(gameQuery, where('isActive', '==', filters.isActive));
+    }
+
+    if (filters?.isFeatured !== undefined) {
+      gameQuery = query(gameQuery, where('isFeatured', '==', filters.isFeatured));
+    }
+
+    if (filters?.category) {
+      gameQuery = query(gameQuery, where('category', '==', filters.category));
+    }
+
+    if (filters?.difficulty) {
+      gameQuery = query(gameQuery, where('difficulty', '==', filters.difficulty));
+    }
+
+    if (filters?.gameType) {
+      gameQuery = query(gameQuery, where('gameType', '==', filters.gameType));
+    }
+
+    const querySnapshot = await getDocs(gameQuery);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as ModernMiniGame[];
+  }
+
+  async getFeaturedGames(limitCount = 6): Promise<ModernMiniGame[]> {
+    const gameQuery = query(
+      this.gamesCollection,
+      where('isActive', '==', true),
+      where('isFeatured', '==', true),
+      orderBy('order', 'asc'),
+      limit(limitCount)
+    );
+
+    const querySnapshot = await getDocs(gameQuery);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as ModernMiniGame[];
+  }
+
+  async getGamesByCategory(category: string, limitCount = 12): Promise<ModernMiniGame[]> {
+    const gameQuery = query(
+      this.gamesCollection,
+      where('isActive', '==', true),
+      where('category', '==', category),
+      orderBy('order', 'asc'),
+      limit(limitCount)
+    );
+
+    const querySnapshot = await getDocs(gameQuery);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as ModernMiniGame[];
+  }
+
+  // Image upload for game content
+  async uploadGameImage(file: File, gameId: string, folder: string): Promise<string> {
+    const fileName = `${Date.now()}_${file.name}`;
+    const storageRef = ref(storage, `mini-games/${gameId}/${folder}/${fileName}`);
+
+    await uploadBytes(storageRef, file);
+    return await getDownloadURL(storageRef);
+  }
+
+  async deleteGameImage(imageUrl: string): Promise<void> {
+    try {
+      const imageRef = ref(storage, imageUrl);
+      await deleteObject(imageRef);
+    } catch (error) {
+      console.error('Error deleting image:', error);
+    }
+  }
+
+  async toggleGameStatus(gameId: string): Promise<void> {
+    const game = await this.getGame(gameId);
+    if (game) {
+      await this.updateGame(gameId, { isActive: !game.isActive });
+    }
+  }
+
+  async toggleFeaturedStatus(gameId: string): Promise<void> {
+    const game = await this.getGame(gameId);
+    if (game) {
+      await this.updateGame(gameId, { isFeatured: !game.isFeatured });
+    }
+  }
+}
+
+export const modernMiniGamesService = new ModernMiniGamesService();
 
 // Interface for Mini Game from Firestore
 export interface FirestoreMiniGame {

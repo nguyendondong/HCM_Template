@@ -2,17 +2,102 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Star } from 'lucide-react';
+import { collection, query, getDocs } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 import { scrollToHanoi } from './MapSection';
+
+interface NavMenuItem {
+  id: string;
+  label: string;
+  href: string;
+  targetSection?: string;
+  order: number;
+  isActive: boolean;
+}
+
+interface NavigationContent {
+  id?: string;
+  logo?: {
+    text: string;
+    iconName: string;
+  };
+  menuItems?: NavMenuItem[];
+  mobileMenuEnabled?: boolean;
+  brandSettings?: {
+    showIcon: boolean;
+    showText: boolean;
+    customIconUrl?: string;
+  };
+  menuSettings?: {
+    showLabels: boolean;
+    highlightActiveSection: boolean;
+    smoothScroll: boolean;
+  };
+  mobileSettings?: {
+    showMobileMenu: boolean;
+    overlayEnabled: boolean;
+    animationEnabled: boolean;
+  };
+}
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('overview'); // Track active section
+  const [navData, setNavData] = useState<NavigationContent>({
+    logo: {
+      text: 'Heritage Journey',
+      iconName: 'Star'
+    },
+    menuItems: [], // Start empty, will be populated from Firebase
+    menuSettings: {
+      showLabels: true,
+      highlightActiveSection: true,
+      smoothScroll: true
+    },
+    mobileSettings: {
+      showMobileMenu: true,
+      overlayEnabled: true,
+      animationEnabled: true
+    }
+  });
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
 
   // Check if we're on homepage
   const isHomePage = location.pathname === '/';
+
+  useEffect(() => {
+    fetchNavigationContent();
+  }, []);
+
+  const fetchNavigationContent = async () => {
+    try {
+      const navQuery = query(collection(db, 'navigationContent'));
+      const querySnapshot = await getDocs(navQuery);
+
+      if (!querySnapshot.empty) {
+        const navDoc = querySnapshot.docs[0];
+        const navContent = navDoc.data() as NavigationContent;
+
+        // Merge with existing state, prioritizing Firebase data
+        setNavData(prev => ({
+          ...prev,
+          ...navContent,
+          menuItems: navContent.menuItems || prev.menuItems || []
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching navigation content:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Get active menu items sorted by order
+  const activeMenuItems = navData.menuItems?.filter(item => item.isActive)
+    ?.sort((a, b) => a.order - b.order) || [];
 
   // Detect scroll for background transparency
   useEffect(() => {
@@ -27,19 +112,15 @@ const Navbar: React.FC = () => {
 
   // Detect active section - only on homepage
   useEffect(() => {
-    if (!isHomePage) {
+    if (!isHomePage || loading) {
       setActiveSection(''); // Clear active section when not on homepage
       return;
     }
 
-    const sections = [
-      { id: 'overview', element: document.getElementById('overview') },
-      { id: 'introduction', element: document.getElementById('introduction') },
-      { id: 'journey', element: document.getElementById('map-section') },
-      { id: 'documents', element: document.getElementById('documents') },
-      { id: 'vr-technology', element: document.getElementById('vr-technology') },
-      { id: 'mini-game', element: document.getElementById('mini-game') }
-    ];
+    const sections = activeMenuItems.map(item => ({
+      id: item.id,
+      element: document.getElementById(item.targetSection || item.id)
+    })).filter(section => section.element);
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -65,16 +146,7 @@ const Navbar: React.FC = () => {
     });
 
     return () => observer.disconnect();
-  }, [isHomePage]); // Add isHomePage dependency
-
-  const navItems = [
-    { id: 'overview', label: 'Tổng quan', href: '#overview' },
-    { id: 'introduction', label: 'Giới thiệu', href: '#introduction' },
-    { id: 'journey', label: 'Hành trình theo chân Bác', href: '#map-section' },
-    { id: 'documents', label: 'Tư liệu về Chủ tịch Hồ Chí Minh', href: '#documents' },
-    { id: 'vr-technology', label: 'Ứng dụng công nghệ VR', href: '#vr-technology' },
-    { id: 'mini-game', label: 'Mini Game', href: '#mini-game' }
-  ];
+  }, [isHomePage, loading, activeMenuItems]); // Add dependencies
 
   const scrollToSection = (href: string) => {
     // If not on homepage, navigate to homepage first with section info
@@ -151,19 +223,23 @@ const Navbar: React.FC = () => {
             onClick={() => navigate('/')}
             style={{ cursor: 'pointer' }}
           >
-            <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-red-600 to-red-800 rounded-lg">
-              <Star className="w-6 h-6 text-yellow-400" fill="currentColor" />
-            </div>
-            <span className={`text-xl font-bold transition-colors duration-300 ${
-              scrolled || !isHomePage ? 'text-gray-900' : 'text-white'
-            }`}>
-
-            </span>
+            {navData.brandSettings?.showIcon !== false && (
+              <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-red-600 to-red-800 rounded-lg">
+                <Star className="w-6 h-6 text-yellow-400" fill="currentColor" />
+              </div>
+            )}
+            {navData.brandSettings?.showText !== false && navData.logo?.text && (
+              <span className={`text-xl font-bold transition-colors duration-300 ${
+                scrolled || !isHomePage ? 'text-gray-900' : 'text-white'
+              }`}>
+                {navData.logo.text}
+              </span>
+            )}
           </motion.div>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1">
-            {navItems.map((item, index) => (
+            {activeMenuItems.map((item, index) => (
               <motion.div
                 key={item.id}
                 className="relative"
@@ -185,10 +261,10 @@ const Navbar: React.FC = () => {
                         : 'text-white hover:text-yellow-400'
                   }`}
                 >
-                  {item.label}
+                  {navData.menuSettings?.showLabels ? item.label : ''}
 
                   {/* Active indicator line - only show on homepage */}
-                  {activeSection === item.id && isHomePage && (
+                  {activeSection === item.id && isHomePage && navData.menuSettings?.highlightActiveSection && (
                     <motion.div
                       layoutId="activeIndicator"
                       className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-current rounded-full ${
@@ -223,7 +299,7 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Navigation */}
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && navData.mobileSettings?.showMobileMenu && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -233,7 +309,7 @@ const Navbar: React.FC = () => {
           >
             <div className="max-w-7xl mx-auto px-6 py-4">
               <div className="space-y-2">
-                {navItems.map((item, index) => (
+                {activeMenuItems.map((item, index) => (
                   <motion.button
                     key={item.id}
                     onClick={async () => {
@@ -245,7 +321,7 @@ const Navbar: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className={`w-full text-left px-4 py-3 font-medium rounded-lg transition-colors duration-200 ${
-                      activeSection === item.id && isHomePage
+                      activeSection === item.id && isHomePage && navData.menuSettings?.highlightActiveSection
                         ? 'text-red-600 bg-red-50 border-l-4 border-red-600'
                         : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
                     }`}

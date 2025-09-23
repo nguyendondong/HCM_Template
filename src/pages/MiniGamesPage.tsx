@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Play, Trophy, Target, Zap, CheckCircle, XCircle, RotateCcw } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import * as LucideIcons from 'lucide-react';
+import { useMiniGamesSection } from '../contexts/ContentContext';
+import { useSmartNavigation } from '../hooks/useSmartNavigation';
 
-interface Question {
-  id: number;
-  question: string;
-  options: string[];
-  correct: number;
-  explanation: string;
-}
+// Helper function to get icon from icon name
+const getIcon = (iconName: string): React.ComponentType<{ className?: string }> => {
+  const Icon = (LucideIcons as any)[iconName];
+  return Icon || LucideIcons.Circle;
+};
 
 interface GameState {
   currentQuestion: number;
@@ -22,7 +22,26 @@ interface GameState {
 
 const MiniGamesPage: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedGame, setSelectedGame] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { id: routeId } = useParams<{ id: string }>();
+  const { isDetailView, goBack, goToDetail } = useSmartNavigation({
+    listPath: '/mini-games',
+    targetSection: 'mini-game'
+  });
+
+  const { content, isLoading, games, leaderboard } = useMiniGamesSection();
+
+  // Filter and view state
+  const [searchQuery, setSearchQuery] = useState<string>(searchParams.get('search') || '');
+  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>(searchParams.get('difficulty') || 'all');
+  const [sortBy, setSortBy] = useState<string>(searchParams.get('sort') || 'newest');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>(
+    (searchParams.get('view') as 'grid' | 'list') || 'grid'
+  );
+
+  // Game state
+  const [selectedGame, setSelectedGame] = useState<string | null>(routeId || null);
   const [gameState, setGameState] = useState<GameState>({
     currentQuestion: 0,
     score: 0,
@@ -32,87 +51,112 @@ const MiniGamesPage: React.FC = () => {
     isPlaying: false
   });
 
-  const handleBackToHome = () => {
-    // Store the target section (mini-game for Mini Games)
-    sessionStorage.setItem('targetSection', 'mini-game');
-    navigate('/');
+  // Extract unique categories from games
+  const categories = useMemo(() => {
+    const uniqueCategories = [...new Set(games.map(game => game.category))];
+    return uniqueCategories;
+  }, [games]);
+
+  // Extract unique difficulties
+  const difficulties = useMemo(() => {
+    const uniqueDifficulties = [...new Set(games.map(game => game.difficulty))];
+    return uniqueDifficulties;
+  }, [games]);
+
+  // Update selected game when route changes
+  useEffect(() => {
+    if (routeId) {
+      setSelectedGame(routeId);
+    }
+  }, [routeId]);
+
+  // Sync URL params with state
+  useEffect(() => {
+    const params: Record<string, string> = {};
+    if (searchQuery) params.search = searchQuery;
+    if (selectedCategory !== 'all') params.category = selectedCategory;
+    if (selectedDifficulty !== 'all') params.difficulty = selectedDifficulty;
+    if (sortBy !== 'newest') params.sort = sortBy;
+    if (viewMode !== 'grid') params.view = viewMode;
+
+    setSearchParams(params, { replace: true });
+  }, [searchQuery, selectedCategory, selectedDifficulty, sortBy, viewMode, setSearchParams]);
+
+  // Filter games based on current filters
+  const filteredGames = useMemo(() => {
+    return games.filter(game => {
+      // Search filter
+      const matchesSearch = searchQuery
+        ? game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          game.description.toLowerCase().includes(searchQuery.toLowerCase())
+        : true;
+
+      // Category filter
+      const matchesCategory = selectedCategory === 'all' || game.category === selectedCategory;
+
+      // Difficulty filter
+      const matchesDifficulty = selectedDifficulty === 'all' || game.difficulty === selectedDifficulty;
+
+      return matchesSearch && matchesCategory && matchesDifficulty;
+    });
+  }, [games, searchQuery, selectedCategory, selectedDifficulty]);
+
+  // Sort filtered games
+  const sortedGames = useMemo(() => {
+    const sorted = [...filteredGames];
+
+    switch (sortBy) {
+      case 'a-z':
+        return sorted.sort((a, b) => a.title.localeCompare(b.title));
+      case 'z-a':
+        return sorted.sort((a, b) => b.title.localeCompare(a.title));
+      case 'easiest':
+        return sorted.sort((a, b) => {
+          const difficultyMap: Record<string, number> = {
+            'Dễ': 1,
+            'Trung bình': 2,
+            'Khó': 3
+          };
+          return (difficultyMap[a.difficulty] || 0) - (difficultyMap[b.difficulty] || 0);
+        });
+      case 'hardest':
+        return sorted.sort((a, b) => {
+          const difficultyMap: Record<string, number> = {
+            'Dễ': 1,
+            'Trung bình': 2,
+            'Khó': 3
+          };
+          return (difficultyMap[b.difficulty] || 0) - (difficultyMap[a.difficulty] || 0);
+        });
+      case 'newest':
+      default:
+        // Assuming games are already sorted by newest in the data
+        return sorted;
+    }
+  }, [filteredGames, sortBy]);
+
+  // Handle filter changes
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
   };
 
-  const miniGames = [
-    {
-      id: 'quiz-history',
-      title: 'Quiz kiến thức lịch sử',
-      description: 'Trả lời các câu hỏi về cuộc đời và sự nghiệp của Chủ tịch Hồ Chí Minh',
-      difficulty: 'Trung bình',
-      timeLimit: '30s/câu',
-      totalQuestions: 10,
-      icon: Trophy,
-      color: 'from-green-500 to-green-600',
-      questions: [
-        {
-          id: 1,
-          question: 'Chủ tịch Hồ Chí Minh sinh ngày nào?',
-          options: ['19/5/1890', '19/5/1891', '20/5/1890', '18/5/1890'],
-          correct: 0,
-          explanation: 'Chủ tịch Hồ Chí Minh sinh ngày 19 tháng 5 năm 1890 tại làng Sen, xã Kim Liên, huyện Nam Đàn, tỉnh Nghệ An.'
-        },
-        {
-          id: 2,
-          question: 'Tên thật của Chủ tịch Hồ Chí Minh là gì?',
-          options: ['Nguyễn Ái Quốc', 'Nguyễn Sinh Cung', 'Nguyễn Tất Thành', 'Lý Thụy'],
-          correct: 1,
-          explanation: 'Tên thật của Chủ tịch Hồ Chí Minh là Nguyễn Sinh Cung. Người còn có nhiều tên khác như Nguyễn Tất Thành, Nguyễn Ái Quốc...'
-        },
-        {
-          id: 3,
-          question: 'Tuyên ngôn độc lập được đọc vào ngày nào?',
-          options: ['2/9/1945', '30/4/1975', '19/8/1945', '1/5/1945'],
-          correct: 0,
-          explanation: 'Tuyên ngôn độc lập được Chủ tịch Hồ Chí Minh đọc tại Quảng trường Ba Đình, Hà Nội vào ngày 2/9/1945.'
-        }
-      ]
-    },
-    {
-      id: 'journey-path',
-      title: 'Hành trình tìm đường cứu nước',
-      description: 'Khám phá các địa điểm Bác Hồ đã đi qua trong hành trình 30 năm tìm đường cứu nước',
-      difficulty: 'Dễ',
-      timeLimit: 'Không giới hạn',
-      totalQuestions: 8,
-      icon: Target,
-      color: 'from-blue-500 to-blue-600',
-      questions: [
-        {
-          id: 1,
-          question: 'Năm 1911, Nguyễn Tất Thành ra đi tìm đường cứu nước từ cảng nào?',
-          options: ['Cảng Sài Gòn', 'Cảng Hải Phòng', 'Cảng Đà Nẵng', 'Cảng Nhà Rồng'],
-          correct: 3,
-          explanation: 'Năm 1911, chàng thanh niên Nguyễn Tất Thành lên tàu Amiral Latouche Tréville tại Cảng Nhà Rồng (nay là Bảo tàng Hồ Chí Minh) để ra đi tìm đường cứu nước.'
-        }
-      ]
-    },
-    {
-      id: 'puzzle-heritage',
-      title: 'Ghép hình di tích',
-      description: 'Ghép các mảnh hình để tạo thành những di tích lịch sử quan trọng',
-      difficulty: 'Khó',
-      timeLimit: '5 phút',
-      totalQuestions: 5,
-      icon: Zap,
-      color: 'from-purple-500 to-purple-600',
-      questions: [
-        {
-          id: 1,
-          question: 'Hãy sắp xếp các di tích theo thứ tự thời gian Bác Hồ đến thăm:',
-          options: ['Kim Liên → Pác Bó → Hà Nội → Tân Trào', 'Pác Bó → Tân Trào → Hà Nội → Kim Liên', 'Kim Liên → Hà Nội → Pác Bó → Tân Trào', 'Tân Trào → Pác Bó → Hà Nội → Kim Liên'],
-          correct: 2,
-          explanation: 'Thứ tự thời gian: Kim Liên (nơi sinh), Hà Nội (hoạt động cách mạng), Pác Bó (trở về), Tân Trào (thủ đô khu giải phóng).'
-        }
-      ]
-    }
-  ];
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
 
-  // Timer effect
+  const handleDifficultyChange = (difficulty: string) => {
+    setSelectedDifficulty(difficulty);
+  };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortBy(e.target.value);
+  };
+
+  const handleViewModeChange = (mode: 'grid' | 'list') => {
+    setViewMode(mode);
+  };
+
+  // Timer effect - MUST be called before any early returns
   useEffect(() => {
     if (!gameState.isPlaying || gameState.isCompleted || gameState.timeLeft <= 0) return;
 
@@ -129,28 +173,75 @@ const MiniGamesPage: React.FC = () => {
     return () => clearInterval(timer);
   }, [gameState.isPlaying, gameState.currentQuestion, gameState.timeLeft, gameState.isCompleted]);
 
+  const handleBack = () => {
+    if (isDetailView && !selectedGame) {
+      // If in detail route but no game selected, go back to list
+      goBack();
+    } else if (selectedGame) {
+      // If game is selected, close game and stay on current page
+      setSelectedGame(null);
+      setGameState({
+        currentQuestion: 0,
+        score: 0,
+        answers: [],
+        timeLeft: 30,
+        isCompleted: false,
+        isPlaying: false
+      });
+    } else {
+      // Default back navigation
+      goBack();
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="container mx-auto px-6 text-center">
+          <div className="animate-pulse">Đang tải...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!content) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="container mx-auto px-6 text-center">
+          <div>Không thể tải dữ liệu mini games</div>
+        </div>
+      </div>
+    );
+  }
+
   const startGame = (gameId: string) => {
-    setSelectedGame(gameId);
-    setGameState({
-      currentQuestion: 0,
-      score: 0,
-      answers: [],
-      timeLeft: 30,
-      isCompleted: false,
-      isPlaying: true
-    });
+    if (isDetailView) {
+      // If already in detail view, just set the selected game
+      setSelectedGame(gameId);
+      setGameState({
+        currentQuestion: 0,
+        score: 0,
+        answers: [],
+        timeLeft: 30,
+        isCompleted: false,
+        isPlaying: true
+      });
+    } else {
+      // Navigate to detail route
+      goToDetail(gameId);
+    }
   };
 
   const handleNextQuestion = (prevState: GameState, selectedAnswer: number): GameState => {
-    const game = miniGames.find(g => g.id === selectedGame);
-    if (!game) return prevState;
+    const game = games.find(g => g.id === selectedGame);
+    if (!game || !game.gameData.questions) return prevState;
 
-    const currentQ = game.questions[prevState.currentQuestion];
-    const isCorrect = selectedAnswer === currentQ.correct;
+    const currentQ = game.gameData.questions[prevState.currentQuestion];
+    const isCorrect = selectedAnswer === currentQ.correctAnswer;
     const newScore = isCorrect ? prevState.score + 1 : prevState.score;
     const newAnswers = [...prevState.answers, selectedAnswer];
 
-    if (prevState.currentQuestion + 1 >= game.questions.length) {
+    if (prevState.currentQuestion + 1 >= game.gameData.questions.length) {
       // Game completed
       return {
         ...prevState,
@@ -187,13 +278,13 @@ const MiniGamesPage: React.FC = () => {
   };
 
   const getCurrentGame = () => {
-    return miniGames.find(game => game.id === selectedGame);
+    return games.find(game => game.id === selectedGame);
   };
 
   const getScorePercentage = () => {
     const game = getCurrentGame();
-    if (!game) return 0;
-    return Math.round((gameState.score / game.questions.length) * 100);
+    if (!game || !game.gameData.questions) return 0;
+    return Math.round((gameState.score / game.gameData.questions.length) * 100);
   };
 
   const getScoreMessage = () => {
@@ -207,26 +298,30 @@ const MiniGamesPage: React.FC = () => {
   // Game playing view
   if (selectedGame && gameState.isPlaying && !gameState.isCompleted) {
     const game = getCurrentGame();
-    if (!game) return null;
+    if (!game || !game.gameData.questions) return null;
 
-    const currentQuestion = game.questions[gameState.currentQuestion];
+    const currentQuestion = game.gameData.questions[gameState.currentQuestion];
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
         <div className="container mx-auto px-6 py-8">
+          {/* Prominent Back Button */}
+          <button
+            onClick={handleBack}
+            className="absolute top-20 left-4 bg-black/70 hover:bg-black/90 backdrop-blur-sm text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-200 flex items-center space-x-3 z-50 border border-white/20 hover:border-white/40"
+            style={{ zIndex: 9999 }}
+          >
+            <LucideIcons.ArrowLeft className="w-5 h-5" />
+            <span>{isDetailView && !selectedGame ? 'Quay về danh sách' : 'Thoát game'}</span>
+          </button>
+
           {/* Game Header */}
-          <div className="flex items-center justify-between mb-8">
-            <button
-              onClick={() => setSelectedGame(null)}
-              className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors duration-200"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Thoát game</span>
-            </button>
+          <div className="flex items-center justify-between mb-8 pt-16">
+            <div></div> {/* Empty space to balance layout */}
 
             <div className="flex items-center space-x-6 text-white">
               <div className="text-center">
-                <div className="text-2xl font-bold">{gameState.currentQuestion + 1}/{game.questions.length}</div>
+                <div className="text-2xl font-bold">{gameState.currentQuestion + 1}/{game.gameData.questions.length}</div>
                 <div className="text-sm opacity-80">Câu hỏi</div>
               </div>
               <div className="text-center">
@@ -246,7 +341,7 @@ const MiniGamesPage: React.FC = () => {
           <div className="w-full bg-white/20 rounded-full h-2 mb-8">
             <div
               className="bg-gradient-to-r from-yellow-400 to-orange-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${((gameState.currentQuestion + 1) / game.questions.length) * 100}%` }}
+              style={{ width: `${((gameState.currentQuestion + 1) / game.gameData.questions.length) * 100}%` }}
             ></div>
           </div>
 
@@ -263,7 +358,7 @@ const MiniGamesPage: React.FC = () => {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {currentQuestion.options.map((option, index) => (
+              {currentQuestion.options.map((option: string, index: number) => (
                 <motion.button
                   key={index}
                   onClick={() => handleAnswer(index)}
@@ -287,7 +382,7 @@ const MiniGamesPage: React.FC = () => {
   // Game completed view
   if (selectedGame && gameState.isCompleted) {
     const game = getCurrentGame();
-    if (!game) return null;
+    if (!game || !game.gameData.questions) return null;
 
     const scoreMessage = getScoreMessage();
 
@@ -316,7 +411,7 @@ const MiniGamesPage: React.FC = () => {
                 <div className="text-sm text-gray-600">Tỷ lệ đúng</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">{game.questions.length}</div>
+                <div className="text-2xl font-bold text-purple-600">{game.gameData.questions.length}</div>
                 <div className="text-sm text-gray-600">Tổng câu hỏi</div>
               </div>
             </div>
@@ -324,23 +419,23 @@ const MiniGamesPage: React.FC = () => {
             {/* Answer Review */}
             <div className="space-y-4 mb-8">
               <h3 className="text-lg font-bold text-gray-900">Kết quả chi tiết:</h3>
-              {game.questions.map((q, index) => {
+              {game.gameData.questions.map((q: any, index: number) => {
                 const userAnswer = gameState.answers[index];
-                const isCorrect = userAnswer === q.correct;
+                const isCorrect = userAnswer === q.correctAnswer;
 
                 return (
                   <div key={q.id} className={`p-3 rounded-lg border-2 ${isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">Câu {index + 1}</span>
                       {isCorrect ? (
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <LucideIcons.CheckCircle className="w-5 h-5 text-green-600" />
                       ) : (
-                        <XCircle className="w-5 h-5 text-red-600" />
+                        <LucideIcons.XCircle className="w-5 h-5 text-red-600" />
                       )}
                     </div>
                     {!isCorrect && (
                       <p className="text-xs text-gray-600 mt-1">
-                        Đáp án đúng: {q.options[q.correct]}
+                        Đáp án đúng: {q.options[q.correctAnswer]}
                       </p>
                     )}
                   </div>
@@ -353,14 +448,14 @@ const MiniGamesPage: React.FC = () => {
                 onClick={restartGame}
                 className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
               >
-                <RotateCcw className="w-5 h-5" />
+                <LucideIcons.RotateCcw className="w-5 h-5" />
                 <span>Chơi lại</span>
               </button>
               <button
-                onClick={() => setSelectedGame(null)}
+                onClick={handleBack}
                 className="flex-1 px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium"
               >
-                Chọn game khác
+                {isDetailView ? 'Quay về danh sách' : 'Chọn game khác'}
               </button>
             </div>
           </motion.div>
@@ -381,70 +476,267 @@ const MiniGamesPage: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <button
-              onClick={handleBackToHome}
+              onClick={handleBack}
               className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors duration-200"
             >
-              <ArrowLeft className="w-5 h-5 mr-2" />
+              <LucideIcons.ArrowLeft className="w-5 h-5 mr-2" />
               Quay về trang chủ
             </button>
 
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Mini Games giáo dục
+              {content.title}
             </h1>
             <p className="text-xl text-gray-200 max-w-3xl">
-              Học lịch sử một cách vui vẻ và hấp dẫn thông qua các trò chơi tương tác,
-              giúp củng cố kiến thức và tạo động lực học tập.
+              {content.description}
             </p>
           </motion.div>
         </div>
       </div>
 
-      {/* Games Grid */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {miniGames.map((game, index) => (
-            <motion.div
-              key={game.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-            >
-              <div className={`h-32 bg-gradient-to-r ${game.color} relative`}>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <game.icon className="w-12 h-12 text-white" />
-                </div>
-                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium">
-                  {game.difficulty}
-                </div>
+      {/* Filters Section */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            {/* Search Bar */}
+            <div className="relative w-full lg:w-1/3">
+              <LucideIcons.Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Tìm kiếm trò chơi..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              {/* Category Filter */}
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handleCategoryChange('all')}
+                  className={`px-4 py-2 text-sm rounded-full ${
+                    selectedCategory === 'all'
+                      ? 'bg-red-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Tất cả
+                </button>
+                {categories.map(category => (
+                  <button
+                    key={category}
+                    onClick={() => handleCategoryChange(category)}
+                    className={`px-4 py-2 text-sm rounded-full ${
+                      selectedCategory === category
+                        ? 'bg-red-600 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
               </div>
 
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{game.title}</h3>
-                <p className="text-gray-600 mb-4 text-sm">{game.description}</p>
-
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Thời gian:</span>
-                    <span className="font-medium text-gray-700">{game.timeLimit}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Số câu hỏi:</span>
-                    <span className="font-medium text-gray-700">{game.totalQuestions}</span>
-                  </div>
-                </div>
-
+              {/* View Mode Switch */}
+              <div className="flex items-center gap-2 border rounded-lg p-1 self-start">
                 <button
-                  onClick={() => startGame(game.id)}
-                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 font-medium"
+                  onClick={() => handleViewModeChange('grid')}
+                  className={`p-2 rounded ${
+                    viewMode === 'grid'
+                      ? 'bg-red-600 text-white'
+                      : 'text-gray-500 hover:bg-gray-100'
+                  }`}
                 >
-                  <Play className="w-4 h-4" />
-                  <span>Bắt đầu chơi</span>
+                  <LucideIcons.LayoutGrid className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => handleViewModeChange('list')}
+                  className={`p-2 rounded ${
+                    viewMode === 'list'
+                      ? 'bg-red-600 text-white'
+                      : 'text-gray-500 hover:bg-gray-100'
+                  }`}
+                >
+                  <LucideIcons.List className="w-5 h-5" />
                 </button>
               </div>
-            </motion.div>
-          ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-4">
+            {/* Difficulty Filter */}
+            <div className="flex flex-wrap gap-2">
+              <span className="text-sm font-medium text-gray-500 self-center mr-2">Độ khó:</span>
+              <button
+                onClick={() => handleDifficultyChange('all')}
+                className={`px-4 py-1.5 text-sm rounded-full ${
+                  selectedDifficulty === 'all'
+                    ? 'bg-red-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Tất cả
+              </button>
+              {difficulties.map(difficulty => (
+                <button
+                  key={difficulty}
+                  onClick={() => handleDifficultyChange(difficulty)}
+                  className={`px-4 py-1.5 text-sm rounded-full ${
+                    selectedDifficulty === difficulty
+                      ? 'bg-red-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {difficulty}
+                </button>
+              ))}
+            </div>
+
+            {/* Sort Dropdown */}
+            <div className="flex items-center gap-2">
+              <label htmlFor="sort" className="text-sm font-medium text-gray-500">
+                Sắp xếp theo:
+              </label>
+              <select
+                id="sort"
+                value={sortBy}
+                onChange={handleSortChange}
+                className="bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+              >
+                <option value="newest">Mới nhất</option>
+                <option value="a-z">A-Z</option>
+                <option value="z-a">Z-A</option>
+                <option value="easiest">Dễ đến khó</option>
+                <option value="hardest">Khó đến dễ</option>
+              </select>
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* Games Display */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        {filteredGames.length === 0 ? (
+          <div className="text-center py-16">
+            <LucideIcons.SearchX className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">Không tìm thấy trò chơi</h3>
+            <p className="text-gray-500">
+              Không tìm thấy trò chơi phù hợp với điều kiện tìm kiếm của bạn. Vui lòng thử lại với các bộ lọc khác.
+            </p>
+          </div>
+        ) : viewMode === 'grid' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {sortedGames.map((game, index) => {
+              const IconComponent = getIcon(game.icon);
+
+              return (
+                <motion.div
+                  key={game.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+                >
+                  <div className={`h-32 bg-gradient-to-r ${game.color} relative`}>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <IconComponent className="w-12 h-12 text-white" />
+                    </div>
+                    <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium">
+                      {game.difficulty}
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{game.title}</h3>
+                    <p className="text-gray-600 mb-4 text-sm line-clamp-3">{game.description}</p>
+
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Thời gian:</span>
+                        <span className="font-medium text-gray-700">{game.estimatedTime}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Số câu hỏi:</span>
+                        <span className="font-medium text-gray-700">{game.gameData.questions?.length || 0}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Danh mục:</span>
+                        <span className="font-medium text-gray-700">{game.category}</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => startGame(game.id)}
+                      className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 font-medium"
+                    >
+                      <LucideIcons.Play className="w-4 h-4" />
+                      <span>Bắt đầu chơi</span>
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        ) : (
+          /* List view */
+          <div className="flex flex-col gap-4">
+            {sortedGames.map((game, index) => {
+              const IconComponent = getIcon(game.icon);
+
+              return (
+                <motion.div
+                  key={game.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="flex flex-col md:flex-row">
+                    <div className={`w-full md:w-48 h-48 md:h-auto bg-gradient-to-r ${game.color} relative flex-shrink-0`}>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <IconComponent className="w-16 h-16 text-white" />
+                      </div>
+                      <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium">
+                        {game.difficulty}
+                      </div>
+                    </div>
+
+                    <div className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between w-full">
+                      <div className="mb-4 md:mb-0 md:pr-6">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{game.title}</h3>
+                        <p className="text-gray-600 mb-3 line-clamp-2">{game.description}</p>
+
+                        <div className="flex flex-wrap gap-3">
+                          <div className="flex items-center text-sm text-gray-500">
+                            <LucideIcons.Clock className="w-4 h-4 mr-1" />
+                            <span>{game.estimatedTime}</span>
+                          </div>
+                          <div className="flex items-center text-sm text-gray-500">
+                            <LucideIcons.HelpCircle className="w-4 h-4 mr-1" />
+                            <span>{game.gameData.questions?.length || 0} câu hỏi</span>
+                          </div>
+                          <div className="flex items-center text-sm text-gray-500">
+                            <LucideIcons.Tag className="w-4 h-4 mr-1" />
+                            <span>{game.category}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => startGame(game.id)}
+                        className="flex-shrink-0 flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 font-medium"
+                      >
+                        <LucideIcons.Play className="w-4 h-4" />
+                        <span>Bắt đầu chơi</span>
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
         {/* Leaderboard Preview */}
         <motion.div
@@ -458,13 +750,7 @@ const MiniGamesPage: React.FC = () => {
           </h2>
 
           <div className="space-y-4">
-            {[
-              { rank: 1, name: 'Nguyễn Văn A', score: '2,450', badge: '🥇' },
-              { rank: 2, name: 'Trần Thị B', score: '2,380', badge: '🥈' },
-              { rank: 3, name: 'Lê Văn C', score: '2,290', badge: '🥉' },
-              { rank: 4, name: 'Phạm Thị D', score: '2,150', badge: '🏅' },
-              { rank: 5, name: 'Hoàng Văn E', score: '2,100', badge: '🏅' }
-            ].map((player, index) => (
+            {leaderboard.map((player, index) => (
               <motion.div
                 key={player.rank}
                 initial={{ opacity: 0, x: -20 }}
@@ -479,14 +765,13 @@ const MiniGamesPage: React.FC = () => {
                     <div className="text-sm text-gray-500">Điểm: {player.score}</div>
                   </div>
                 </div>
-                <Trophy className="w-5 h-5 text-yellow-500" />
+                <LucideIcons.Trophy className="w-5 h-5 text-yellow-500" />
               </motion.div>
             ))}
           </div>
         </motion.div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default MiniGamesPage;

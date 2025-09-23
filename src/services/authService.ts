@@ -33,8 +33,17 @@ export const signUpWithEmail = async (
   displayName?: string
 ): Promise<FirebaseUser> => {
   try {
-    // Tạo user trong Firebase Auth
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const sanitizedEmail = email.trim().toLowerCase();
+
+    if (!email || !password) {
+      throw new Error('Email và mật khẩu không được để trống');
+    }
+
+    if (password.length < 6) {
+      throw new Error('Mật khẩu phải có ít nhất 6 ký tự');
+    }
+
+    const userCredential = await createUserWithEmailAndPassword(auth, sanitizedEmail, password);
     const user = userCredential.user;
 
     // Cập nhật profile nếu có displayName
@@ -49,6 +58,10 @@ export const signUpWithEmail = async (
 
     return user;
   } catch (error: any) {
+    console.error('❌ Signup error:', error);
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
+
     // Handle specific error codes
     switch (error.code) {
       case 'auth/email-already-in-use':
@@ -57,8 +70,16 @@ export const signUpWithEmail = async (
         throw new Error('Mật khẩu quá yếu (tối thiểu 6 ký tự)');
       case 'auth/invalid-email':
         throw new Error('Email không hợp lệ');
+      case 'auth/operation-not-allowed':
+        throw new Error('Tính năng đăng ký email/password chưa được bật');
+      case 'auth/too-many-requests':
+        throw new Error('Quá nhiều yêu cầu. Vui lòng thử lại sau');
       default:
-        throw new Error('Đăng ký thất bại. Vui lòng thử lại.');
+        // If it's already a custom error message, use it
+        if (error.message && !error.code) {
+          throw error;
+        }
+        throw new Error(`Đăng ký thất bại: ${error.message || 'Vui lòng thử lại'}`);
     }
   }
 };
@@ -199,7 +220,9 @@ const createUserDocument = async (
   user: FirebaseUser,
   additionalData?: any
 ): Promise<void> => {
-  if (!user) return;
+  if (!user) {
+    throw new Error('User object is required');
+  }
 
   try {
     const userDoc = doc(db, 'users', user.uid);
@@ -236,9 +259,23 @@ const createUserDocument = async (
         await updateDoc(userDoc, updates);
       }
     }
-  } catch (error) {
-    console.error('Error creating/updating user document:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('❌ Error creating/updating user document:', error);
+    console.error('Error details:', {
+      code: error.code,
+      message: error.message,
+      userId: user.uid,
+      userEmail: user.email
+    });
+
+    // Throw with more specific error message
+    if (error.code === 'permission-denied') {
+      throw new Error('Không có quyền tạo tài khoản người dùng. Vui lòng kiểm tra cấu hình Firebase.');
+    } else if (error.code === 'unavailable') {
+      throw new Error('Dịch vụ tạm thời không khả dụng. Vui lòng thử lại sau.');
+    } else {
+      throw new Error(`Lỗi tạo thông tin người dùng: ${error.message}`);
+    }
   }
 };
 

@@ -1,189 +1,177 @@
-# Dữ liệu Seed cho Di sản Hồ Chí Minh
+# Heritage Journey - Refined Seed Data
 
-## Tổng quan
+## 📋 Tổng quan
 
-Thư mục `data/seed` chứa tất cả dữ liệu mẫu đã được tổng hợp và tích hợp từ nhiều nguồn khác nhau để tạo thành một bộ dữ liệu hoàn chỉnh về di sản Chủ tịch Hồ Chí Minh.
+Thư mục này chứa dữ liệu seed đã được refactor hoàn toàn để phù hợp với cấu trúc landing page và các component của ứng dụng Heritage Journey - Hành Trình Theo Dấu Chân Bác.
 
-## Cấu trúc dữ liệu
+## 🚀 Phiên bản 2.0 (Refined)
 
-### 1. Heritage Spots (heritage-spots-ho-chi-minh.json)
-**8 khu di tích chính:**
-- Kim Liên - Quê hương Chủ tịch Hồ Chí Minh
-- Pác Bó - Cội nguồn cách mạng Việt Nam
-- Bến Nhà Rồng - Bảo tàng Hồ Chí Minh
-- Khu di tích Hà Nội
-- Tân Trào - Thủ đô Khu giải phóng
-- Khu di tích Huế
-- Bảo tàng Hồ Chí Minh Cần Thơ
-- Khu lưu niệm Cô Tô
+### 📁 Cấu trúc file mới
 
-**Dữ liệu bao gồm:**
-- Thông tin cơ bản (tên, mô tả, vị trí)
-- Tọa độ bản đồ và vị trí hiển thị
-- Thư viện media (ảnh, video)
-- Các giai đoạn lịch sử
-- Nội dung VR/360°
-- Thông tin tham quan
-- Mức độ tương tác
-
-### 2. Documents (documents-ho-chi-minh.json)
-**8 danh mục tài liệu:**
-- Tuổi thơ và gia đình
-- Thời kỳ học tập
-- Hành trình ra nước ngoài
-- Hoạt động cách mạng
-- Tác phẩm văn học
-- Thư từ cá nhân
-- Thời kỳ lãnh đạo Nhà nước
-- Quan hệ quốc tế
-
-**Mỗi danh mục chứa:**
-- Thông tin tổng quan
-- Danh sách tài liệu chi tiết
-- Loại tài liệu (giấy tờ, ảnh, video, v.v.)
-- Link tải xuống và thumbnail
-- Mức độ quan trọng
-
-### 3. Mini Games (mini-games-ho-chi-minh.json)
-**5 loại trò chơi:**
-- Quiz kiến thức cơ bản
-- Quiz kiến thức nâng cao
-- Khám phá di tích tương tác
-- Trò chơi ghép từ
-- Sắp xếp thời gian
-
-**Tính năng:**
-- Nhiều loại câu hỏi (trắc nghiệm, điền từ, vị trí bản đồ)
-- Hệ thống điểm số và thành tích
-- Độ khó đa dạng
-- Giới hạn thời gian
-
-### 4. Overview Stats (overview-stats-ho-chi-minh.json)
-**5 nhóm thống kê:**
-- Thống kê tổng quan
-- Dòng thời gian lịch sử
-- Phân bố địa lý di tích
-- Tác động cách mạng
-- Công tác bảo tồn di sản
-
-### 5. Learning Modules (ho-chi-minh-learning-modules.json)
-**6 module học tập:**
-- Tiểu sử Chủ tịch Hồ Chí Minh
-- Hành trình cách mạng
-- Tư tưởng Hồ Chí Minh
-- Phong cách lãnh đạo
-- Tác động văn hóa
-- Sự công nhận quốc tế
-
-### 6. Quizzes (ho-chi-minh-quizzes.json)
-**4 bộ câu hỏi chuyên sâu:**
-- Hành trình cuộc đời
-- Các sự kiện lịch sử
-- Thành tựu cách mạng
-- Triết lý và tư tưởng
-
-### 7. VR Content (ho-chi-minh-vr-content.json)
-**4 trải nghiệm VR:**
-- Tour di tích ảo
-- Tái hiện lịch sử
-- Trải nghiệm immersive
-- Dòng thời gian tương tác
-
-### 8. Site Content (ho-chi-minh-content.json)
-**Nội dung tĩnh website:**
-- Hero section
-- Navigation menu
-- Footer
-- Metadata
-
-## Cách sử dụng
-
-### 1. Import trực tiếp
-```typescript
-import heritageSpots from './data/seed/heritage-spots-ho-chi-minh.json';
-import documents from './data/seed/documents-ho-chi-minh.json';
-// ... các file khác
+```
+data/seed/
+├── landing-page-content.json          # Nội dung tất cả section trên landing page
+├── heritage-spots-refined.json        # 8 di tích lịch sử quan trọng
+├── documents-refined.json              # 8 tài liệu + 4 danh mục
+├── mini-games-refined.json             # 6 trò chơi giáo dục
+├── vr-content-refined.json             # 6 trải nghiệm VR + 2 bộ sưu tập
+├── seed-configuration-refined.json     # Cấu hình seed và metadata
+└── index.ts                           # Export tất cả seed data
 ```
 
-### 2. Sử dụng Seed Function
-```typescript
-import { seedAllCollections, quickSeed } from './data/seedFirestore';
-import { db } from './lib/firebase';
+### 🎯 Nội dung chi tiết
 
-// Seed tất cả collections
-await seedAllCollections(db, {
-  clearExisting: true,
-  batchSize: 50
+#### 1. Landing Page Content (`landing-page-content.json`)
+- **Hero Section**: Title, subtitle, description, stats, action button
+- **Introduction Section**: Highlights, video path, call to action
+- **Documents Section**: Categories, items, call to action
+- **VR Technology Section**: Features, experiences, call to action
+- **Mini Game Section**: Games list, achievements, call to action
+
+#### 2. Heritage Spots (`heritage-spots-refined.json`)
+- **8 di tích lịch sử**: Kim Liên, Pác Bó, Bến Nhà Rồng, Ba Đình, Phủ Chủ tịch, Tân Trào, Việt Bắc, Ao Sen
+- **Thông tin đầy đủ**: Location, map position, significance, visit info, media, highlights
+- **Tương thích với MapSection**: Map coordinates, side positioning, interactive elements
+
+#### 3. Documents (`documents-refined.json`)
+- **4 danh mục**: Văn bản lịch sử, Hình ảnh, Video tư liệu, Ghi âm
+- **8 tài liệu**: Tuyên ngôn độc lập, Di chúc, ảnh Paris, video Ba Đình, etc.
+- **Metadata đầy đủ**: File info, download count, view count, tags
+
+#### 4. Mini Games (`mini-games-refined.json`)
+- **6 trò chơi**: Timeline quiz, knowledge quiz, puzzle, quotes matching, museum exploration, chronology sorting
+- **Game mechanics**: Difficulty, time, scoring, rewards, badges
+- **Educational value**: Learning objectives, interactive elements
+
+#### 5. VR Content (`vr-content-refined.json`)
+- **6 trải nghiệm VR**: Kim Liên, Pác Bó, Ba Đình 1945, Phủ Chủ tịch, Bến Nhà Rồng, Tân Trào
+- **2 bộ sưu tập**: Life journey, Revolutionary sites
+- **Technical specs**: Device support, quality settings, interactive elements
+
+## 🛠️ Cách sử dụng
+
+### 1. Khởi tạo dữ liệu qua Admin Panel
+```typescript
+// Truy cập: /admin → Data Initialization Panel
+// Click "Khởi tạo Dữ liệu" hoặc "Reset Dữ liệu"
+```
+
+### 2. Khởi tạo dữ liệu bằng code
+```typescript
+import { initializeRefinedSeedData, quickSeedRefined } from '../../scripts/seedRefined';
+
+// Khởi tạo an toàn (không xóa dữ liệu cũ)
+await initializeRefinedSeedData({
+  clearExisting: false,
+  batchSize: 25,
+  validateData: true
 });
 
-// Quick seed cho development
-await quickSeed(db, ['heritage-spots', 'documents']);
+// Reset hoàn toàn (cho development)
+await quickSeedRefined();
 ```
 
-### 3. Seed từng collection
+### 3. Import dữ liệu trong component
 ```typescript
-import { seedCollection } from './data/seedFirestore';
-import heritageSpots from './data/seed/heritage-spots-ho-chi-minh.json';
-
-await seedCollection('heritage-spots', heritageSpots, db, {
-  clearExisting: true
-});
+import {
+  landingPageContent,
+  heritageSpots,
+  documentsData,
+  miniGames,
+  vrContent
+} from '../../data/seed';
 ```
 
-## Cấu hình Seed
+## 📊 Thống kê dữ liệu
 
-File `seed-configuration.json` chứa thông tin về:
-- Tên collection trong Firestore
-- File nguồn dữ liệu
-- Số lượng bản ghi
-- Cấu trúc dữ liệu
-- Các category và timeline
+| Collection | Documents | Description |
+|------------|-----------|-------------|
+| Landing Page Content | 1 | Tất cả section trên landing page |
+| Heritage Spots | 8 | Di tích lịch sử quan trọng |
+| Document Categories | 4 | Danh mục tài liệu |
+| Documents | 8 | Tài liệu lịch sử |
+| Mini Games | 6 | Trò chơi giáo dục |
+| VR Experiences | 6 | Trải nghiệm thực tế ảo |
+| VR Collections | 2 | Bộ sưu tập VR |
+| **Tổng cộng** | **35** | **Tất cả nội dung** |
 
-## Tính năng nổi bật
+## 🔄 So sánh với phiên bản cũ
 
-### 1. Dữ liệu hoàn chỉnh
-- Tích hợp từ `heritageSpots.ts`, `seedData.ts` và các file seed hiện có
-- Bảo tồn metadata phong phú và nội dung giáo dục
-- Cấu trúc nhất quán và có tổ chức
+### Phiên bản 1.0 (Legacy)
+- ❌ Dữ liệu phân tán, không đồng bộ
+- ❌ Cấu trúc không phù hợp với component
+- ❌ Thiếu metadata và validation
+- ❌ Khó bảo trì và mở rộng
 
-### 2. Hệ thống Seeding thông minh
-- Xử lý theo batch để tránh rate limiting
-- Xóa dữ liệu cũ tùy chọn
-- Theo dõi lỗi và báo cáo chi tiết
-- Hỗ trợ seed từng collection hoặc toàn bộ
+### Phiên bản 2.0 (Refined)
+- ✅ Dữ liệu tập trung, có cấu trúc
+- ✅ Hoàn toàn phù hợp với landing page
+- ✅ Metadata đầy đủ, validation tốt
+- ✅ Dễ bảo trì và mở rộng
+- ✅ Hỗ trợ TypeScript
+- ✅ Documentation đầy đủ
 
-### 3. Tính linh hoạt
-- Có thể include/exclude collections cụ thể
-- Cấu hình batch size
-- Kiểm tra dữ liệu sau khi seed
-- Hỗ trợ development và production
+## 🎨 Tính năng nổi bật
 
-### 4. Nội dung đa dạng
-- Văn bản tiếng Việt phong phú
-- Metadata chi tiết cho từng mục
-- Hệ thống tag và categorization
-- Nội dung VR và tương tác
+### 1. Landing Page Integration
+- Hero Section với stats động
+- Introduction với video và highlights
+- Documents với categories và preview
+- VR Technology với features và experiences
+- Mini Games với achievements và rewards
 
-## Lưu ý khi sử dụng
+### 2. Heritage Spots Enhancement
+- Map positioning chính xác
+- Interactive elements
+- Virtual tour links
+- Visit information
+- Media galleries
 
-1. **Firebase Configuration**: Cần cấu hình Firebase trước khi sử dụng seed functions
-2. **Permissions**: Đảm bảo có quyền ghi vào Firestore
-3. **Rate Limiting**: Sử dụng batch size phù hợp để tránh giới hạn
-4. **Development vs Production**: Sử dụng `quickSeed` cho development, `seedAllCollections` cho production
+### 3. Rich Document Management
+- Hierarchical categories
+- Full metadata
+- Download tracking
+- Search optimization
+- File management
 
-## Thống kê
+### 4. Educational Gaming
+- Diverse game types
+- Progress tracking
+- Achievement system
+- Learning objectives
+- Difficulty progression
 
-- **Tổng số collections**: 8
-- **Tổng số bản ghi**: 50+
-- **Kích thước**: ~200KB (compressed)
-- **Ngôn ngữ**: Tiếng Việt chính, một số nội dung đa ngôn ngữ
-- **Cập nhật**: 2024-01-01
+### 5. Immersive VR Experiences
+- Multi-device support
+- Quality adaptation
+- Interactive elements
+- Collection management
+- Performance optimization
 
-## Đóng góp
+## 🚨 Migration Notes
 
-Khi thêm dữ liệu mới:
-1. Tuân thủ cấu trúc hiện tại
-2. Bao gồm metadata đầy đủ
-3. Cập nhật `seed-configuration.json`
-4. Test seed functions
-5. Cập nhật documentation
+### Từ phiên bản cũ sang mới:
+1. **Backup dữ liệu cũ** trước khi migrate
+2. **Chạy script reset** để xóa dữ liệu cũ
+3. **Khởi tạo dữ liệu mới** bằng refined seed
+4. **Test các component** để đảm bảo hoạt động đúng
+5. **Update các service** nếu cần thiết
+
+### Breaking changes:
+- Structure của hero content đã thay đổi
+- Heritage spots có thêm nhiều field mới
+- Documents được tổ chức theo categories
+- VR content được phân chia thành experiences và collections
+
+## 📞 Hỗ trợ
+
+Nếu có vấn đề khi sử dụng refined seed data:
+
+1. **Kiểm tra console** để xem lỗi chi tiết
+2. **Xem Firebase** để kiểm tra dữ liệu đã được seed chưa
+3. **Chạy validation** để đảm bảo data integrity
+4. **Contact team** để được hỗ trợ
+
+---
+
+*Tài liệu này được cập nhật theo phiên bản 2.0.0 - Ngày 23/09/2025*
