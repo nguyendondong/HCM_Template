@@ -1,0 +1,278 @@
+[
+  {
+    "id": "journey-timeline-quiz",
+    "title": "Hành trình tìm đường cứu nước",
+    "description": "Khám phá các địa điểm và sự kiện quan trọng trong hành trình 30 năm tìm đường cứu nước của Chủ tịch Hồ Chí Minh",
+    "gameType": "timeline_quiz",
+    "difficulty": "Dễ",
+    "estimatedTime": "10-15 phút",
+    "players": 1234,
+    "maxScore": 1000,
+    "icon": "Target",
+    "color": "from-blue-500 to-blue-600",
+    "category": "history",
+    "tags": ["hành trình", "lịch sử", "địa điểm"],
+    "gameData": {
+      "questions": [
+        {
+          "id": 1,
+          "question": "Nguyễn Tất Thành rời Việt Nam tìm đường cứu nước năm nào?",
+          "options": ["1910", "1911", "1912", "1913"],
+          "correctAnswer": 1,
+          "points": 100,
+          "explanation": "Nguyễn Tất Thành rời cảng Nhà Rồng (Sài Gòn) ngày 5/6/1911 trên tàu Amiral Latouche Tréville."
+        },
+        {
+          "id": 2,
+          "question": "Thành phố nào Người đến đầu tiên trong hành trình tìm đường cứu nước?",
+          "options": ["London", "Paris", "Marseille", "New York"],
+          "correctAnswer": 2,
+          "points": 100,
+          "explanation": "Marseille là thành phố đầu tiên Người đến sau khi rời Việt Nam."
+        }
+      ],
+      "locations": [
+        {
+          "name": "Cảng Nhà Rồng",
+          "year": 1911,
+          "description": "Điểm khởi đầu hành trình",
+          "coordinates": [10.7683, 106.7051]
+        },
+        {
+          "name": "Paris",
+          "year": 1917,
+          "description": "Tham gia hoạt động cách mạng",
+          "coordinates": [48.8566, 2.3522]
+        }
+      ]
+    },
+    "rewards": {
+      "points": [100, 200, 500, 1000],
+      "badges": ["Khởi đầu hành trình", "Nhà thám hiểm", "Bậc thầy lịch sử"],
+      "unlockContent": ["heritage-spot-details", "historical-documents"]
+    },
+    "isActive": true,
+    "isFeatured": true,
+    "order": 1
+  },
+
+  {
+    "id": "ho-chi-minh-knowledge-quiz",
+    "title": "Quiz kiến thức về Bác Hồ",
+    "description": "Trả lời các câu hỏi về cuộc đời, sự nghiệp và tư tưởng của Chủ tịch Hồ Chí Minh",
+    "gameType": "multiple_choice_quiz",
+    "difficulty": "Trung bình",
+    "estimatedTime": "15-20 phút",
+    "players": 2156,
+    "maxScore": 2000,
+    "icon": "Trophy",
+    "color": "from-green-500 to-green-600",
+    "category": "knowledge",
+    "tags": ["kiến thức", "bác hồ", "lịch sử"],
+    "gameData": {
+      "categories": [
+        {
+          "name": "Thời thơ ấu",
+          "questions": 10,
+          "difficulty": "easy"
+        },
+        {
+          "name": "Thời kỳ tìm đường cứu nước",
+          "questions": 15,
+          "difficulty": "medium"
+        },
+        {
+          "name": "Thời kỳ lãnh đạo cách mạng",
+          "questions": 20,
+          "difficulty": "hard"
+        }
+      ],
+      "totalQuestions": 45,
+      "timePerQuestion": 30,
+      "passingScore": 70
+    },
+    "rewards": {
+      "points": [50, 100, 150, 200],
+      "badges": ["Học sinh giỏi", "Nhà nghiên cứu", "Chuyên gia lịch sử"],
+      "unlockContent": ["bonus-questions", "expert-mode"]
+    },
+    "isActive": true,
+    "isFeatured": true,
+    "order": 2
+  },
+
+  {
+    "id": "heritage-site-puzzle",
+    "title": "Ghép hình di tích lịch sử",
+    "description": "Ghép các mảnh puzzle để tạo thành những di tích lịch sử quan trọng gắn liền với Chủ tịch Hồ Chí Minh",
+    "gameType": "jigsaw_puzzle",
+    "difficulty": "Khó",
+    "estimatedTime": "20-30 phút",
+    "players": 856,
+    "maxScore": 1500,
+    "icon": "Zap",
+    "color": "from-purple-500 to-purple-600",
+    "category": "puzzle",
+    "tags": ["ghép hình", "di tích", "hình ảnh"],
+    "gameData": {
+      "puzzles": [
+        {
+          "id": "kim-lien-puzzle",
+          "name": "Nhà sinh Bác Hồ",
+          "image": "/images/puzzles/kim-lien-birthplace.jpg",
+          "pieces": 24,
+          "difficulty": "easy"
+        },
+        {
+          "id": "pac-bo-puzzle",
+          "name": "Hang Pác Bó",
+          "image": "/images/puzzles/pac-bo-cave.jpg",
+          "pieces": 48,
+          "difficulty": "medium"
+        },
+        {
+          "id": "ba-dinh-puzzle",
+          "name": "Quảng trường Ba Đình",
+          "image": "/images/puzzles/ba-dinh-square.jpg",
+          "pieces": 96,
+          "difficulty": "hard"
+        }
+      ],
+      "timeBonus": true,
+      "hintSystem": true
+    },
+    "rewards": {
+      "points": [200, 400, 600, 800],
+      "badges": ["Người ghép hình", "Thầy ghép hình", "Bậc thầy puzzle"],
+      "unlockContent": ["bonus-puzzles", "custom-puzzles"]
+    },
+    "isActive": true,
+    "isFeatured": true,
+    "order": 3
+  },
+
+  {
+    "id": "quotes-matching-game",
+    "title": "Ghép cặp câu nói nổi tiếng",
+    "description": "Kết nối các câu nói nổi tiếng với bối cảnh và ý nghĩa của chúng",
+    "gameType": "matching_game",
+    "difficulty": "Trung bình",
+    "estimatedTime": "12-18 phút",
+    "players": 1567,
+    "maxScore": 1200,
+    "icon": "BookOpen",
+    "color": "from-orange-500 to-orange-600",
+    "category": "literature",
+    "tags": ["câu nói", "tư tưởng", "văn học"],
+    "gameData": {
+      "quotes": [
+        {
+          "quote": "Không có gì quý hơn độc lập tự do",
+          "context": "Tuyên ngôn độc lập 1945",
+          "meaning": "Khẳng định giá trị của độc lập dân tộc"
+        },
+        {
+          "quote": "Đạo đức là gốc, tài năng là ngọn",
+          "context": "Tư tưởng về đạo đức cách mạng",
+          "meaning": "Tầm quan trọng của đạo đức trong con người"
+        }
+      ],
+      "matchingPairs": 15,
+      "timeLimit": 300
+    },
+    "rewards": {
+      "points": [80, 160, 240, 320],
+      "badges": ["Người hiểu lời", "Thầy tư tưởng", "Bậc thầy triết học"],
+      "unlockContent": ["advanced-quotes", "philosophy-mode"]
+    },
+    "isActive": true,
+    "isFeatured": false,
+    "order": 4
+  },
+
+  {
+    "id": "virtual-museum-exploration",
+    "title": "Khám phá bảo tàng ảo",
+    "description": "Tham quan các bảo tàng và di tích quan trọng trong không gian ảo tương tác",
+    "gameType": "exploration_game",
+    "difficulty": "Dễ",
+    "estimatedTime": "25-35 phút",
+    "players": 943,
+    "maxScore": 2500,
+    "icon": "Compass",
+    "color": "from-teal-500 to-teal-600",
+    "category": "exploration",
+    "tags": ["khám phá", "bảo tàng", "ảo"],
+    "gameData": {
+      "museums": [
+        {
+          "name": "Bảo tàng Hồ Chí Minh - Hà Nội",
+          "rooms": 8,
+          "artifacts": 50,
+          "virtualTour": "/vr/ho-chi-minh-museum-hanoi"
+        },
+        {
+          "name": "Bảo tàng Hồ Chí Minh - TP.HCM",
+          "rooms": 6,
+          "artifacts": 35,
+          "virtualTour": "/vr/ho-chi-minh-museum-hcm"
+        }
+      ],
+      "interactiveElements": true,
+      "audioGuide": true,
+      "collectibles": true
+    },
+    "rewards": {
+      "points": [150, 300, 450, 600],
+      "badges": ["Du khách", "Nhà thám hiểm", "Chuyên gia bảo tàng"],
+      "unlockContent": ["hidden-rooms", "curator-mode"]
+    },
+    "isActive": true,
+    "isFeatured": false,
+    "order": 5
+  },
+
+  {
+    "id": "chronology-sorting-game",
+    "title": "Sắp xếp thời gian biểu",
+    "description": "Sắp xếp các sự kiện lịch sử theo đúng trình tự thời gian",
+    "gameType": "sorting_game",
+    "difficulty": "Khó",
+    "estimatedTime": "18-25 phút",
+    "players": 678,
+    "maxScore": 1800,
+    "icon": "Clock",
+    "color": "from-indigo-500 to-indigo-600",
+    "category": "timeline",
+    "tags": ["thời gian", "sự kiện", "lịch sử"],
+    "gameData": {
+      "timelines": [
+        {
+          "name": "Cuộc đời Bác Hồ",
+          "events": 20,
+          "timeSpan": "1890-1969"
+        },
+        {
+          "name": "Cách mạng Tháng Tám",
+          "events": 15,
+          "timeSpan": "1945"
+        },
+        {
+          "name": "Kháng chiến chống Pháp",
+          "events": 25,
+          "timeSpan": "1946-1954"
+        }
+      ],
+      "difficultyLevels": 3,
+      "hintSystem": true
+    },
+    "rewards": {
+      "points": [120, 240, 360, 480],
+      "badges": ["Người ghi chép", "Sử gia", "Bậc thầy thời gian"],
+      "unlockContent": ["detailed-timeline", "expert-events"]
+    },
+    "isActive": true,
+    "isFeatured": false,
+    "order": 6
+  }
+]

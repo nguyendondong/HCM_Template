@@ -1,64 +1,96 @@
-// Index file for consolidated seed data
-// Export all seed data collections for easy import
+// Refined Seed Data Exports
+// This file exports all the refined seed data for the Heritage Journey application
 
-export { default as heritageSpots } from './heritage-spots-ho-chi-minh.json';
-export { default as documents } from './documents-ho-chi-minh.json';
-export { default as miniGames } from './mini-games-ho-chi-minh.json';
-export { default as overviewStats } from './overview-stats-ho-chi-minh.json';
-export { default as learningModules } from './ho-chi-minh-learning-modules.json';
-export { default as quizzes } from './ho-chi-minh-quizzes.json';
-export { default as vrContent } from './ho-chi-minh-vr-content.json';
-export { default as siteContent } from './ho-chi-minh-content.json';
-export { default as seedConfiguration } from './seed-configuration.json';
+// REFINED SEED DATA (Version 2.0)
+// Landing page content (Hero, Introduction, Documents, VR, Mini Games sections)
+export { default as landingPageContent } from './landing-page-content.json';
 
-// Re-export seeding functions
-export * from '../seedFirestore';
+// Heritage spots and historical locations
+export { default as heritageSpots } from './heritage-spots-refined.json';
 
-// Type definitions for seed data
-export interface SeedDataIndex {
-  heritageSpots: any[];
-  documents: any[];
-  miniGames: any[];
-  overviewStats: any[];
-  learningModules: any[];
-  quizzes: any[];
-  vrContent: any[];
-  siteContent: any;
-  seedConfiguration: any[];
-}
+// Documents with categories
+export { default as documentsData } from './documents-refined.json';
 
-// Consolidated export of all data
-export const allSeedData: SeedDataIndex = {
-  heritageSpots: require('./heritage-spots-ho-chi-minh.json'),
-  documents: require('./documents-ho-chi-minh.json'),
-  miniGames: require('./mini-games-ho-chi-minh.json'),
-  overviewStats: require('./overview-stats-ho-chi-minh.json'),
-  learningModules: require('./ho-chi-minh-learning-modules.json').learningModules || [],
-  quizzes: require('./ho-chi-minh-quizzes.json'),
-  vrContent: require('./ho-chi-minh-vr-content.json').vrExperiences || [],
-  siteContent: require('./ho-chi-minh-content.json'),
-  seedConfiguration: require('./seed-configuration.json')
-};
+// Educational mini games
+export { default as miniGames } from './mini-games-refined.json';
 
-// Summary statistics
-export const seedDataSummary = {
-  totalCollections: 8,
-  totalRecords: Object.values(allSeedData).reduce((total, collection) => {
-    if (Array.isArray(collection)) {
-      return total + collection.length;
-    }
-    return total + 1; // For non-array items like siteContent
-  }, 0),
-  collections: {
-    heritageSpots: allSeedData.heritageSpots.length,
-    documents: allSeedData.documents.length,
-    miniGames: allSeedData.miniGames.length,
-    overviewStats: allSeedData.overviewStats.length,
-    learningModules: allSeedData.learningModules.length,
-    quizzes: allSeedData.quizzes.length,
-    vrContent: allSeedData.vrContent.length,
-    siteContent: 1,
-    seedConfiguration: allSeedData.seedConfiguration.length
+// VR experiences and collections
+export { default as vrContent } from './vr-content-refined.json';
+
+// Seed configuration and metadata
+export { default as seedConfig } from './seed-configuration-refined.json';
+
+// Refined seed collection definitions for automated seeding
+export const REFINED_SEED_COLLECTIONS = [
+  {
+    name: 'landingPageContent',
+    firebaseCollection: 'pageContent',
+    documentId: 'landing-page',
+    type: 'single_document',
+    priority: 1
   },
-  lastUpdated: '2024-01-01T00:00:00Z'
+  {
+    name: 'heritageSpots',
+    firebaseCollection: 'heritage-spots',
+    type: 'collection',
+    priority: 2
+  },
+  {
+    name: 'documentCategories',
+    firebaseCollection: 'document-categories',
+    type: 'collection',
+    priority: 3
+  },
+  {
+    name: 'documents',
+    firebaseCollection: 'documents',
+    type: 'collection',
+    priority: 4
+  },
+  {
+    name: 'miniGames',
+    firebaseCollection: 'mini-games',
+    type: 'collection',
+    priority: 5
+  },
+  {
+    name: 'vrExperiences',
+    firebaseCollection: 'vr-experiences',
+    type: 'collection',
+    priority: 6
+  },
+  {
+    name: 'vrCollections',
+    firebaseCollection: 'vr-collections',
+    type: 'collection',
+    priority: 7
+  }
+];
+
+// Refined seed data summary
+export const refinedSeedSummary = {
+  version: '2.0.0',
+  created: '2025-09-23',
+  description: 'Refined and restructured seed data for Heritage Journey application',
+  totalCollections: 8,
+  totalDocuments: 35,
+  estimatedSeedTime: '2-3 minutes',
+  features: [
+    'Structured landing page content',
+    'Comprehensive heritage spots data',
+    'Rich document management',
+    'Interactive mini games',
+    'Immersive VR experiences',
+    'Configurable site settings'
+  ],
+  collections: {
+    landingPageContent: 1,
+    heritageSpots: 8,
+    documentCategories: 4,
+    documents: 8,
+    miniGames: 6,
+    vrExperiences: 6,
+    vrCollections: 2,
+    siteConfig: 1
+  }
 };

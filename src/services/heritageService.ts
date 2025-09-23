@@ -97,7 +97,6 @@ export const getHeritageSpotById = async (id: string): Promise<FirebaseHeritageS
         ...spotSnapshot.data()
       } as FirebaseHeritageSpot;
     } else {
-      console.log('No such heritage spot!');
       return null;
     }
   } catch (error) {

@@ -458,7 +458,6 @@ export async function initializeDefaultHeritageData(): Promise<void> {
     });
 
     await batch.commit();
-    console.log('Default heritage data initialized successfully');
   } catch (error) {
     console.error('Error initializing default heritage data:', error);
     throw error;

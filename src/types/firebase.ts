@@ -5,11 +5,13 @@ export interface FirebaseHeritageSpot {
   id: string;
   name: string;
   description: string;
-  coordinates: {
+  mapPosition: {
     x: number; // Percentage from left
     y: number; // Percentage from top
   };
-  side: 'left' | 'right';
+  side: 'left' | 'right' | 'center';
+  url?: string;
+
   imageUrl?: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;

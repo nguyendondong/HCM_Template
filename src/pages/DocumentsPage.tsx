@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, FileText, Download, Image, Video, Search, Calendar, User, BookOpen, Globe, ExternalLink } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { useSmartNavigation } from '../hooks/useSmartNavigation';
 
 // Interfaces for Firestore data
 interface DocumentCategory {
   id: string;
-  title: string;
+  name: string; // Changed from 'title' to match admin data
   description: string;
   icon: string;
+  color: string;
+  order: number;
+  isActive?: boolean;
   url?: string; // URL cho liên kết ngoài nếu có
   documents?: Document[];
 }
@@ -19,12 +23,25 @@ interface Document {
   id: string;
   title: string;
   description: string;
-  date: string;
+  category: string; // Changed from 'category' to match admin data
   type: string;
-  size: string;
-  downloadUrl: string;
-  previewImage: string;
-  category: string;
+  thumbnailUrl?: string; // Changed from 'previewImage'
+  fileUrl?: string; // Changed from 'downloadUrl'
+  digitalUrl?: string; // Additional field from admin
+  year?: number;
+  location?: string;
+  language?: string;
+  significance?: string;
+  tags?: string[];
+  metadata?: any;
+  isPublic?: boolean;
+  isFeatured?: boolean;
+  downloadCount?: number;
+  viewCount?: number;
+  order?: number;
+  isActive?: boolean;
+  createdAt?: any;
+  updatedAt?: any;
 }
 
 // Map các icon string từ Firestore thành Lucide component
@@ -44,11 +61,23 @@ const getIconComponent = (iconName: string): React.ElementType => {
 };
 
 const DocumentsPage: React.FC = () => {
-  const navigate = useNavigate();
+  const { id: routeId } = useParams<{ id: string }>();
+  const { isDetailView, goBack, goToDetail } = useSmartNavigation({
+    listPath: '/documents',
+    targetSection: 'documents'
+  });
+
   const [documentCategories, setDocumentCategories] = useState<DocumentCategory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>(routeId || '');
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Update selected category when route changes
+  useEffect(() => {
+    if (routeId) {
+      setSelectedCategory(routeId);
+    }
+  }, [routeId]);
 
   // Fetch data from Firestore
   useEffect(() => {
@@ -91,10 +120,17 @@ const DocumentsPage: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleBackToHome = () => {
-    // Store the target section (documents for Documents)
-    sessionStorage.setItem('targetSection', 'documents');
-    navigate('/');
+  const handleBack = () => {
+    if (isDetailView && !selectedCategory) {
+      // If in detail route but no category selected, go back to list
+      goBack();
+    } else if (selectedCategory) {
+      // If category is selected, close detail and stay on current page
+      setSelectedCategory('');
+    } else {
+      // Default back navigation
+      goBack();
+    }
   };
 
   const getCurrentCategory = () => {
@@ -131,11 +167,11 @@ const DocumentsPage: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <button
-              onClick={handleBackToHome}
+              onClick={handleBack}
               className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors duration-200"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
-              Quay về trang chủ
+              {isDetailView && !selectedCategory ? 'Quay về danh sách' : 'Quay về trang chủ'}
             </button>
 
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -180,7 +216,15 @@ const DocumentsPage: React.FC = () => {
                     return (
                       <button
                         key={category.id}
-                        onClick={() => setSelectedCategory(category.id)}
+                        onClick={() => {
+                          if (isDetailView) {
+                            // If already in detail view, just set the selected category
+                            setSelectedCategory(category.id);
+                          } else {
+                            // Navigate to detail route
+                            goToDetail(category.id);
+                          }
+                        }}
                         className={`w-full text-left p-3 rounded-lg transition-colors duration-200 ${
                           selectedCategory === category.id
                             ? 'bg-blue-100 text-blue-700 border-l-4 border-blue-500'
@@ -190,7 +234,7 @@ const DocumentsPage: React.FC = () => {
                         <div className="flex items-center space-x-3">
                           <IconComponent className="w-5 h-5" />
                           <div>
-                            <div className="font-medium">{category.title}</div>
+                            <div className="font-medium">{category.name}</div>
                             <div className="text-xs text-gray-500">{category.documents?.length || 0} tài liệu</div>
                           </div>
                         </div>
@@ -236,7 +280,7 @@ const DocumentsPage: React.FC = () => {
                         {React.createElement(getIconComponent(currentCategory.icon), { className: "w-6 h-6 text-blue-600" })}
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-gray-900">{currentCategory.title}</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">{currentCategory.name}</h2>
                         <p className="text-gray-600">{currentCategory.description}</p>
                       </div>
                     </div>
@@ -258,17 +302,34 @@ const DocumentsPage: React.FC = () => {
                       className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                     >
                       <div className="relative">
-                        <img
-                          src={document.previewImage}
-                          alt={document.title}
-                          className="w-full h-48 object-cover"
-                        />
+                        {document.thumbnailUrl ? (
+                          <img
+                            src={document.thumbnailUrl}
+                            alt={document.title}
+                            className="w-full h-48 object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const parent = target.parentElement;
+                              if (parent && !parent.querySelector('.fallback-placeholder')) {
+                                const fallback = window.document.createElement('div');
+                                fallback.className = 'fallback-placeholder w-full h-48 bg-gray-100 flex items-center justify-center';
+                                fallback.innerHTML = '<div class="w-12 h-12 text-gray-400"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM18 20H6V4h7v5h5v11z"/></svg></div>';
+                                parent.appendChild(fallback);
+                              }
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+                            <FileText className="w-12 h-12 text-gray-400" />
+                          </div>
+                        )}
                         <div className="absolute top-4 right-4 space-y-2">
                           <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${getFileTypeColor(document.type)}`}>
                             {document.type}
                           </span>
                           <div className="bg-black/60 text-white px-2 py-1 rounded text-xs">
-                            {document.size}
+                            {document.metadata?.fileSize || 'N/A'}
                           </div>
                         </div>
                       </div>
@@ -280,11 +341,11 @@ const DocumentsPage: React.FC = () => {
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center space-x-2 text-sm text-gray-500">
                             <Calendar className="w-4 h-4" />
-                            <span>{document.date}</span>
+                            <span>{document.year || document.metadata?.date || 'N/A'}</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-gray-500">
                             <User className="w-4 h-4" />
-                            <span>Chủ tịch Hồ Chí Minh</span>
+                            <span>{document.metadata?.author || 'Chủ tịch Hồ Chí Minh'}</span>
                           </div>
                         </div>
 
@@ -294,10 +355,20 @@ const DocumentsPage: React.FC = () => {
                             <span>Xem chi tiết</span>
                           </button>
                           <a
-                            href={document.downloadUrl}
+                            href={document.fileUrl || document.digitalUrl || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm"
+                            className={`flex items-center justify-center px-4 py-2 rounded-lg transition-colors duration-200 text-sm ${
+                              document.fileUrl || document.digitalUrl
+                                ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            }`}
+                            onClick={(e) => {
+                              if (!document.fileUrl && !document.digitalUrl) {
+                                e.preventDefault();
+                                alert('File không có sẵn để tải xuống');
+                              }
+                            }}
                           >
                             <Download className="w-4 h-4" />
                           </a>
@@ -349,7 +420,7 @@ const DocumentsPage: React.FC = () => {
             <div className="bg-white rounded-xl p-6 text-center shadow-lg">
               <FileText size={64} className="mx-auto text-yellow-500 mb-4" />
               <p className="text-gray-600 font-medium">Văn kiện lịch sử quan trọng nhất</p>
-              <p className="text-sm text-gray-500 mt-2">Được UNESCO công nhận là Di sản tài liệu thế giới</p>
+              <p className="text-sm text-gray-500 mt-2">Được UNESCO công nhận là Địa điểm  tài liệu thế giới</p>
             </div>
           </div>
         </motion.div>
