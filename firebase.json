@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "hcmtemplate",
     "public": "dist",
     "ignore": [
       "firebase.json",

@@ -305,16 +305,6 @@ const MiniGamesPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
         <div className="container mx-auto px-6 py-8">
-          {/* Prominent Back Button */}
-          <button
-            onClick={handleBack}
-            className="absolute top-20 left-4 bg-black/70 hover:bg-black/90 backdrop-blur-sm text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-200 flex items-center space-x-3 z-50 border border-white/20 hover:border-white/40"
-            style={{ zIndex: 9999 }}
-          >
-            <LucideIcons.ArrowLeft className="w-5 h-5" />
-            <span>{isDetailView && !selectedGame ? 'Quay về danh sách' : 'Thoát game'}</span>
-          </button>
-
           {/* Game Header */}
           <div className="flex items-center justify-between mb-8 pt-16">
             <div></div> {/* Empty space to balance layout */}
@@ -475,13 +465,13 @@ const MiniGamesPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <button
+            {/* <button
               onClick={handleBack}
               className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors duration-200"
             >
               <LucideIcons.ArrowLeft className="w-5 h-5 mr-2" />
               Quay về trang chủ
-            </button>
+            </button> */}
 
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               {content.title}

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import { useAuth } from '../../contexts/AuthContext';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import {
   LayoutDashboard,
   MapPin,
@@ -41,6 +41,16 @@ const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
+  // Clear all toasts when component mounts (fresh login)
+  useEffect(() => {
+    toast.dismiss();
+  }, []);
+
+  // Clear all toasts when user changes (logout/login)
+  useEffect(() => {
+    toast.dismiss();
+  }, [currentUser]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -55,6 +65,8 @@ const AdminLayout: React.FC = () => {
 
   const handleLogout = async () => {
     try {
+      // Clear all toasts before logout
+      toast.dismiss();
       await signOut(auth);
     } catch (error) {
       console.error('Error signing out:', error);
@@ -210,6 +222,10 @@ const AdminLayout: React.FC = () => {
                   background: '#ef4444',
                 },
               },
+            }}
+            reverseOrder={false}
+            containerStyle={{
+              zIndex: 9999,
             }}
           />
         </div>

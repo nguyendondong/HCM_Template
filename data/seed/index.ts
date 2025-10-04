@@ -64,6 +64,12 @@ export const REFINED_SEED_COLLECTIONS = [
     firebaseCollection: 'vr-collections',
     type: 'collection',
     priority: 7
+  },
+    {
+    name: 'vrFeatured',
+    firebaseCollection: 'vr-featured',
+    type: 'collection',
+    priority: 7
   }
 ];
 

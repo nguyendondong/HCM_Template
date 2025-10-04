@@ -2,20 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, deleteDoc, addDoc, updateDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import toast from 'react-hot-toast';
-    // ...existing code...
-    try {
-      // ...existing code for saving...
-      toast.success('Lưu quiz thành công!');
-    } catch (error) {
-      toast.error('Có lỗi khi lưu quiz!');
-    }
-    // ...existing code...
-    try {
-      // ...existing code for deleting...
-      toast.success('Xóa quiz thành công!');
-    } catch (error) {
-      toast.error('Có lỗi khi xóa quiz!');
-    }
 import {
   Brain,
   Plus,

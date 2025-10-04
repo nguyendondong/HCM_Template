@@ -250,13 +250,81 @@ export function ContentProvider({
       ]);
 
       // Load documents section configuration from landing page data
-      const landingPageModule = await import('../../data/seed/landing-page-content.json');
-      const documentsConfig = landingPageModule.default.documentsSection;
-      const vrTechnologyData = landingPageModule.default.vrTechnologySection;
+
+      // Load VR content using dedicated service
+      const { vrContentService } = await import('../services/vrContentService');
+      const vrContentData = await vrContentService.getVRContent();
+
+      // Convert VRContent to VRTechnologySection format
+      const vrTechnologyData: VRTechnologySection | null = vrContentData ? {
+        title: vrContentData.title,
+        subtitle: vrContentData.subtitle,
+        description: vrContentData.description,
+        features: vrContentData.features,
+        experiences: vrContentData.experiences.map(exp => ({
+          id: exp.id,
+          title: exp.title,
+          description: exp.description,
+          image: exp.imageUrl,
+          duration: exp.duration || 'N/A', // Default duration
+          difficulty: exp.difficulty || 'N/A' // Default difficulty
+        })),
+        callToAction: {
+          text: "Khám phá VR",
+          href: "/vr"
+        },
+        isActive: vrContentData.isActive
+      } : null;
+
+      // Load Mini Games content using dedicated service
+      const { modernMiniGamesService } = await import('../services/miniGamesService');
+      const gamesFromFirestore = await modernMiniGamesService.getAllGames({ isActive: true });
+
+      // Convert Firestore games to legacy format for compatibility
+      const convertedGames: MiniGame[] = gamesFromFirestore.map(game => ({
+        id: game.id,
+        title: game.title,
+        description: game.description,
+        gameType: game.gameType,
+        difficulty: game.difficulty,
+        estimatedTime: game.estimatedTime,
+        players: game.players,
+        maxScore: game.maxScore,
+        icon: game.icon,
+        color: game.color,
+        category: game.category,
+        tags: game.tags,
+        gameData: {
+          ...game.gameData,
+          questions: game.gameData.questions?.map((q, index) => ({
+            id: parseInt(q.id) || index + 1,
+            question: q.question,
+            options: q.options,
+            correctAnswer: q.correctAnswer,
+            points: 100, // Default points
+            explanation: q.explanation || 'Không có giải thích'
+          }))
+        },
+        rewards: {
+          points: Array.isArray(game.rewards.points) ? game.rewards.points : [game.rewards.points],
+          badges: game.rewards.badges,
+          unlockContent: game.rewards.unlocks || []
+        },
+        isActive: game.isActive,
+        isFeatured: game.isFeatured,
+        order: game.order
+      }));
 
       // Create documents section with Firestore data
       const documentsData: DocumentsSection = {
-        ...documentsConfig,
+        title: "Tài Liệu Lịch Sử",
+        subtitle: "Kho tàng tài liệu quý",
+        description: "Khám phá bộ sưu tập tài liệu lịch sử quý giá về Chủ tịch Hồ Chí Minh và lịch sử Việt Nam.",
+        callToAction: {
+          text: "Xem tất cả tài liệu",
+          href: "/documents"
+        },
+        isActive: true,
         categories: documentsCategories.map((category: any) => ({
           icon: category.icon,
           title: category.name,
@@ -271,13 +339,11 @@ export function ContentProvider({
         }))
       };
 
-      // Load mini games from mini-games-refined.json
-      const miniGamesModule = await import('../../data/seed/mini-games-refined.json');
       const miniGamesData: MiniGamesSection = {
         title: "Mini Games giáo dục",
         subtitle: "Học lịch sử qua trò chơi",
         description: "Học lịch sử một cách vui vẻ và hấp dẫn thông qua các trò chơi tương tác, giúp củng cố kiến thức và tạo động lực học tập.",
-        games: miniGamesModule.default as MiniGame[],
+        games: convertedGames,
         achievements: [
           { icon: "Trophy", title: "Thành tích đạt được", count: "2,450", description: "Tổng số điểm tích lũy" },
           { icon: "Star", title: "Quiz hoàn thành", count: "156", description: "Số quiz đã hoàn thành" },
@@ -301,7 +367,6 @@ export function ContentProvider({
       setNavigationContent(navData);
       setFooterContent(footerData);
       setSiteConfig(configData);
-
       setIsInitialized(true);
     } catch (err) {
       console.error('Error loading initial content:', err);

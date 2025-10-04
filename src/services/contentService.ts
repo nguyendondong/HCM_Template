@@ -111,7 +111,36 @@ class ContentService {
 
   // ===== DOCUMENTS SECTION =====
   async getDocumentsContent(): Promise<DocumentsContent | null> {
-    return this.getActiveContent<DocumentsContent>('documentsContent');
+    // Use dedicated documents service instead of generic content lookup
+    const { documentsService } = await import('./documentsService');
+
+    try {
+      // Try to get from documentsContent collection first
+      const documentsContentResult = await this.getActiveContent<DocumentsContent>('documentsContent');
+      if (documentsContentResult) {
+        return documentsContentResult;
+      }
+
+      // If no documentsContent document, construct from document-categories
+      const categories = await documentsService.getCategories();
+      const categoryIds = categories.map(cat => cat.id);
+
+      return {
+        id: 'constructed',
+        title: "Tài Liệu Lịch Sử",
+        subtitle: "Kho tàng tài liệu quý",
+        description: "Khám phá bộ sưu tập tài liệu lịch sử quý giá về Chủ tịch Hồ Chí Minh và lịch sử Việt Nam.",
+        categories: categoryIds,
+        layout: 'grid',
+        isActive: true,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
+      } as DocumentsContent;
+
+    } catch (error) {
+      console.error('Error in getDocumentsContent:', error);
+      return null;
+    }
   }
 
   async updateDocumentsContent(id: string, data: Partial<DocumentsContent>): Promise<void> {
@@ -242,7 +271,9 @@ class ContentService {
 
   // ===== VR TECHNOLOGY SECTION =====
   async getVRContent(): Promise<VRContent | null> {
-    return this.getActiveContent<VRContent>('vrContent');
+    // Use dedicated VR service instead of generic content lookup
+    const { vrContentService } = await import('./vrContentService');
+    return vrContentService.getVRContent();
   }
 
   async updateVRContent(id: string, data: Partial<VRContent>): Promise<void> {
@@ -255,7 +286,62 @@ class ContentService {
 
   // ===== MINI GAME SECTION =====
   async getMiniGameContent(): Promise<MiniGameContent | null> {
-    return this.getActiveContent<MiniGameContent>('miniGameContent');
+    // Use dedicated mini games service instead of generic content lookup
+    const { modernMiniGamesService } = await import('./miniGamesService');
+
+    try {
+      // Try to get from miniGameContent collection first
+      const miniGameContentResult = await this.getActiveContent<MiniGameContent>('miniGameContent');
+      if (miniGameContentResult) {
+        return miniGameContentResult;
+      }
+
+      // If no miniGameContent document, construct from mini-games collection
+      const games = await modernMiniGamesService.getAllGames({ isActive: true });
+
+      // Convert to legacy format for compatibility
+      const legacyGames = games.map(game => ({
+        id: game.id,
+        title: game.title,
+        description: game.description,
+        difficulty: game.difficulty,
+        playerCount: `${game.players} người chơi`,
+        icon: game.icon,
+        color: game.color,
+        gameUrl: `/games/${game.id}`
+      }));
+
+      const achievements = [
+        { icon: "Trophy", title: "Thành tích đạt được", count: "2,450", description: "Tổng số điểm tích lũy" },
+        { icon: "Star", title: "Quiz hoàn thành", count: "156", description: "Số quiz đã hoàn thành" },
+        { icon: "Target", title: "Cấp độ hiện tại", count: "12", description: "Level cao nhất đạt được" }
+      ];
+
+      const leaderboard = [
+        { rank: 1, name: "Nguyễn Văn A", score: "2,450", badge: "🥇" },
+        { rank: 2, name: "Trần Thị B", score: "2,380", badge: "🥈" },
+        { rank: 3, name: "Lê Văn C", score: "2,290", badge: "🥉" },
+        { rank: 4, name: "Phạm Thị D", score: "2,150", badge: "🏅" },
+        { rank: 5, name: "Hoàng Văn E", score: "2,100", badge: "🏅" }
+      ];
+
+      return {
+        id: 'constructed',
+        title: "Mini Games Giáo Dục",
+        subtitle: "Học lịch sử qua trò chơi",
+        description: "Học lịch sử một cách vui vẻ và hấp dẫn thông qua các trò chơi tương tác.",
+        games: legacyGames,
+        achievements,
+        leaderboard,
+        isActive: true,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
+      } as MiniGameContent;
+
+    } catch (error) {
+      console.error('Error in getMiniGameContent:', error);
+      return null;
+    }
   }
 
   async updateMiniGameContent(id: string, data: Partial<MiniGameContent>): Promise<void> {

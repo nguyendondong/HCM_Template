@@ -47,7 +47,7 @@ const VRTechnologySection: React.FC = () => {
 
         {/* VR Features */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {features.map((feature, index) => {
+          {features.slice(0, 4).map((feature, index) => {
             const IconComponent = getIcon(feature.icon);
 
             return (
@@ -82,7 +82,7 @@ const VRTechnologySection: React.FC = () => {
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {experiences.map((experience, index) => (
+            {experiences.slice(0, 3).map((experience, index) => (
               <motion.div
                 key={experience.id}
                 initial={{ opacity: 0, scale: 0.9 }}

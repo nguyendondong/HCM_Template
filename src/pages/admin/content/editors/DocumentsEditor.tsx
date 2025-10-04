@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Eye, EyeOff, File, Image } from 'lucide-react';
 
 interface DocumentContent {
@@ -65,6 +66,7 @@ const DocumentsEditor: React.FC<DocumentsEditorProps> = ({ formData, setFormData
       ...prev,
       categories: newCategories
     }));
+    toast.success('Thêm danh mục mới thành công!');
   };
 
   const removeCategory = (index: number) => {
@@ -73,6 +75,7 @@ const DocumentsEditor: React.FC<DocumentsEditorProps> = ({ formData, setFormData
       ...prev,
       categories: newCategories
     }));
+    toast.success('Xóa danh mục thành công!');
   };
 
   const handleDocumentChange = (index: number, field: string, value: any) => {
@@ -103,6 +106,7 @@ const DocumentsEditor: React.FC<DocumentsEditorProps> = ({ formData, setFormData
       ...prev,
       documents: newDocuments
     }));
+    toast.success('Thêm tài liệu mới thành công!');
   };
 
   const removeDocument = (index: number) => {
@@ -111,6 +115,7 @@ const DocumentsEditor: React.FC<DocumentsEditorProps> = ({ formData, setFormData
       ...prev,
       documents: newDocuments
     }));
+    toast.success('Xóa tài liệu thành công!');
   };
 
   const handleDocumentTagsChange = (docIndex: number, tagsString: string) => {

@@ -1,24 +1,43 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Glasses, Play, Pause, Volume2, VolumeX, Maximize, RotateCcw, Info } from 'lucide-react';
-import { useSmartNavigation } from '../hooks/useSmartNavigation';
+import { ArrowLeft, Glasses, Play, Pause, Volume2, VolumeX, Maximize, RotateCcw, Info, Loader2 } from 'lucide-react';
+import { vrContentService, ExtendedVRExperience } from '../services/vrContentService';
 
 const VRExperiencePage: React.FC = () => {
   const { id: routeId } = useParams<{ id: string }>();
-  const { isDetailView, goBack, goToDetail } = useSmartNavigation({
-    listPath: '/vr-experience',
-    targetSection: 'vr-technology'
-  });
-
-  // Use routeId if available, otherwise fall back to state-based selection
+  // State management
   const [selectedExperience, setSelectedExperience] = useState<string | null>(routeId || null);
+  const [vrExperiences, setVrExperiences] = useState<ExtendedVRExperience[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Video control states
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.7);
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Load VR experiences from Firestore
+  useEffect(() => {
+    loadVRExperiences();
+  }, []);
+
+      const loadVRExperiences = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const experiences = await vrContentService.getVRExperiences();
+        setVrExperiences(experiences);
+      } catch (err) {
+        console.error('Error loading VR experiences:', err);
+        setError('Không thể tải danh sách trải nghiệm VR. Vui lòng thử lại.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
   // Update selected experience when route changes
   useEffect(() => {
@@ -29,64 +48,54 @@ const VRExperiencePage: React.FC = () => {
     }
   }, [routeId]);
 
-  const vrExperiences = [
-    {
-      id: 'kim-lien-vr',
-      title: 'Thăm quan Kim Liên VR',
-      description: 'Khám phá quê hương Bác Hồ trong môi trường thực tế ảo hoàn toàn immersive',
-      duration: '15 phút',
-      difficulty: 'Dễ',
-      category: 'Di tích lịch sử',
-      features: ['360° toàn cảnh', 'Tương tác thực tế', 'Hướng dẫn viên ảo', 'Quiz kiến thức'],
-      thumbnail: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=600&h=400&fit=crop',
-      videoSrc: '/src/data/video/9018C0AF-BD7B-470D-9E38-33900630D830.mp4'
-    },
-    {
-      id: 'ba-dinh-vr',
-      title: 'Chứng kiến Tuyên ngôn độc lập',
-      description: 'Tham dự lễ đọc Tuyên ngôn độc lập tại Quảng trường Ba Đình ngày 2/9/1945',
-      duration: '20 phút',
-      difficulty: 'Trung bình',
-      category: 'Sự kiện lịch sử',
-      features: ['Tái hiện lịch sử', 'Âm thanh 3D', 'Tương tác nhân vật', 'Thông tin chi tiết'],
-      thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=400&fit=crop',
-      videoSrc: '/src/data/video/9018C0AF-BD7B-470D-9E38-33900630D830.mp4'
-    },
-    {
-      id: 'journey-vr',
-      title: 'Hành trình ra nước ngoài',
-      description: 'Đi cùng chàng thanh niên Nguyễn Tất Thành trong hành trình 30 năm tìm đường cứu nước',
-      duration: '25 phút',
-      difficulty: 'Khó',
-      category: 'Hành trình lịch sử',
-      features: ['Nhiều địa điểm', 'Dòng thời gian', 'Tài liệu thực', 'Trải nghiệm sâu'],
-      thumbnail: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop',
-      videoSrc: '/src/data/video/9018C0AF-BD7B-470D-9E38-33900630D830.mp4'
-    }
-  ];
-
   // Video controls
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+  // useEffect(() => {
+  //   const video = videoRef.current;
+  //   if (!video) return;
 
-    const handleTimeUpdate = () => setCurrentTime(video.currentTime);
-    const handleLoadedMetadata = () => setDuration(video.duration);
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
+  //   const handleTimeUpdate = () => setCurrentTime(video.currentTime);
+  //   const handleLoadedMetadata = () => setDuration(video.duration);
+  //   const handlePlay = () => setIsPlaying(true);
+  //   const handlePause = () => setIsPlaying(false);
 
-    video.addEventListener('timeupdate', handleTimeUpdate);
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    video.addEventListener('play', handlePlay);
-    video.addEventListener('pause', handlePause);
+  //   video.addEventListener('timeupdate', handleTimeUpdate);
+  //   video.addEventListener('loadedmetadata', handleLoadedMetadata);
+  //   video.addEventListener('play', handlePlay);
+  //   video.addEventListener('pause', handlePause);
 
-    return () => {
-      video.removeEventListener('timeupdate', handleTimeUpdate);
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      video.removeEventListener('play', handlePlay);
-      video.removeEventListener('pause', handlePause);
-    };
-  }, [selectedExperience]);
+  //   return () => {
+  //     video.removeEventListener('timeupdate', handleTimeUpdate);
+  //     video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+  //     video.removeEventListener('play', handlePlay);
+  //     video.removeEventListener('pause', handlePause);
+  //   };
+  // }, [selectedExperience]);
+
+  function handleVRCategory(category: string) {
+    switch (category) {
+      case 'heritage_site':
+        return "Di sản lịch sử ";
+        break;
+      case 'historical_site':
+        return "Di tích lịch sử";
+        break;
+      case 'historical_moment':
+        return "Tài liệu lịch sử";
+        break;
+      case 'daily_life':
+        return "Cuộc sống hàng ngày";
+        break;
+      case 'historical_journey':
+        return "Hành trình lịch sử";
+        break;
+      case 'revolutionary_base':
+        return "Cơ sở cách mạng";
+        break;
+      default:
+        return category
+        break;
+    }
+  }
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -143,6 +152,44 @@ const VRExperiencePage: React.FC = () => {
     return vrExperiences.find(exp => exp.id === selectedExperience);
   };
 
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
+            <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Đang tải trải nghiệm VR...</h3>
+          <p className="text-gray-600">Vui lòng đợi trong giây lát</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+            <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Có lỗi xảy ra</h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Thử lại
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (selectedExperience) {
     const experience = getCurrentExperience();
     if (!experience) return null;
@@ -154,28 +201,12 @@ const VRExperiencePage: React.FC = () => {
           <video
             ref={videoRef}
             className="w-full h-full object-cover"
-            src={experience.videoSrc}
+            src={experience.videoSrc || experience.vrUrl || '/src/data/video/9018C0AF-BD7B-470D-9E38-33900630D830.mp4'}
             preload="metadata"
           />
 
           {/* Video Controls Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20">
-            {/* Prominent Back Button */}
-            <button
-              onClick={() => {
-                if (isDetailView && routeId) {
-                  goBack();
-                } else if (selectedExperience && !routeId) {
-                  setSelectedExperience(null);
-                } else {
-                  goBack();
-                }
-              }}
-              className="absolute top-20 left-4 bg-black/70 hover:bg-black/90 backdrop-blur-sm text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-all duration-200 flex items-center space-x-3 z-50 border border-white/20 hover:border-white/40"
-              style={{ zIndex: 9999 }}
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
 
             {/* Top Bar */}
             <div className="absolute top-0 left-0 right-0 p-6 pt-20 bg-gradient-to-b from-black/60 to-transparent">
@@ -277,13 +308,6 @@ const VRExperiencePage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <button
-              onClick={goBack}
-              className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors duration-200"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              {isDetailView ? 'Quay về danh sách' : 'Quay về trang chủ'}
-            </button>
 
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               Trải nghiệm VR
@@ -298,8 +322,17 @@ const VRExperiencePage: React.FC = () => {
 
       {/* VR Experiences Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {vrExperiences.map((experience, index) => (
+        {vrExperiences.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
+              <Glasses className="w-8 h-8 text-purple-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Chưa có trải nghiệm VR nào</h3>
+            <p className="text-gray-600">Các trải nghiệm VR sẽ được cập nhật sớm.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {vrExperiences.map((experience, index) => (
             <motion.div
               key={experience.id}
               initial={{ opacity: 0, y: 30 }}
@@ -309,7 +342,7 @@ const VRExperiencePage: React.FC = () => {
             >
               <div className="relative">
                 <img
-                  src={experience.thumbnail}
+                  src={experience.image || 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=600&h=400&fit=crop'}
                   alt={experience.title}
                   className="w-full h-48 object-cover"
                 />
@@ -318,21 +351,21 @@ const VRExperiencePage: React.FC = () => {
                   <span>VR</span>
                 </div>
                 <div className="absolute top-4 left-4 bg-black/60 text-white px-2 py-1 rounded text-xs">
-                  {experience.duration}
+                  {experience.duration || '20-25 phút'}
                 </div>
               </div>
 
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded">
-                    {experience.category}
+                    {handleVRCategory(experience.category) || 'Trải nghiệm VR'}
                   </span>
                   <span className={`text-xs px-2 py-1 rounded ${
                     experience.difficulty === 'Dễ' ? 'bg-green-100 text-green-700' :
-                    experience.difficulty === 'Trung bình' ? 'bg-yellow-100 text-yellow-700' :
+                    experience.difficulty === 'Trung bình' || experience.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-700' :
                     'bg-red-100 text-red-700'
                   }`}>
-                    {experience.difficulty}
+                    {experience.difficulty || 'Trung bình'}
                   </span>
                 </div>
 
@@ -340,23 +373,32 @@ const VRExperiencePage: React.FC = () => {
                 <p className="text-gray-600 mb-4 text-sm">{experience.description}</p>
 
                 <div className="space-y-2 mb-6">
-                  {experience.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center space-x-2">
-                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
-                      <span className="text-xs text-gray-600">{feature}</span>
-                    </div>
-                  ))}
+                  {experience.features && experience.features.length > 0 ? (
+                    experience.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-center space-x-2">
+                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                        <span className="text-xs text-gray-600">{feature}</span>
+                      </div>
+                    ))
+                  ) : (
+                    // Default features if none available
+                    ['Trải nghiệm VR 360°', 'Chất lượng cao', 'Tương tác thực tế'].map((feature, idx) => (
+                      <div key={idx} className="flex items-center space-x-2">
+                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                        <span className="text-xs text-gray-600">{feature}</span>
+                      </div>
+                    ))
+                  )}
                 </div>
 
                 <button
                   onClick={() => {
-                    if (isDetailView) {
-                      // If already in detail view, just set the selected experience
-                      setSelectedExperience(experience.id);
-                    } else {
-                      // Navigate to detail route
-                      goToDetail(experience.id);
-                    }
+                  const url = experience.vrUrl || experience.videoSrc;
+                  if (url) {
+                    window.open(url, '_blank');
+                  } else {
+                    setSelectedExperience(experience.id);
+                  }
                   }}
                   className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium"
                 >
@@ -366,7 +408,8 @@ const VRExperiencePage: React.FC = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+          </div>
+        )}
 
         {/* Info Section */}
         <motion.div

@@ -128,6 +128,8 @@ export interface VRExperience {
   description: string;
   imageUrl: string;
   experienceUrl?: string;
+  duration: string;
+  difficulty: string;
 }
 
 export interface VRStat {

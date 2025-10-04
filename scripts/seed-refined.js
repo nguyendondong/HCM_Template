@@ -535,16 +535,28 @@ async function initializeRefinedSeedData(db, options = {}) {
         totalFailed += vrExperiencesResult.errorCount;
       }
 
-      if (vrContent.vrCollections) {
-        console.log('\n📦 Seeding VR collections...');
-        const vrCollectionsResult = await seedCollection(db, 'vr-collections', vrContent.vrCollections, {
+      // if (vrContent.vrCollections) {
+      //   console.log('\n📦 Seeding VR collections...');
+      //   const vrCollectionsResult = await seedCollection(db, 'vr-collections', vrContent.vrCollections, {
+      //     clearExisting: options.clearExisting,
+      //     batchSize: options.batchSize,
+      //     validateData: options.validateData
+      //   });
+      //   results.push(vrCollectionsResult);
+      //   totalSuccess += vrCollectionsResult.successCount;
+      //   totalFailed += vrCollectionsResult.errorCount;
+      // }
+
+      if (vrContent.vrFeatured) {
+        console.log('\n📦 Seeding VR featured...');
+        const vrFeaturedResult = await seedCollection(db, 'vr-featured', vrContent.vrFeatured, {
           clearExisting: options.clearExisting,
           batchSize: options.batchSize,
           validateData: options.validateData
         });
-        results.push(vrCollectionsResult);
-        totalSuccess += vrCollectionsResult.successCount;
-        totalFailed += vrCollectionsResult.errorCount;
+        results.push(vrFeaturedResult);
+        totalSuccess += vrFeaturedResult.successCount;
+        totalFailed += vrFeaturedResult.errorCount;
       }
 
       if (vrContent.vrSettings) {
@@ -609,6 +621,7 @@ async function initializeRefinedSeedData(db, options = {}) {
     console.log('   • mini-games (Trò chơi giáo dục)');
     console.log('   • vr-experiences (Trải nghiệm VR)');
     console.log('   • vr-collections (Bộ sưu tập VR)');
+    console.log('   • vr-featured (Nổi bật VR)');
     console.log('   • app-settings (Cài đặt ứng dụng)');
 
     console.log('\n🚀 Application is ready with refined seed data!');

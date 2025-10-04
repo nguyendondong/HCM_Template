@@ -1,10 +1,10 @@
-# 🚀 Heritage Journey - Complete Setup Guide
+# 🚀 HCM Heritage Template - Quick Start Guide
 
 ## 📋 Prerequisites
 
 ```bash
 # Kiểm tra requirements
-node --version  # v20+ required for Firebase
+node --version  # v18+ required for Vite + Firebase
 yarn --version  # v1.22+ recommended
 git --version   # Latest version
 ```
@@ -14,7 +14,7 @@ git --version   # Latest version
 ### 1. Tạo Firebase Project
 
 1. Vào [Firebase Console](https://console.firebase.google.com/)
-2. **Create a project** → Đặt tên "Heritage Journey Ho Chi Minh"
+2. **Create a project** → Đặt tên "HCM Heritage Template"
 3. Enable Google Analytics (recommended)
 4. Chọn **Default Account for Firebase**
 
@@ -50,16 +50,12 @@ git --version   # Latest version
 
 ## 🎯 Environment Configuration
 
-### 1. Setup Project
+### 1. Clone và Setup Project
 
 ```bash
-# Clone project nếu chưa có
+# Clone project
 git clone <repository-url>
 cd HCM_Template
-
-# Ensure Node.js >= 20.0.0 (required for Firebase)
-node --version
-# If not v20+, use nvm to switch: nvm use 20
 
 # Install dependencies
 yarn install
@@ -72,29 +68,60 @@ cp .env.example .env
 
 1. **Project Settings** (⚙️) → **General** tab
 2. **Your apps** → **Add app** → **Web** (</>)
-3. App nickname: "Heritage Journey Web"
+3. App nickname: "HCM Heritage Web"
 4. ✅ **Also set up Firebase Hosting**
 5. Copy `firebaseConfig` object
 
 ### 3. Configure .env File
 
 ```env
-# Thay thế values này bằng config từ Firebase Console
-VITE_FIREBASE_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-VITE_FIREBASE_AUTH_DOMAIN=heritage-journey-xxxx.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=heritage-journey-xxxx
-VITE_FIREBASE_STORAGE_BUCKET=heritage-journey-xxxx.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=123456789012
-VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
+# ===========================================
+# 🔥 FIREBASE CONFIGURATION - DEVELOPMENT
+# ===========================================
+# For emulator development, these can be dummy values
+# but they MUST be present for Firebase SDK to initialize
 
-# Development settings (sử dụng emulators)
+VITE_FIREBASE_API_KEY=your_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=hcmtemplate.firebaseapp.com
+VITE_DATABASE_URL=https://hcmtemplate-default-rtdb.asia-southeast1.firebasedatabase.app
+VITE_FIREBASE_PROJECT_ID=hcmtemplate
+VITE_FIREBASE_STORAGE_BUCKET=hcmtemplate.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=1:123456789:web:your-app-id
+VITE_MEASUREMENT_ID=G-YOUR-MEASUREMENT-ID
+
+# ===========================================
+# ⚙️  ENVIRONMENT SETTINGS - DEVELOPMENT
+# ===========================================
+
 VITE_USE_EMULATORS=true
+VITE_ENV=development
 
-# Optional: Analytics
-VITE_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
+# ===========================================
+# 🔧 EMULATOR CONFIGURATION
+# ===========================================
+
+VITE_EMULATOR_HOST=127.0.0.1
+VITE_FIRESTORE_EMULATOR_PORT=8084
+VITE_AUTH_EMULATOR_PORT=9099
+VITE_STORAGE_EMULATOR_PORT=9199
+
+# ===========================================
+# 👨‍💼 ADMIN SETTINGS
+# ===========================================
+
+VITE_ADMIN_SESSION_EXPIRE_DAYS=3
+
+# ===========================================
+# 🔧 FIREBASE SERVICE ACCOUNT
+# ===========================================
+
+GOOGLE_APPLICATION_CREDENTIALS=./hcmtemplate.json
 ```
 
-## � Development Workflow
+**⚠️ Important**: Ngay cả khi dùng emulator, bạn vẫn cần điền đầy đủ Firebase config keys để tránh lỗi `invalid-api-key`.
+
+## 🛠️ Development Workflow
 
 ### 1. Verify Environment Setup
 
@@ -116,8 +143,14 @@ yarn firebase:emulators:ui
 ### 3. Seed Development Data
 
 ```bash
-# Seed Ho Chi Minh heritage data vào emulator (safe)
+# Seed refined data vào emulator (safe)
 yarn data:seed
+
+# Hoặc seed specific collection
+yarn seed heritage-spots
+yarn seed vr-experiences
+yarn seed mini-games
+yarn seed documents
 
 # View seeded data at: http://127.0.0.1:4004/firestore
 ```
@@ -128,8 +161,8 @@ yarn data:seed
 # Start development server (emulator mode)
 yarn dev
 
-# Hoặc start với auto-initialization
-yarn data:init:dev
+# Hoặc start với production Firebase (không emulator)
+yarn dev:prod
 
 # Server will start at http://localhost:5173
 ```
@@ -141,67 +174,70 @@ yarn data:init:dev
 | Command | Purpose | Environment | Safety |
 |---------|---------|-------------|---------|
 | `yarn check-env` | Verify Firebase config | All | ✅ Safe |
-| `yarn data:seed` | Seed data to emulator | Emulator | ✅ Safe |
+| `yarn data:seed` | Seed refined data to emulator | Emulator | ✅ Safe |
 | `yarn data:seed:prod` | Seed data to production | Production | ⚠️ **Dangerous** |
 | `yarn data:seed:prod:safe` | Seed with manual confirm | Production | ⚠️ **Requires --confirm** |
+| `yarn seed [collection]` | Seed specific collection | Emulator | ✅ Safe |
+| `yarn seed:prod [collection]` | Seed specific to production | Production | ⚠️ **Dangerous** |
 
-### Ho Chi Minh Heritage Data Collections
+### Available Data Collections
 
 Sau khi seed data, Firestore sẽ chứa:
 
 ```
 🔥 Firestore Collections:
-├── heritage-spots/         # 3 di tích chính của Bác Hồ
-│   ├── kim-lien-heritage-site
-│   ├── pac-bo-heritage-site
-│   └── ben-nha-rong-ho-chi-minh-museum
-├── quizzes/               # 3 bộ câu hỏi trắc nghiệm
-├── content/               # Nội dung giao diện
-│   ├── hero-content
-│   ├── navigation-content
-│   ├── footer-content
-│   └── site-config
-├── learning-modules/      # 3 module học tập về cuộc đời Bác
-├── learning-paths/        # Lộ trình học tập
-├── vr-experiences/        # 3 trải nghiệm VR
-├── vr-collections/        # Bộ sưu tập VR
-├── user-progress/         # Demo user progress
-└── app-settings/          # Cài đặt ứng dụng
+├── heritage-spots/         # Di tích lịch sử HCM
+├── vr-content/            # Trải nghiệm VR
+├── documents/             # Tài liệu lịch sử
+├── mini-games/            # Mini games tương tác
+├── landing-page-content/  # Nội dung trang chủ
+└── configuration/         # Cấu hình hệ thống
 ```
 
-### Sample Heritage Spot Data Format
+### Seed Data Files
 
-```json
-{
-  "id": "kim-lien-heritage-site",
-  "name": "Khu di tích Kim Liên - Quê hương Chủ tịch Hồ Chí Minh",
-  "description": "Khu di tích quê hương Chủ tịch Hồ Chí Minh tại Kim Liên...",
-  "location": {
-    "province": "Nghệ An",
-    "address": "Xã Kim Liên, huyện Nam Đàn, tỉnh Nghệ An",
-    "coordinates": { "lat": 19.0583, "lng": 105.6342 }
-  },
-  "mapPosition": { "x": 25, "y": 30 },
-  "side": "left",
-  "historicalSignificance": "Nơi sinh và lớn lên của Chủ tịch Hồ Chí Minh",
-  "period": "1890-1911",
-  "images": ["/images/kim-lien-main.jpg"],
-  "vrTourUrl": "/vr/kim-lien-tour",
-  "isActive": true,
-  "difficulty": 1,
-  "estimatedDuration": 60,
-  "tags": ["quê hương", "sinh thành", "tuổi thơ"]
-}
+```
+/data/seed/
+├── heritage-spots-refined.json      # Các di tích HCM
+├── vr-content-refined.json         # Nội dung VR experiences
+├── documents-refined.json          # Tài liệu lịch sử
+├── mini-games-refined.json         # Game content
+├── landing-page-content.json       # Homepage content
+├── seed-configuration-refined.json # System config
+└── README.md                       # Hướng dẫn seed data
 ```
 
 ## 🚀 Production Deployment
 
 ### Chuẩn bị Production
 
-1. **Cập nhật .env cho production:**
+1. **Tạo .env.production:**
 ```env
+# ===========================================
+# 🔥 FIREBASE CONFIGURATION - PRODUCTION
+# ===========================================
+
+VITE_FIREBASE_API_KEY=your_production_api_key
+VITE_FIREBASE_AUTH_DOMAIN=hcmtemplate.firebaseapp.com
+VITE_DATABASE_URL=https://hcmtemplate-default-rtdb.asia-southeast1.firebasedatabase.app
+VITE_FIREBASE_PROJECT_ID=hcmtemplate
+VITE_FIREBASE_STORAGE_BUCKET=hcmtemplate.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_MEASUREMENT_ID=your_measurement_id
+
+# ===========================================
+# ⚙️  ENVIRONMENT SETTINGS - PRODUCTION
+# ===========================================
+
 VITE_USE_EMULATORS=false
-# Các config khác giữ nguyên
+VITE_ENV=production
+
+# ===========================================
+# 👨‍💼 ADMIN SETTINGS
+# ===========================================
+
+VITE_ADMIN_SESSION_EXPIRE_DAYS=3
 ```
 
 2. **Deploy Firestore Rules:**
@@ -212,7 +248,7 @@ yarn firebase:deploy:rules
 3. **Seed Production Data (Cẩn thận!):**
 ```bash
 # Cần service account key và --confirm flag
-yarn data:seed:prod
+yarn data:seed:prod --confirm
 
 # Hoặc manual confirmation
 yarn data:seed:prod:safe --confirm
@@ -221,13 +257,16 @@ yarn data:seed:prod:safe --confirm
 ### Deploy Application
 
 ```bash
-# Build production
-yarn build
+# Safe deploy chỉ hosting (không ảnh hưởng database)
+yarn firebase:deploy:safe
 
-# Deploy to Firebase Hosting
+# Hoặc sử dụng script an toàn
+./scripts/safe-deploy.sh
+
+# Deploy full (hosting + rules)
 yarn firebase:deploy
 
-# Hoặc deploy riêng hosting
+# Deploy riêng hosting
 yarn firebase:deploy:hosting
 ```
 
@@ -242,8 +281,8 @@ yarn firebase:login
 # Start emulators with UI
 yarn firebase:emulators:ui
 
-# Deploy hosting only
-yarn firebase:deploy:hosting
+# Deploy hosting only (safe)
+yarn firebase:deploy:safe
 
 # Deploy security rules
 yarn firebase:deploy:rules
@@ -259,7 +298,7 @@ yarn firebase:serve
 yarn build:emulators
 
 # Production build
-yarn build
+yarn build:prod
 
 # Development server (emulator mode)
 yarn dev
@@ -275,31 +314,78 @@ yarn preview
 
 ### Firestore Security Rules
 
-Hiện tại rules cho phép write trong development:
+Development rules (hiện tại trong `firestore.rules`):
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // DEVELOPMENT/EMULATOR MODE ONLY - Allow all operations
+    // TODO: Replace with proper security rules before production deployment
     match /{document=**} {
-      allow read: if true;
-      allow write: if true; // TEMPORARY: for development
+      allow read, write: if true;
     }
   }
 }
 ```
 
-**⚠️ Quan trọng:** Cần update rules secure hơn cho production!
+Production rules (được tạo trong `firestore.rules.production`):
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // PRODUCTION RULES - More restrictive
+
+    // Heritage Spots - Public read, admin write
+    match /heritage-spots/{document} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // VR Content - Public read, admin write
+    match /vr-content/{document} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Documents - Public read, admin write
+    match /documents/{document} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
+  }
+}
+```
+
+**⚠️ Quan trọng:** Trước khi deploy production, copy `firestore.rules.production` thành `firestore.rules`!
 
 ### Production Safety
 
-1. **Service Account**: Cần `firebase-service-account.json` cho production seeding
-2. **Backup**: Luôn backup data trước khi seed production
-3. **Testing**: Luôn test với emulator trước
-4. **Rules**: Update Firestore rules về secure trước khi deploy
+1. **Service Account**: File `hcmtemplate.json` cần thiết cho production seeding
+2. **Environment Files**:
+   - `.env` - Development với emulators
+   - `.env.production` - Production config
+3. **Backup**: Luôn backup data trước khi seed production
+4. **Testing**: Luôn test với emulator trước
+5. **Safe Deploy**: Sử dụng `./scripts/safe-deploy.sh` để deploy an toàn
 
 ## 🚨 Troubleshooting
 
 ### Common Issues
+
+#### "Firebase: Error (auth/invalid-api-key)"
+```bash
+# Lỗi này xảy ra khi thiếu Firebase config keys trong .env
+# Ngay cả khi dùng emulator, vẫn cần đầy đủ config keys
+
+# Kiểm tra .env file có đầy đủ:
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+# ... các keys khác
+
+# Khởi động lại development server
+yarn dev
+```
 
 #### "Firebase not initialized"
 ```bash
@@ -307,7 +393,7 @@ service cloud.firestore {
 yarn check-env
 
 # Đảm bảo Firebase emulators đang chạy
-yarn firebase:emulators
+yarn firebase:emulators:ui
 ```
 
 #### "Permission denied" errors
@@ -326,6 +412,9 @@ yarn data:seed
 
 # Check Firebase emulator UI
 # http://127.0.0.1:4004/firestore
+
+# Hoặc seed specific collection
+yarn seed heritage-spots
 ```
 
 #### "Build errors"
@@ -338,323 +427,65 @@ yarn install
 yarn dev --force
 ```
 
+#### "Deploy overwriting database"
+```bash
+# Sử dụng safe deploy script
+./scripts/safe-deploy.sh
+
+# Hoặc deploy hosting only
+yarn firebase:deploy:safe
+
+# Kiểm tra environment trước deploy
+cat .env | grep VITE_USE_EMULATORS
+```
+
 ## 📖 Next Steps
 
 Sau khi setup thành công:
 
-1. ✅ **Explore App**: Xem 3 di tích Hồ Chí Minh đã được seed
-2. ✅ **Customize Content**: Thêm di tích mới trong Firestore
-3. ✅ **Test Features**: Quiz, VR experiences, learning modules
-4. ✅ **Add Authentication**: Implement user login
+1. ✅ **Explore App**: Khám phá các collection đã được seed
+2. ✅ **Customize Content**: Thêm heritage spots mới trong Firestore
+3. ✅ **Test Features**: VR experiences, documents, mini games
+4. ✅ **Add Authentication**: Implement user login system
 5. ✅ **Deploy Production**: Push to Firebase Hosting
 
 ## 🆘 Support
 
 - **Firebase Console**: [console.firebase.google.com](https://console.firebase.google.com)
 - **Emulator UI**: [127.0.0.1:4004](http://127.0.0.1:4004) (khi chạy emulators)
-- **Production Guide**: Xem `PRODUCTION_SEEDING_GUIDE.md`
-- **Environment Setup**: Xem `SINGLE_ENV_SETUP.md`
+- **Project Documentation**: Xem các file `.md` trong project
+- **Environment Setup**: Kiểm tra `.env.example` và `.env.production`
 
-### Data Seeding Options
-
-#### Option 1: Automated Sample Data (Recommended)
-```bash
-# Seeds complete sample data including:
-# - Hero content, Navigation, Footer
-# - 10 heritage spots with rich content
-# - Sample quizzes and learning modules
-# - User progress templates
-
-yarn seed:sample-data
-```
-
-#### Option 2: Import from CSV/JSON Files
-```bash
-# Prepare your data files in /data/seed/ folder
-yarn import:heritage-spots
-yarn import:content-data
-yarn import:quiz-data
-```
-
-#### Option 3: Manual Admin Panel
-```bash
-# Start development
-yarn dev
-
-# Navigate to /admin (requires authentication)
-# Use the Data Initialization Panel
-```
-
-## 📁 Sample Data Structure
+## 📁 Project Structure
 
 ```
-/data/seed/
-├── heritage-spots.json      # Heritage locations data
-├── hero-content.json       # Homepage hero content
-├── navigation.json         # Menu structure
-├── footer-content.json     # Footer links & info
-├── quizzes.json           # Quiz questions & answers
-├── vr-content.json        # VR experience data
-├── mini-games.json        # Game content & scoring
-└── user-sample.json       # Sample user data
+HCM_Template/
+├── src/
+│   ├── components/         # React components
+│   ├── pages/             # Page components
+│   ├── services/          # Firebase services
+│   ├── contexts/          # React contexts
+│   ├── lib/               # Firebase config
+│   └── types/             # TypeScript types
+├── data/seed/             # Seed data files
+├── scripts/               # Build & deployment scripts
+├── .env.example           # Environment template
+├── .env.production        # Production config
+├── firebase.json          # Firebase configuration
+├── firestore.rules        # Development rules
+├── firestore.rules.production  # Production rules
+└── QUICK_START.md         # This guide
 ```
 
-### Sample Heritage Spot Data Format
+## 🔧 Scripts Overview
 
-```json
-{
-  "id": "saigon-opera-house",
-  "name": "Nhà hát Thành phố Hồ Chí Minh",
-  "description": "Công trình kiến trúc Pháp cổ điển...",
-  "location": {
-    "latitude": 10.7769,
-    "longitude": 106.7009,
-    "address": "7 Lam Sơn, Quận 1, TP.HCM"
-  },
-  "mapPosition": { "x": 45, "y": 60 },
-  "side": "left",
-  "mediaGallery": [
-    {
-      "type": "image",
-      "url": "/images/opera-house-main.jpg",
-      "title": "Mặt tiền chính",
-      "description": "Kiến trúc Pháp cổ điển"
-    }
-  ],
-  "historicalPeriods": [
-    {
-      "name": "Thời Pháp thuộc",
-      "startYear": 1897,
-      "endYear": 1954,
-      "description": "Xây dựng theo phong cách Opera Paris"
-    }
-  ],
-  "vrContent": {
-    "has360View": true,
-    "virtualTourUrl": "/vr/opera-house-tour",
-    "interactionPoints": [
-      {
-        "name": "Sảnh chính",
-        "coordinates": { "x": 0.5, "y": 0.3 },
-        "description": "Sảnh tiếp tân với kiến trúc tân cổ điển"
-      }
-    ]
-  },
-  "difficulty": 2,
-  "tags": ["kiến trúc", "pháp", "nhà hát", "lịch sử"],
-  "accessibility": {
-    "wheelchairAccessible": true,
-    "hasAudioGuide": true,
-    "hasSignLanguage": false
-  },
-  "isActive": true
-}
-```
-
-## 🚀 Development Workflow
-
-### 1. Start Development Server
-
-```bash
-# Check environment variables
-yarn check-env
-
-# Start development server (with auto-initialization)
-yarn dev
-
-# Server will start at http://localhost:5173
-```
-
-### 2. Initialize Sample Data (First Time)
-
-```bash
-# Development mode - creates sample data
-yarn init:dev
-
-# Production mode - minimal data only
-yarn init:prod
-```
-
-### 3. Development Commands
-
-```bash
-# Start with clean data
-yarn dev:clean
-
-# Start with sample data
-yarn dev:sample
-
-# Check Firebase connection
-yarn firebase:test
-
-# Deploy security rules
-yarn firebase:deploy:rules
-
-# Build for production
-yarn build
-
-# Preview production build
-yarn preview
-```
-
-## 🛠️ Admin Panel Access
-
-### First-time Admin Setup
-
-1. **Start development**: `yarn dev`
-2. **Navigate to**: `http://localhost:5173/admin`
-3. **Sign in** with Google or Email
-4. **Set admin privileges** (automatically set for first user)
-
-### Admin Panel Features
-
-| Feature | Description | Access |
-|---------|-------------|---------|
-| **Content Management** | Edit hero, navigation, footer content | `/admin/content` |
-| **Heritage Spots** | Manage heritage locations & details | `/admin/heritage` |
-| **Data Initialization** | Setup fresh environments | `/admin/data-init` |
-| **Analytics Dashboard** | Monitor site performance | `/admin/analytics` |
-| **User Management** | Handle user accounts & permissions | `/admin/users` |
-
-## � Database Collections Overview
-
-After initialization, your Firestore will contain:
-
-```
-🔥 Firestore Collections:
-├── heroContent/          # Homepage hero section content
-├── navigationContent/    # Menu structure & branding
-├── footerContent/       # Footer links & contact info
-├── siteConfig/          # Global site configuration
-├── documentsContent/    # Document management
-├── vrContent/           # VR experience data
-├── miniGameContent/     # Game content & scoring
-├── enhancedHeritageSpots/ # Heritage locations (enhanced)
-├── quizzes/             # Interactive quizzes
-├── userProgress/        # User learning progress
-├── heritageComments/    # User comments & ratings
-├── learningModules/     # Structured learning content
-├── siteAnalytics/       # Site performance metrics
-├── spotAnalytics/       # Heritage spot analytics
-└── systemNotifications/ # System alerts & messages
-```
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-#### "Firebase not initialized"
-```bash
-# Check environment variables
-yarn check-env
-
-# Verify Firebase config in console
-# Make sure all VITE_FIREBASE_* variables are set
-```
-
-#### "Permission denied" errors
-```bash
-# Deploy security rules
-yarn firebase:deploy:rules
-
-# Or initialize with test rules
-yarn firebase:init:rules
-```
-
-#### "No data showing"
-```bash
-# Re-initialize data
-yarn init:data
-
-# Check Firebase console for data
-# Verify collections exist and contain documents
-```
-
-#### "Build errors"
-```bash
-# Clear node modules and reinstall
-rm -rf node_modules yarn.lock
-yarn install
-
-# Clear Vite cache
-yarn dev -- --force
-```
-
-## 🔒 Security Configuration
-
-### Firestore Security Rules
-```javascript
-// Auto-deployed with yarn firebase:deploy:rules
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Public read for content, admin write
-    match /{collection}/{document} {
-      allow read: if isPublicCollection(collection);
-      allow write: if isAdmin();
-    }
-
-    // User-specific collections
-    match /userProgress/{userId} {
-      allow read, write: if isOwner(userId) || isAdmin();
-    }
-  }
-}
-```
-
-### Storage Security Rules
-```javascript
-// Auto-deployed with security rules
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /heritage-spots/{allPaths=**} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-  }
-}
-```
-
-## 🚀 Deployment
-
-### Development Deployment
-```bash
-# Build and deploy to Firebase Hosting
-yarn build
-yarn firebase:deploy
-
-# Deploy specific components
-yarn firebase:deploy:hosting
-yarn firebase:deploy:rules
-yarn firebase:deploy:functions
-```
-
-### Production Deployment
-```bash
-# Set production environment
-export VITE_ENVIRONMENT=production
-
-# Build optimized bundle
-yarn build:prod
-
-# Deploy to production
-yarn deploy:prod
-```
-
-## 📖 Next Steps
-
-After successful setup:
-
-1. ✅ **Explore Admin Panel**: Configure content and heritage spots
-2. ✅ **Customize Design**: Modify components in `/src/components/`
-3. ✅ **Add Content**: Use data seeding system for your heritage data
-4. ✅ **Setup Analytics**: Configure Google Analytics integration
-5. ✅ **Deploy**: Push to production with Firebase Hosting
-
-## 🆘 Support
-
-- **Documentation**: See `/docs/` folder for detailed guides
-- **Issues**: Check GitHub Issues for common problems
-- **Firebase Docs**: [Firebase Documentation](https://firebase.google.com/docs)
-- **React Docs**: [React Documentation](https://react.dev)
+| Script | Purpose | Environment |
+|---------|---------|-------------|
+| `yarn dev` | Development server với emulators | Development |
+| `yarn dev:prod` | Development server với production Firebase | Production |
+| `yarn build:prod` | Build cho production | Production |
+| `yarn data:seed` | Seed data vào emulator | Development |
+| `yarn firebase:emulators:ui` | Start emulators với UI | Development |
+| `yarn firebase:deploy:safe` | Deploy hosting an toàn | Production |
+| `./scripts/safe-deploy.sh` | Deploy script với confirmation | Production |
+| `yarn check-env` | Kiểm tra environment variables | All |

@@ -58,7 +58,6 @@ const AuthForms: React.FC<AuthFormsProps> = ({ onSuccess, onError }) => {
         await signUpWithEmail(email, password, displayName.trim());
       }
 
-      console.log('Authentication successful');
       onSuccess?.();
     } catch (error: any) {
       const errorMessage = error.message || 'Có lỗi xảy ra';
@@ -76,7 +75,7 @@ const AuthForms: React.FC<AuthFormsProps> = ({ onSuccess, onError }) => {
 
     try {
       await signInWithGoogle();
-      console.log('Google authentication successful');
+
       onSuccess?.();
     } catch (error: any) {
       const errorMessage = error.message || 'Đăng nhập Google thất bại';

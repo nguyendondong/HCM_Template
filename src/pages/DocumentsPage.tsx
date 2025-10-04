@@ -166,13 +166,13 @@ const DocumentsPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <button
+            {/* <button
               onClick={handleBack}
               className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors duration-200"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               {isDetailView && !selectedCategory ? 'Quay về danh sách' : 'Quay về trang chủ'}
-            </button>
+            </button> */}
 
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               Tư liệu về Chủ tịch Hồ Chí Minh

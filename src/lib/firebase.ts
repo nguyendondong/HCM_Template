@@ -28,11 +28,13 @@ const useEmulators = import.meta.env.VITE_USE_EMULATORS === 'true';
 const environment = useEmulators ? 'development' : 'production';
 
 // Console logging để biết environment hiện tại
+if (import.meta.env.MODE === 'development') {
 console.log('🔧 Firebase Environment Info:');
 console.log('📍 Environment:', environment);
 console.log('🔄 Use Emulators:', useEmulators);
 console.log('🏗️ Project ID:', firebaseConfig.projectId);
 console.log('📦 Storage Bucket:', firebaseConfig.storageBucket);
+}
 
 // Emulator connection (chỉ khi VITE_USE_EMULATORS=true)
 if (useEmulators) {
@@ -71,7 +73,6 @@ if (useEmulators) {
   }
 } else {
   console.log('🌐 Using Firebase Production services');
-  console.log('📍 Firestore:', `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}`);
 }
 
 export default app;
