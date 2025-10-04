@@ -152,8 +152,8 @@ const Footer: React.FC = () => {
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
             "{footerData.quote}"
           </h3>
-          <p className="text-lg md:text-xl text-gray-200 mb-10 leading-relaxed max-w-4xl mx-auto">
-            {footerData.description}
+          <p className="text-lg md:text-xl text-gray-200 mb-10 leading-relaxed max-w-4xl mx-auto whitespace-pre-line">
+            {footerData.description?.replace(/\\n/g, "\n")}
           </p>
 
           {footerData.actionButton && (

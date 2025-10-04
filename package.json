@@ -22,7 +22,6 @@
     "firebase:emulators": "firebase emulators:start --only auth,firestore,storage --project hcmtemplate",
     "firebase:emulators:ui": "firebase emulators:start --project hcmtemplate",
     "firebase:deploy": "yarn build:prod && firebase deploy",
-    "firebase:deploy:hosting": "yarn build:prod && firebase deploy --only hosting",
     "build:prod": "cp .env.production .env && vite build",
     "firebase:deploy:rules": "firebase deploy --only firestore:rules,storage",
     "firebase:deploy:indexes": "firebase deploy --only firestore:indexes --project hcmtemplate",
